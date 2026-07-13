@@ -116,15 +116,41 @@
   .hero2 .fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(34,31,43,.05) 40%,var(--bg) 96%)}
   .backc{position:absolute;top:16px;left:16px;z-index:9}
   .body2{padding:0 18px 30px;margin-top:-44px;position:relative}
+  /* detail pages: scrollable content + docked action bar (own space, never overlaps) */
+  .view.paged{flex-direction:column}
+  .view.paged.active{display:flex}
+  .scrollwrap{flex:1;overflow-y:auto;position:relative;scrollbar-width:none;overscroll-behavior:contain}
+  .scrollwrap::-webkit-scrollbar{display:none}
+  .ctabar{display:flex;gap:10px;padding:12px 16px 14px;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -10px 30px rgba(34,31,43,.08);flex-shrink:0}
+  .ctabar .btn{flex:1}
   .minimap{position:relative;height:210px;border-radius:20px;overflow:hidden;margin:14px 0;background:linear-gradient(180deg,#CBE7FA,#EAF6EE);border:1px solid var(--line)}
   .minimap .lbl{position:absolute;top:10px;left:10px;z-index:3;background:rgba(255,255,255,.92);border-radius:10px;padding:5px 10px;font-size:10.5px;font-weight:900;color:var(--ink);box-shadow:var(--shadow)}
-  .cta2{position:absolute;bottom:82px;left:18px;right:18px;display:flex;gap:10px;z-index:15}
-  .cta2 .btn{flex:1}
   .kv2{display:flex;flex-direction:column;gap:10px;margin-top:14px}
   .kv2 .row{display:flex;gap:12px;align-items:center;font-size:13.5px}
   .kv2 .ic{width:38px;height:38px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
   .expl{margin:12px 0;padding:13px 15px;border-radius:16px;background:var(--soft);font-size:13px;line-height:1.5}
 
+  /* ---------- activity walls ---------- */
+  .composer2{display:flex;gap:10px;align-items:center;padding:11px 12px;margin:0 0 14px}
+  .composer2 input{flex:1;background:var(--soft);border:none;border-radius:999px;padding:11px 15px;font-family:inherit;font-weight:600;font-size:13.5px;outline:none;min-width:0;color:var(--ink)}
+  .inforow{display:flex;gap:10px;align-items:center;margin:0 0 12px;padding:11px 14px;border-radius:16px;background:var(--soft);font-size:12.5px;font-weight:700;color:#5A5566}
+  .body2 .fpost{margin:0 0 14px}
+  /* ---------- comments sheet ---------- */
+  #cmtOv{position:absolute;inset:0;background:rgba(34,31,43,.45);z-index:80;display:none;align-items:flex-end;backdrop-filter:blur(2px)}
+  #cmtOv.open{display:flex}
+  #cmtSheet{width:100%;max-height:76%;min-height:44%;background:var(--bg);border-radius:26px 26px 0 0;display:flex;flex-direction:column;padding-top:8px;animation:sheetup .26s cubic-bezier(.3,.9,.4,1)}
+  @keyframes sheetup{from{transform:translateY(35%)}to{transform:none}}
+  .grab{width:44px;height:5px;border-radius:99px;background:var(--line);margin:4px auto 10px;flex-shrink:0}
+  #cmtHead{text-align:center;font-weight:900;font-size:14px;padding-bottom:11px;border-bottom:1px solid var(--line);flex-shrink:0}
+  #cmtList{flex:1;overflow-y:auto;padding:15px 18px;display:flex;flex-direction:column;gap:13px;scrollbar-width:none}
+  #cmtList::-webkit-scrollbar{display:none}
+  .cmt{display:flex;gap:10px}
+  .cmt .bubblec{background:var(--card);border-radius:16px;padding:9px 13px;box-shadow:var(--shadow);font-size:13px;flex:1;line-height:1.45}
+  .cmt .bubblec b{font-size:12px;display:block}
+  .cmt .bubblec .w{font-size:10.5px;color:var(--sub);font-weight:700;margin-top:3px;display:block}
+  .cmtin{display:flex;gap:9px;padding:10px 16px 16px;border-top:1px solid var(--line);flex-shrink:0;background:var(--bg)}
+  .cmtin input{flex:1;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:11px 16px;outline:none;font-family:inherit;font-weight:600;font-size:13.5px;min-width:0;color:var(--ink)}
+  .cmtin input:focus{border-color:var(--coral)}
   /* ---------- create ---------- */
   .pick{margin:0 18px 12px;padding:18px;display:flex;gap:15px;align-items:center;cursor:pointer;transition:.15s}
   .pick:hover{transform:translateY(-2px)}
@@ -240,7 +266,8 @@
   </div>
 
   <!-- ========== CAMPAIGN ========== -->
-  <div class="view" id="view-campaign">
+  <div class="view paged" id="view-campaign">
+    <div class="scrollwrap">
     <div class="circle backc" onclick="go(lastTab)">←</div>
     <div class="hero2" id="chero"><div class="fade"></div></div>
     <div class="body2">
@@ -259,16 +286,20 @@
       <p class="s13" style="line-height:1.6;color:#524D5E" id="cdesc"></p>
       <div class="sechead" style="padding:18px 0 10px"><h3>Gatherings</h3><a onclick="openCreate('event')">+ Host yours</a></div>
       <div id="cevents"></div>
-      <div style="height:130px"></div>
+      <div class="sechead" style="padding:18px 0 10px"><h3>Activity</h3><span class="s12 sub">members can post here</span></div>
+      <div id="cwall"></div>
+      <div style="height:8px"></div>
     </div>
-    <div class="cta2">
+    </div>
+    <div class="ctabar">
       <button class="btn go" id="cjoinbtn" onclick="joinCampaign(this)">Count me in ✋</button>
-      <button class="btn" style="background:#fff;box-shadow:var(--shadow)" onclick="openCreate('event')">Host a gathering</button>
+      <button class="btn" onclick="openCreate('event')">Host a gathering</button>
     </div>
   </div>
 
   <!-- ========== EVENT ========== -->
-  <div class="view" id="view-event">
+  <div class="view paged" id="view-event">
+    <div class="scrollwrap">
     <div class="circle backc" onclick="go(lastTab)">←</div>
     <div class="hero2" id="ehero"><div class="fade"></div></div>
     <div class="body2">
@@ -282,13 +313,16 @@
       </div>
       <div class="minimap"><div class="lbl">📍 This gathering & its global moment</div><div id="emapEl" style="position:absolute;inset:0"></div></div>
       <div class="faces" id="efaces" style="margin-top:4px"></div>
+      <div class="sechead" style="padding:18px 0 10px"><h3>Activity</h3><span class="s12 sub">attendees can post here</span></div>
+      <div id="ewall"></div>
       <div class="sechead" style="padding:18px 0 10px"><h3>More near you</h3><a onclick="go('home')">Home</a></div>
       <div id="enear"></div>
-      <div style="height:130px"></div>
+      <div style="height:8px"></div>
     </div>
-    <div class="cta2">
+    </div>
+    <div class="ctabar">
       <button class="btn go" id="ersvp" onclick="this.textContent='You\'re going! 🎉';toast('Ticket saved to your profile')">Reserve my spot</button>
-      <button class="btn" style="background:#fff;box-shadow:var(--shadow)" onclick="openThread(0)">Message host</button>
+      <button class="btn" onclick="openThread(0)">Message host</button>
     </div>
   </div>
 
@@ -309,6 +343,8 @@
       <div id="ocamps"></div>
       <div class="sechead" style="padding:14px 0 10px"><h3>Team</h3></div>
       <div class="card" style="padding:6px 0" id="oteam"></div>
+      <div class="sechead" style="padding:18px 0 10px"><h3>Activity</h3><span class="s12 sub">members can post here</span></div>
+      <div id="owall"></div>
       <div style="height:40px"></div>
     </div>
   </div>
@@ -398,6 +434,19 @@
     <div class="t" data-v="inbox" onclick="go('inbox')"><span class="i">💬<span class="ndot" id="inboxdot">1</span></span>Inbox</div>
     <div class="t" data-v="me" onclick="go('me')"><span class="i">🙂</span>You</div>
   </div>
+  <!-- ========== COMMENTS SHEET ========== -->
+  <div id="cmtOv" onclick="if(event.target===this)closeComments()">
+    <div id="cmtSheet">
+      <div class="grab"></div>
+      <div id="cmtHead">Comments</div>
+      <div id="cmtList"></div>
+      <div class="cmtin">
+        <div class="av" style="width:36px;height:36px;font-size:12px">KM</div>
+        <input id="cmtin" placeholder="Add a comment…" onkeydown="if(event.key==='Enter')addComment()">
+        <button class="btn go sm" style="border-radius:99px" onclick="addComment()">Send</button>
+      </div>
+    </div>
+  </div>
   <div class="toast" id="toast"></div>
 </div>
 
@@ -438,14 +487,35 @@ let evts=[
  {id:'e6',name:'Nairobi Watch Meetup',city:'Nairobi',lat:-1.29,lng:36.82,going:19,cap:60,price:0,camp:'c1',host:'Amara',mon:'AUG',day:'12'},
  {id:'e7',name:'Mojave Cleanup Day',city:'Mojave Desert',lat:35.0,lng:-115.5,going:12,cap:40,price:0,camp:'c4',host:'Kevin',mon:'APR',day:'18'},
  {id:'e8',name:'Solstice in the Park',city:'Griffith Park, LA',lat:34.13,lng:-118.29,going:88,cap:250,price:0,camp:'c2',host:'Yuli',mon:'JUN',day:'21'}];
+/* one shared store: every post lives on a wall (campaign/event/community); home aggregates */
+let pidSeq=20;
+const wallPosts=[
+ {id:'p1',wall:'c1',who:'Unify',init:'UN',when:'2h',txt:'One month until the shadow crosses Iceland. 12 cities are watching the same sky with us. Who\'s hosting #13? 🌘',img:IMG.eclipse,likes:214,
+  comments:[{who:'Daniela',init:'DA',txt:'Paris is ready! Picnic under the Tower 🇫🇷',when:'1h'},{who:'Mason',init:'MA',txt:'Toronto crew checking in 🙌',when:'45m'},{who:'Rin',init:'RI',txt:'Tokyo dawn circle is going to be magic',when:'20m'}]},
+ {id:'p2',wall:'c3',who:'Kevin Moore',init:'KM',when:'5h',txt:'Day 18 of the Meat Fast and honestly? Best I\'ve felt all year. 🌱',img:IMG.vegan,likes:47,
+  comments:[{who:'Yuli Zhong',init:'YZ',txt:'Proud of you!! Day 12 over here 💪',when:'4h'},{who:'Ray Mehta',init:'RM',txt:'The streak is real 🔥',when:'3h'}]},
+ {id:'p3',wall:'o3',who:'Open Spaces',init:'OS',when:'1d',txt:'214 of you have pledged a Free Lands action. The desert says thank you. 🏜',img:IMG.lands,likes:112,
+  comments:[{who:'Liam',init:'LI',txt:'The Mojave cleanup was unreal. Again soon?',when:'1d'}]},
+ {id:'p4',wall:'c1',who:'Unify',init:'UN',when:'3h',txt:'Eclipse glasses arrive next week for every official gathering 🕶 Hosts, check your inbox for shipping info.',likes:88,
+  comments:[{who:'Omar',init:'OM',txt:'Cairo needs 70 pairs!',when:'2h'}]},
+ {id:'p5',wall:'c1',kind:'info',icon:'🎉',txt:'Vivaan and 213 others joined this week',when:'today'},
+ {id:'p6',wall:'c1',kind:'info',icon:'📍',txt:'New gathering: Tokyo Dawn Circle',when:'1d'},
+ {id:'p7',wall:'c1',who:'Daniela',init:'DA',when:'1d',txt:'Picnic spot secured for the Paris gathering. Bring croissants 🥐',img:IMG.crowd,likes:64,comments:[]},
+ {id:'p8',wall:'e1',who:'Kevin Moore',init:'KM',when:'4h',txt:'Rooftop is confirmed! Doors at 9AM, shadow hits at 9:47 sharp. Bring blankets 🌘',likes:23,
+  comments:[{who:'Ray Mehta',init:'RM',txt:'Bringing the sound gear 🎶',when:'3h'}]},
+ {id:'p9',wall:'e1',kind:'info',icon:'🎟',txt:'56 people reserved — 144 spots left',when:'today'},
+ {id:'p10',wall:'o2',who:'Rise',init:'RI',when:'6h',txt:'Meat Fast crossed 3,400 participants. Final stretch — 12 days! 🌱',likes:51,comments:[]},
+ {id:'p11',wall:'o1',kind:'info',icon:'🏡',txt:'Ray Mehta joined the team as Moderator',when:'2d'},
+ {id:'p12',wall:'o1',who:'Unify',init:'UN',when:'2d',txt:'Two campaigns live, one planet. Thank you for showing up, every time. 💛',likes:130,comments:[]},
+ {id:'p13',wall:'e8',who:'Yuli Zhong',init:'YZ',when:'1d',txt:'Griffith Park lawn is booked — sunrise side, best view in LA ☀️',likes:31,comments:[]}];
 const feedPosts=[
  {kind:'camp',ref:'c1'},
- {kind:'post',who:'Unify',init:'UN',when:'2h',txt:'One month until the shadow crosses Iceland. 12 cities are watching the same sky with us. Who\'s hosting #13? 🌘',img:IMG.eclipse,likes:214,com:36},
+ {kind:'post',ref:'p1'},
  {kind:'event',ref:'e8'},
- {kind:'post',who:'Kevin Moore',init:'KM',when:'5h',txt:'Day 18 of the Meat Fast and honestly? Best I\'ve felt all year. 🌱',img:IMG.vegan,likes:47,com:9},
+ {kind:'post',ref:'p2'},
  {kind:'camp',ref:'c3'},
  {kind:'event',ref:'e7'},
- {kind:'post',who:'Open Spaces',init:'OS',when:'1d',txt:'214 of you have pledged a Free Lands action. The desert says thank you. 🏜',img:IMG.lands,likes:112,com:14}];
+ {kind:'post',ref:'p3'}];
 let chats=[
  {id:0,name:'Ray Mehta',init:'RM',sub:'active now',unread:1,msgs:[
    {me:false,t:'Hey! Hosting the LA watch party again this year? 🌘',w:'9:12'},
@@ -502,17 +572,68 @@ function eventCard(e){const c=camps.find(x=>x.id===e.camp);
   <button class="btn teal sm" onclick="event.stopPropagation();this.textContent='Going ✓';toast('You\\'re going! 🎉')">Join</button></div>`}
 function postCard(p){
  return `<div class="card fpost">
-  <div class="hd"><div class="av">${p.init}</div><div><b class="s13">${p.who}</b><div class="s12 sub">${p.when} ago</div></div></div>
+  <div class="hd"><div class="av">${p.init}</div><div><b class="s13">${p.who}</b><div class="s12 sub">${p.when}${p.when==='now'||p.when==='today'?'':' ago'}</div></div></div>
   <div class="body">${p.txt}</div>
-  <div class="pic" style="background-image:url('${p.img}')"></div>
-  <div class="bar"><div onclick="this.innerHTML='❤️ '+${p.likes+1}">🤍 ${p.likes}</div><div onclick="toast('Comments')">💬 ${p.com}</div><div onclick="toast('Shared!')">↗ Share</div></div></div>`}
+  ${p.img?`<div class="pic" style="background-image:url('${p.img}')"></div>`:''}
+  <div class="bar">
+   <div onclick="likePost(this,'${p.id}')">🤍 ${p.likes}</div>
+   <div onclick="openComments('${p.id}')">💬 ${p.comments.length}</div>
+   <div onclick="toast('Shared!')">↗ Share</div></div></div>`}
+function likePost(el,pid){const p=wallPosts.find(x=>x.id===pid);p.likes++;el.innerHTML='❤️ '+p.likes}
+function infoRow(p){return `<div class="inforow"><span style="font-size:16px">${p.icon}</span><span style="flex:1">${p.txt}</span><span class="s12 sub">${p.when}</span></div>`}
 function renderFeed(){
  document.getElementById('feed').innerHTML=feedPosts.map(p=>{
   if(p.kind==='camp'){const c=camps.find(x=>x.id===p.ref);return c?campCard(c):''}
   if(p.kind==='event'){const e=evts.find(x=>x.id===p.ref);return e?eventCard(e):''}
-  return postCard(p)}).join('');
+  const post=wallPosts.find(x=>x.id===p.ref);return post?postCard(post):''}).join('');
 }
 renderStories();renderFeed();
+
+/* ============ activity walls ============ */
+function wallHTML(entity,cid,ph){
+ const items=wallPosts.filter(x=>x.wall===entity);
+ return `<div class="card composer2"><div class="av" style="width:38px;height:38px;font-size:12px">KM</div>
+   <input placeholder="${ph}" onkeydown="if(event.key==='Enter')postToWall('${cid}')">
+   <button class="btn go sm" onclick="postToWall('${cid}')">Post</button></div>`
+  +(items.length?items.map(x=>x.kind==='info'?infoRow(x):postCard(x)).join('')
+   :`<div class="s13 sub" style="text-align:center;padding:14px 0">Quiet so far — say something first! 👋</div>`);
+}
+function renderWall(cid,entity,ph){const el=document.getElementById(cid);el.dataset.entity=entity;el.dataset.ph=ph;el.innerHTML=wallHTML(entity,cid,ph)}
+function refreshWalls(){
+ ['cwall','ewall','owall'].forEach(cid=>{const el=document.getElementById(cid);
+  if(el&&el.dataset.entity)el.innerHTML=wallHTML(el.dataset.entity,cid,el.dataset.ph)});
+ renderFeed();
+}
+function postToWall(cid){
+ const el=document.getElementById(cid);const inp=el.querySelector('input');
+ if(!inp.value.trim())return;
+ const p={id:'p'+(++pidSeq),wall:el.dataset.entity,who:'Kevin Moore',init:'KM',when:'now',txt:inp.value.trim(),likes:0,comments:[]};
+ wallPosts.unshift(p);feedPosts.splice(1,0,{kind:'post',ref:p.id});
+ refreshWalls();toast('Posted! Everyone in this space can see it 📣');
+}
+
+/* ============ comments sheet ============ */
+let cmtPid=null;
+function openComments(pid){cmtPid=pid;renderComments();document.getElementById('cmtOv').classList.add('open');
+ setTimeout(()=>document.getElementById('cmtin').focus(),250)}
+function closeComments(){document.getElementById('cmtOv').classList.remove('open')}
+function renderComments(){
+ const p=wallPosts.find(x=>x.id===cmtPid);if(!p)return;
+ document.getElementById('cmtHead').textContent=p.comments.length?p.comments.length+(p.comments.length===1?' comment':' comments'):'Comments';
+ const el=document.getElementById('cmtList');
+ el.innerHTML=`<div class="s12 sub" style="padding-bottom:2px"><b style="color:var(--ink)">${p.who}</b>: ${p.txt.length>90?p.txt.slice(0,90)+'…':p.txt}</div>`+
+  (p.comments.length?p.comments.map(c=>`
+   <div class="cmt"><div class="av" style="width:32px;height:32px;font-size:11px">${c.init}</div>
+    <div class="bubblec"><b>${c.who}</b>${c.txt}<span class="w">${c.when}</span></div></div>`).join('')
+  :`<div class="s13 sub" style="text-align:center;padding:22px 0">No comments yet — start the conversation! 💬</div>`);
+ el.scrollTop=el.scrollHeight;
+}
+function addComment(){
+ const i=document.getElementById('cmtin');if(!i.value.trim()||!cmtPid)return;
+ const p=wallPosts.find(x=>x.id===cmtPid);
+ p.comments.push({who:'Kevin Moore',init:'KM',txt:i.value.trim(),when:'now'});
+ i.value='';renderComments();refreshWalls();
+}
 
 /* ============ campaign page ============ */
 let curCamp=null;
@@ -537,6 +658,7 @@ function openCampaign(id){
    <div class="info"><b>${e.name}</b><div class="s12 sub">${e.city} · ${e.going} going · host ${e.host}</div></div>
    <span class="sub">→</span></div>`).join(''):
   `<div class="s13 sub" style="padding:2px 0 8px">No gatherings yet — ${c.type==='window'?'do your action solo any day, or':''} be the first to host one! 🎈</div>`;
+ renderWall('cwall',c.id,'Share an update with this campaign…');
  show('view-campaign');setTimeout(()=>campMap(c),60);
 }
 function joinCampaign(btn){btn.textContent='You\'re in! 🎉';curCamp.joined++;toast('Welcome aboard — you\'re dot #'+curCamp.joined.toLocaleString()+' on the map')}
@@ -558,6 +680,7 @@ function openEvent(id){
   <div class="card ecard" style="margin:0 0 10px" onclick="openEvent('${x.id}')">
    <div class="datechip"><div class="m">${x.mon}</div><div class="d">${x.day}</div></div>
    <div class="info"><b>${x.name}</b><div class="s12 sub">${x.city} · ${x.going} going</div></div><span class="sub">→</span></div>`).join('');
+ renderWall('ewall',e.id,'Post to this gathering…');
  show('view-event');setTimeout(()=>evtMap(e,c),60);
 }
 
@@ -572,6 +695,7 @@ function openCommunity(id){
  document.getElementById('oteam').innerHTML=o.team.map(([n,r])=>`
   <div class="setrow2" style="cursor:default"><div class="av" style="width:36px;height:36px;font-size:12px">${n[0]}${n[1]||''}</div>
    <b class="s13">${n}</b><span class="rolebadge" style="margin-left:auto">${r}</span></div>`).join('');
+ renderWall('owall',o.id,'Share with this community…');
  show('view-community');
 }
 function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active')}
