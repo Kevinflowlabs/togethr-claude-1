@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Togethr — Rebuild Prototype v2</title>
+<style>
+  :root{
+    --pink:#F41585; --pink-soft:rgba(244,21,133,.14);
+    --bg:#0B0D12; --panel:#12151D; --panel2:#1A1E29; --line:#242939;
+    --text:#F2F4F8; --muted:#8B93A7; --blue:#4DA3FF; --green:#3DDC97; --amber:#FFB020;
+    --glass:rgba(18,21,29,.94); --glass2:rgba(11,13,18,.9);
+    --loginbg:radial-gradient(120% 90% at 50% -10%,#251024 0%,var(--bg) 55%);
+    --radius:18px;
+  }
+  /* ---------- light theme ---------- */
+  #phone.light{
+    --bg:#F5F6FA; --panel:#FFFFFF; --panel2:#ECEEF6; --line:#DFE3EE;
+    --text:#14161D; --muted:#66708C; --pink-soft:rgba(244,21,133,.10);
+    --glass:rgba(255,255,255,.94); --glass2:rgba(255,255,255,.92);
+    --loginbg:radial-gradient(120% 90% at 50% -10%,#FFE0F0 0%,var(--bg) 55%);
+  }
+  /* keep the Discover globe immersive/dark in both themes */
+  #phone.light #view-globe{
+    --bg:#0B0D12; --panel:#12151D; --panel2:#1A1E29; --line:#242939;
+    --text:#F2F4F8; --muted:#8B93A7;
+    --glass:rgba(18,21,29,.94); --glass2:rgba(11,13,18,.9);
+    background:#05060A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:#05060A;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;display:flex;align-items:center;justify-content:center}
+  #phone{position:relative;width:100%;max-width:430px;height:100dvh;max-height:100dvh;background:var(--bg);overflow:hidden;display:flex;flex-direction:column}
+  @media(min-width:520px){
+    #phone{height:min(880px,94vh);border-radius:44px;border:1px solid #1d2230;box-shadow:0 40px 120px rgba(244,21,133,.13),0 30px 80px rgba(0,0,0,.6)}
+  }
+  /* ---------- shared ---------- */
+  .view{position:absolute;inset:0;bottom:64px;overflow-y:auto;overscroll-behavior:contain;display:none;scrollbar-width:none}
+  .view::-webkit-scrollbar{display:none}
+  .view.active{display:block}
+  .view.full{bottom:0}
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:14px 16px 10px;background:linear-gradient(var(--bg) 70%,transparent);backdrop-filter:blur(8px)}
+  .logo{font-weight:900;letter-spacing:.14em;font-size:17px}
+  .logo b{color:var(--pink)}
+  .iconbtn{margin-left:auto;width:34px;height:34px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;flex-shrink:0}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .chip.on{background:var(--pink-soft);border-color:var(--pink);color:#fff}
+  .chiprow{display:flex;gap:8px;overflow-x:auto;padding:2px 16px 10px;scrollbar-width:none}
+  .chiprow::-webkit-scrollbar{display:none}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .btn{border:none;border-radius:14px;padding:12px 18px;font-weight:700;font-size:14px;cursor:pointer;color:var(--text);background:var(--panel2);border:1px solid var(--line)}
+  .btn.primary{background:linear-gradient(120deg,var(--pink),#FF5DA2);border:none;box-shadow:0 6px 20px rgba(244,21,133,.35);color:#fff}
+  .btn.small{padding:8px 14px;font-size:12.5px;border-radius:11px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:7px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+  .badge.sync{background:#3A0F26;color:#FF7DBE}.badge.challenge{background:#2A1D05;color:var(--amber)}.badge.range{background:#0E2438;color:var(--blue)}.badge.live{background:var(--pink);color:#fff}.badge.event{background:#0E2438;color:var(--blue)}.badge.org{background:#123024;color:var(--green)}
+  .muted{color:var(--muted)} .small{font-size:12px}
+  .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7b2ff7,#f107a3);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+  .cd{display:flex;gap:10px}
+  .cd div{text-align:center}
+  .cd b{display:block;font-size:20px;color:var(--pink);font-variant-numeric:tabular-nums}
+  .cd span{font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .aiflag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--green);font-weight:700}
+  .aiflag.warn{color:var(--amber)}
+  .sectionhead{display:flex;align-items:baseline;justify-content:space-between;padding:18px 16px 10px}
+  .sectionhead h3{font-size:15px}
+  .sectionhead a{color:var(--pink);font-size:12px;text-decoration:none;font-weight:700;cursor:pointer}
+  .miniglobe{position:relative;height:230px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:radial-gradient(circle at 50% 130%,#101c33,#05060A);margin:14px 0}
+  .miniglobe .lbl{position:absolute;top:10px;left:12px;z-index:3;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8B93A7;background:rgba(11,13,18,.7);padding:4px 9px;border-radius:8px;backdrop-filter:blur(6px)}
+  .miniglobe .expand{position:absolute;top:8px;right:8px;z-index:3}
+  /* ---------- login ---------- */
+  #view-login{background:var(--loginbg)}
+  .loginwrap{min-height:100%;display:flex;flex-direction:column;justify-content:center;padding:36px 28px 48px}
+  .loginlogo{font-size:34px;font-weight:900;letter-spacing:.16em;text-align:center}
+  .loginlogo b{color:var(--pink)}
+  .logintag{text-align:center;color:var(--muted);font-size:13.5px;margin:10px 0 8px;line-height:1.5}
+  .loginglobe{height:190px;position:relative;margin:6px 0 18px}
+  .loginglobe .ball{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 33% 30%,#2a5ca8,#0a1830 62%,#05060A);box-shadow:0 0 70px rgba(244,21,133,.28), inset -18px -18px 50px rgba(0,0,0,.65);animation:breathe 4s ease-in-out infinite}
+  @keyframes breathe{0%,100%{box-shadow:0 0 55px rgba(244,21,133,.22),inset -18px -18px 50px rgba(0,0,0,.65)}50%{box-shadow:0 0 95px rgba(244,21,133,.4),inset -18px -18px 50px rgba(0,0,0,.65)}}
+  .dotp{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink)}
+  /* ---------- home ---------- */
+  .carousel{display:flex;gap:12px;overflow-x:auto;padding:4px 16px 6px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .carousel::-webkit-scrollbar{display:none}
+  .feat{scroll-snap-align:start;flex:0 0 82%;border-radius:22px;overflow:hidden;position:relative;height:190px;cursor:pointer;border:1px solid var(--line)}
+  .feat .bgi{position:absolute;inset:0;background-size:cover;background-position:center;filter:saturate(1.1)}
+  .feat .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(5,6,10,.92));display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff}
+  .feat .ov .muted,.feat .ov .cd span{color:#B9C0D4}
+  .feat h4{font-size:16px;margin:6px 0 2px}
+  .composer{margin:12px 16px;display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
+  .composer input{flex:1;background:none;border:none;color:var(--text);font-size:13.5px;outline:none;min-width:0}
+  .post{margin:0 16px 12px;padding:14px}
+  .post .head{display:flex;gap:10px;align-items:center;margin-bottom:9px}
+  .post .media{margin-top:10px;border-radius:12px;height:150px;background-size:cover;background-position:center}
+  .post .acts{display:flex;gap:18px;margin-top:11px;color:var(--muted);font-size:12.5px;font-weight:600}
+  /* ---------- globe ---------- */
+  #view-globe{overflow:hidden}
+  #globeWrap{position:absolute;inset:0;bottom:0}
+  #globeEl{position:absolute;inset:0}
+  .globe-top{position:absolute;top:0;left:0;right:0;z-index:5}
+  .globe-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--muted)}
+  .globe-fallback .ball{width:230px;height:230px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#1c4d8f,#0a1830 65%,#05060A);box-shadow:0 0 80px rgba(77,163,255,.25), inset -20px -20px 60px rgba(0,0,0,.6)}
+  .sheet{position:absolute;left:10px;right:10px;bottom:74px;z-index:6;background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:14px;backdrop-filter:blur(12px);transform:translateY(140%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  .sheet.open{transform:none}
+  .foryou{position:absolute;left:16px;right:16px;top:96px;z-index:5;background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:12.5px;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px)}
+  .foryou .spark{color:var(--pink);font-size:15px}
+  /* ---------- lists ---------- */
+  .rowcard{margin:0 16px 12px;padding:13px;display:flex;gap:12px;cursor:pointer}
+  .thumb{width:64px;height:64px;border-radius:14px;background-size:cover;background-position:center;flex-shrink:0}
+  /* ---------- detail ---------- */
+  .hero{height:200px;background-size:cover;background-position:center;position:relative}
+  .hero .ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,18,.15),var(--bg))}
+  .backbtn{position:absolute;top:14px;left:14px;z-index:9;width:34px;height:34px;border-radius:12px;background:var(--glass2);border:1px solid var(--line);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px)}
+  .detailbody{padding:0 16px 30px;margin-top:-34px;position:relative}
+  .stickycta{position:absolute;bottom:76px;left:16px;right:16px;display:flex;gap:10px;z-index:15}
+  .stickycta .btn{flex:1}
+  .pillrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .pill{font-size:11px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--muted)}
+  .facepile{display:flex;margin-top:12px;align-items:center}
+  .facepile .avatar{width:28px;height:28px;font-size:10px;border:2px solid var(--bg);margin-left:-8px}
+  .facepile .avatar:first-child{margin-left:0}
+  .kv{display:grid;grid-template-columns:88px 1fr;gap:7px 12px;font-size:12.5px;margin-top:12px}
+  .kv span{color:var(--muted)}
+  /* ---------- wizard ---------- */
+  .steps{display:flex;gap:6px;padding:4px 16px 14px}
+  .steps i{flex:1;height:4px;border-radius:4px;background:var(--panel2)}
+  .steps i.on{background:var(--pink)}
+  .field{margin:0 16px 14px}
+  .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.03em}
+  .field input,.field textarea,.field select{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px 13px;color:var(--text);font-size:14px;outline:none;font-family:inherit}
+  .field input:focus,.field textarea:focus{border-color:var(--pink)}
+  .fieldrow{display:flex;gap:10px;margin:0 16px 14px}
+  .fieldrow .field{margin:0;flex:1}
+  .typegrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 16px 14px}
+  .typegrid .opt{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 10px;text-align:center;cursor:pointer;font-size:11.5px;font-weight:700}
+  .typegrid .opt .ico{font-size:20px;display:block;margin-bottom:6px}
+  .typegrid .opt.on{border-color:var(--pink);background:var(--pink-soft)}
+  .segment{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:4px;margin:0 16px 14px}
+  .segment div{flex:1;text-align:center;padding:9px 4px;border-radius:10px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer}
+  .segment div.on{background:var(--panel2);color:#fff;border:1px solid var(--line)}
+  .aiassist{margin:0 16px 14px;padding:12px;border-radius:14px;border:1px dashed rgba(244,21,133,.45);background:rgba(244,21,133,.06);font-size:12.5px;display:flex;gap:10px;align-items:center;cursor:pointer}
+  .flowbanner{margin:0 16px 14px;padding:11px 13px;border-radius:14px;background:#123024;border:1px solid #1d4a37;font-size:12.5px;color:var(--green);display:flex;gap:8px;align-items:center}
+  .memberrow{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 16px 10px}
+  .memberrow select{margin-left:auto;background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:6px 8px;font-size:11px;font-weight:700}
+  /* ---------- create chooser ---------- */
+  .choosegrid{display:flex;flex-direction:column;gap:10px;margin:4px 16px}
+  .choose{display:flex;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;cursor:pointer}
+  .choose:hover{border-color:var(--pink)}
+  .choose .ico{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+  /* ---------- chat ---------- */
+  .convo{display:flex;gap:12px;align-items:center;padding:13px 16px;cursor:pointer;border-bottom:1px solid rgba(36,41,57,.5)}
+  .convo:hover{background:rgba(255,255,255,.02)}
+  .convo .when{margin-left:auto;font-size:11px;color:var(--muted);flex-shrink:0}
+  .unread{width:9px;height:9px;border-radius:50%;background:var(--pink);flex-shrink:0}
+  #thread{display:flex;flex-direction:column;height:100%}
+  #threadmsgs{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:8px;scrollbar-width:none}
+  .bubble{max-width:78%;padding:10px 13px;border-radius:17px;font-size:13.5px;line-height:1.45}
+  .bubble.them{background:var(--panel2);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:6px}
+  .bubble.me{background:linear-gradient(120deg,var(--pink),#FF5DA2);align-self:flex-end;border-bottom-right-radius:6px;color:#fff}
+  .bubble .t{display:block;font-size:9.5px;opacity:.65;margin-top:4px}
+  .threadinput{display:flex;gap:9px;padding:10px 14px 14px;border-top:1px solid var(--line);background:var(--bg)}
+  .threadinput input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:11px 16px;color:var(--text);outline:none;font-size:13.5px;min-width:0}
+  .asorg{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:11.5px;color:var(--muted)}
+  .asorg select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:11px;font-weight:700}
+  /* ---------- profile / admin ---------- */
+  .statrow{display:flex;text-align:center;margin:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 0}
+  .statrow div{flex:1}
+  .statrow b{display:block;font-size:17px}
+  .statrow span{font-size:11px;color:var(--muted)}
+  .modrow{margin:0 16px 10px;padding:12px}
+  .modrow .acts{display:flex;gap:8px;margin-top:10px}
+  .rolechip{font-size:10px;background:#0E2438;color:var(--blue);border-radius:6px;padding:3px 7px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+  /* ---------- settings ---------- */
+  .setgroup{margin:0 16px 16px}
+  .setgroup h5{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 2px 8px}
+  .setcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .setrow{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+  .setrow:last-child{border-bottom:none}
+  .setrow .ic{width:30px;height:30px;border-radius:10px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .setrow .lb{flex:1;min-width:0}
+  .setrow .lb b{font-size:13.5px;display:block}
+  .setrow .lb span{font-size:11px;color:var(--muted)}
+  .switch{position:relative;width:44px;height:26px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);cursor:pointer;transition:.2s;flex-shrink:0}
+  .switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+  .switch.on{background:var(--pink);border-color:var(--pink)}
+  .switch.on::after{left:20px}
+  .themeseg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+  .themeseg div{padding:7px 14px;border-radius:9px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+  .themeseg div.on{background:var(--panel);color:var(--text);box-shadow:0 1px 6px rgba(0,0,0,.18)}
+  /* ---------- bottom nav ---------- */
+  #nav{position:absolute;bottom:0;left:0;right:0;height:64px;background:var(--glass2);border-top:1px solid var(--line);display:none;z-index:30;backdrop-filter:blur(14px)}
+  #phone.authed #nav{display:flex}
+  #nav .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+  #nav .tab .i{font-size:18px;position:relative}
+  #nav .tab.on{color:#fff}
+  #nav .tab.create .i{width:38px;height:38px;background:linear-gradient(120deg,var(--pink),#FF5DA2);border-radius:13px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 18px rgba(244,21,133,.4);margin-top:-12px}
+  .navdot{position:absolute;top:-2px;right:-4px;width:7px;height:7px;border-radius:50%;background:var(--pink)}
+  .toast{position:absolute;bottom:84px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel2);border:1px solid var(--line);padding:10px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;transition:.3s;z-index:60;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  .successcard{margin:0 16px 14px;padding:18px;text-align:center}
+  .successcard .big{font-size:38px}
+</style>
+</head>
+<body>
+<div id="phone">
+
+  <!-- ============ LOGIN ============ -->
+  <div class="view full active" id="view-login">
+    <div class="loginwrap">
+      <div class="loginglobe">
+        <div class="ball"></div>
+        <div class="dotp" style="left:34%;top:28%"></div><div class="dotp" style="left:60%;top:22%;animation-delay:.4s"></div>
+        <div class="dotp" style="left:52%;top:58%"></div><div class="dotp" style="left:42%;top:72%"></div><div class="dotp" style="left:66%;top:44%"></div>
+      </div>
+      <div class="loginlogo">TOGETH<b>R</b></div>
+      <div class="logintag">One planet. One moment.<br>Join global synchronized action.</div>
+      <div class="field" style="margin:18px 0 12px"><label>EMAIL</label><input id="lemail" value="kevin@flowlabs.us"></div>
+      <div class="field" style="margin:0 0 18px"><label>PASSWORD</label><input type="password" value="•••••••••••"></div>
+      <button class="btn primary" style="width:100%" onclick="login()">Log in</button>
+      <div style="text-align:center;margin-top:16px" class="small muted">New here? <a style="color:var(--pink);font-weight:700;cursor:pointer" onclick="login('Account created — welcome to Togethr ✦')">Create account</a></div>
+      <div style="text-align:center;margin-top:26px;font-size:10.5px" class="muted">©2026 Flow Labs · Privacy · Terms</div>
+    </div>
+  </div>
+
+  <!-- ============ HOME ============ -->
+  <div class="view" id="view-home">
+    <div class="topbar"><div class="logo">TOGETH<b>R</b></div><div class="iconbtn" onclick="toast('Search: people · campaigns · events · orgs')">⌕</div><div class="iconbtn" style="margin-left:8px" onclick="toast('Campaign Iceland Eclipse starts in 35d')">✦</div></div>
+    <div class="carousel" id="carousel"></div>
+    <div class="composer"><div class="avatar">KM</div><input placeholder="Share with the world…" onfocus="toast('Posts are AI pre-screened, then human-moderated')"><button class="btn primary small">Post</button></div>
+    <div class="sectionhead"><h3>For you <span class="aiflag" style="margin-left:4px">✦ AI</span></h3><a onclick="go('globe')">Open globe →</a></div>
+    <div class="chiprow"><span class="chip on">#synchronize</span><span class="chip">#global</span><span class="chip">#eclipse</span><span class="chip">#meditation</span><span class="chip">#vegan</span></div>
+    <div id="feed"></div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ============ GLOBE / DISCOVER ============ -->
+  <div class="view" id="view-globe">
+    <div id="globeWrap">
+      <div class="globe-fallback" id="globeFallback"><div class="ball"></div><div>Loading globe…</div></div>
+      <div id="globeEl"></div>
+    </div>
+    <div class="globe-top">
+      <div class="topbar"><div class="logo">Discover</div><div class="iconbtn" onclick="toast('Search the globe')">⌕</div></div>
+      <div class="chiprow">
+        <span class="chip on" data-layer="campaigns" onclick="toggleLayer(this)">● Campaigns</span>
+        <span class="chip on" data-layer="events" onclick="toggleLayer(this)">● Events</span>
+        <span class="chip on" data-layer="participants" onclick="toggleLayer(this)">● Participants</span>
+        <span class="chip on" data-layer="arcs" onclick="toggleLayer(this)">⌒ Sync arcs</span>
+      </div>
+    </div>
+    <div class="foryou"><span class="spark">✦</span><span><b>3 campaigns near you</b> go live this week — Iceland Eclipse has an LA satellite event.</span></div>
+    <div class="sheet" id="sheet"></div>
+  </div>
+
+  <!-- ============ EVENTS ============ -->
+  <div class="view" id="view-events">
+    <div class="topbar"><div class="logo">Events</div><div class="iconbtn" onclick="go('globe')">🌐</div></div>
+    <div class="chiprow"><span class="chip on">Near me</span><span class="chip">Upcoming</span><span class="chip">Free</span><span class="chip">All tags</span></div>
+    <div id="eventlist"></div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ============ CHAT LIST ============ -->
+  <div class="view" id="view-chat">
+    <div class="topbar"><div class="logo">Messages</div><div class="iconbtn" onclick="toast('New message')">✎</div></div>
+    <div class="chiprow"><span class="chip on" onclick="chatTab(this,'dm')">Messages</span><span class="chip" onclick="chatTab(this,'ann')">Announcements</span></div>
+    <div class="asorg">Chatting as <select id="chatIdentity" onchange="toast('Now messaging as '+this.value)"><option>Kevin Moore</option><option>Rise (org)</option><option>Open Spaces (org)</option></select></div>
+    <div id="convolist"></div>
+  </div>
+
+  <!-- ============ CHAT THREAD ============ -->
+  <div class="view full" id="view-thread">
+    <div id="thread">
+      <div class="topbar" style="position:relative">
+        <div class="iconbtn" style="margin:0" onclick="go('chat')">←</div>
+        <div class="avatar" id="thavatar">RM</div>
+        <div><b id="thname" style="font-size:14.5px">Ray Mehta</b><div class="muted" style="font-size:10.5px" id="thsub">online</div></div>
+      </div>
+      <div id="threadmsgs"></div>
+      <div class="threadinput">
+        <input id="msginput" placeholder="Message…" onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="btn primary small" style="border-radius:999px" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CREATE CHOOSER ============ -->
+  <div class="view" id="view-create">
+    <div class="topbar"><div class="logo">Create</div><div class="iconbtn" onclick="go('home')">✕</div></div>
+    <div class="flowbanner">✦ Guided setup: Organization → Campaign → Events. Start anywhere.</div>
+    <div class="choosegrid">
+      <div class="choose" onclick="startOrgWizard()">
+        <div class="ico" style="background:#123024">🏛</div>
+        <div><b>Organization</b><div class="muted small">Top level. Team roles, campaigns, announcements.</div></div>
+        <div style="margin-left:auto" class="muted">→</div>
+      </div>
+      <div class="choose" onclick="startCampaignWizard()">
+        <div class="ico" style="background:#3A0F26">🌐</div>
+        <div><b>Campaign</b><div class="muted small">Synchronized moment, challenge, or range.</div></div>
+        <div style="margin-left:auto" class="muted">→</div>
+      </div>
+      <div class="choose" onclick="startEventWizard()">
+        <div class="ico" style="background:#0E2438">📍</div>
+        <div><b>Event</b><div class="muted small">Official or local event under a campaign umbrella.</div></div>
+        <div style="margin-left:auto" class="muted">→</div>
+      </div>
+    </div>
+    <div class="sectionhead"><h3>Why the hierarchy?</h3></div>
+    <div class="card" style="margin:0 16px;padding:13px" >
+      <div class="small muted" style="line-height:1.6">Organizations run <b style="color:#fff">campaigns</b>. Campaigns spawn <b style="color:#fff">events</b> — official ones by the team, or local satellites hosted by anyone, all under the same umbrella and plotted on the globe.</div>
+    </div>
+  </div>
+
+  <!-- ============ ORG WIZARD ============ -->
+  <div class="view" id="view-createorg">
+    <div class="topbar"><div class="logo">New Organization</div><div class="iconbtn" onclick="go('create')">✕</div></div>
+    <div class="steps"><i class="on" id="ost1"></i><i id="ost2"></i></div>
+    <div id="ostep1">
+      <div class="field"><label>ORGANIZATION NAME</label><input id="oname" placeholder="e.g. Aurora Collective" oninput="document.getElementById('oslug').value=this.value.toLowerCase().replace(/[^a-z0-9]+/g,'-')"></div>
+      <div class="field"><label>LINK</label><input id="oslug" placeholder="aurora-collective"></div>
+      <div class="field"><label>TAGLINE</label><input id="otag" placeholder="One line about your mission"></div>
+      <div class="field"><label>LOCATION</label><input placeholder="City, Country" value="Los Angeles, CA"></div>
+      <div class="field"><label>TAGS</label><input placeholder="#community #earth"></div>
+      <div class="aiassist" onclick="document.getElementById('otag').value='Rising together for collective change';toast('✦ AI drafted tagline, description & tags')"><span style="font-size:18px;color:var(--pink)">✦</span><span><b>Draft with AI</b> — mission statement, description &amp; tags from one line.</span></div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn primary" style="flex:1" onclick="owiz(2)">Continue — Team &amp; roles</button></div>
+    </div>
+    <div id="ostep2" style="display:none">
+      <div class="field"><label>TEAM & ROLES</label></div>
+      <div class="memberrow"><div class="avatar">KM</div><div><b class="small">Kevin Moore</b><div class="muted" style="font-size:10.5px">kevin@flowlabs.us</div></div><select><option>Org Admin</option></select></div>
+      <div class="memberrow"><div class="avatar">YZ</div><div><b class="small">Yuli Zhong</b><div class="muted" style="font-size:10.5px">invited</div></div>
+        <select><option>Org Manager</option><option>Content Moderator</option><option selected>Events Coordinator</option><option>Messages Manager</option></select></div>
+      <div class="memberrow"><div class="avatar">RM</div><div><b class="small">Ray Mehta</b><div class="muted" style="font-size:10.5px">invited</div></div>
+        <select><option>Org Manager</option><option selected>Content Moderator</option><option>Events Coordinator</option><option>Messages Manager</option></select></div>
+      <div style="margin:0 16px 14px"><button class="btn small" onclick="toast('Invite sent')">+ Add member</button></div>
+      <div class="card" style="margin:0 16px 14px;padding:12px;font-size:12.5px">
+        <div class="aiflag">✦ AI pre-check passed</div>
+        <div class="muted" style="margin-top:6px">No impersonation or duplicate-org signals found.</div>
+      </div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn" onclick="owiz(1)">Back</button><button class="btn primary" style="flex:1" onclick="publishOrg()">Create organization</button></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ============ CAMPAIGN WIZARD ============ -->
+  <div class="view" id="view-createcampaign">
+    <div class="topbar"><div class="logo">New Campaign</div><div class="iconbtn" onclick="go('create')">✕</div></div>
+    <div class="flowbanner" id="cflowbanner" style="display:none"></div>
+    <div class="steps"><i class="on" id="st1"></i><i id="st2"></i><i id="st3"></i></div>
+    <div id="wstep1">
+      <div class="field"><label>ORGANIZATION</label>
+        <select id="corgsel"><option>Rise — you are Admin</option><option>Open Spaces — Admin</option><option>Vegan Coalition — Manager</option></select></div>
+      <div class="field"><label>CAMPAIGN NAME</label><input id="cname" placeholder="e.g. Global Sunrise Yoga" oninput="pv()"></div>
+      <div class="field"><label>CAMPAIGN TYPE</label></div>
+      <div class="typegrid">
+        <div class="opt on" onclick="pickType(this,'sync')"><span class="ico">🌐</span>Synchronized<br>Moment</div>
+        <div class="opt" onclick="pickType(this,'challenge')"><span class="ico">🏆</span>Challenge</div>
+        <div class="opt" onclick="pickType(this,'range')"><span class="ico">📅</span>Range</div>
+      </div>
+      <div class="field"><label>EVENTS</label></div>
+      <div class="segment"><div onclick="seg(this)">No events</div><div onclick="seg(this)">Private hosted</div><div class="on" onclick="seg(this)">Public hosted</div></div>
+      <div class="aiassist" onclick="aiDraft()"><span style="font-size:18px;color:var(--pink)">✦</span><span><b>Draft with AI</b> — tagline, description &amp; tags from one line.</span></div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn primary" style="flex:1" onclick="wiz(2)">Continue — Schedule &amp; place</button></div>
+    </div>
+    <div id="wstep2" style="display:none">
+      <div class="fieldrow">
+        <div class="field"><label>STARTS</label><input type="datetime-local" value="2026-08-12T09:47"></div>
+        <div class="field"><label>ENDS</label><input type="datetime-local" value="2026-08-12T11:47"></div>
+      </div>
+      <div class="field"><label>TIMEZONE</label><select><option>Auto — participant local time</option><option>PST (UTC-8)</option><option>GMT</option></select></div>
+      <div class="field"><label>LOCATION / COVERAGE</label>
+        <select id="cloc"><option value="34.05,-118.24">Los Angeles, CA</option><option value="64.8,-23.7">Snæfellsnes, Iceland</option><option value="40.7,-74">New York, NY</option><option value="51.5,-0.12">London, UK</option><option value="0,0">🌍 Global</option></select></div>
+      <div class="card" style="margin:0 16px 14px;height:120px;background:radial-gradient(circle at 50% 120%,#12345a,#0B0D12);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px">🌍 drag to set area coverage</div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn" onclick="wiz(1)">Back</button><button class="btn primary" style="flex:1" onclick="wiz(3)">Continue — Review</button></div>
+    </div>
+    <div id="wstep3" style="display:none">
+      <div class="field"><label>PREVIEW</label></div>
+      <div class="feat" style="margin:0 16px 14px;flex:none">
+        <div class="bgi" style="background:linear-gradient(120deg,#301934,#0f2027)"></div>
+        <div class="ov"><span class="badge sync" id="pvbadge">Sync moment</span><h4 id="pvname">Your campaign</h4><div class="small muted" id="pvorg">by Rise · starts Aug 12</div></div>
+      </div>
+      <div class="card" style="margin:0 16px 14px;padding:12px;font-size:12.5px">
+        <div class="aiflag">✦ AI pre-check passed</div>
+        <div class="muted" style="margin-top:6px">No policy issues found. Publishes straight to the globe.</div>
+      </div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn" onclick="wiz(2)">Back</button><button class="btn primary" style="flex:1" onclick="publishCampaign()">Publish campaign</button></div>
+    </div>
+    <div id="wstepdone" style="display:none">
+      <div class="card successcard">
+        <div class="big">🌐</div>
+        <b id="donecname" style="display:block;margin:8px 0 4px">Campaign live!</b>
+        <div class="muted small">It's on the globe and in the feed. Now add events — official ones, and anyone can host local satellites.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin:0 16px">
+        <button class="btn primary" onclick="startEventWizard(true)">＋ Add an official event</button>
+        <button class="btn" onclick="openCampaign(lastCreatedCampaign)">View campaign page</button>
+        <button class="btn" onclick="go('globe')">See it on the globe</button>
+      </div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ============ EVENT WIZARD ============ -->
+  <div class="view" id="view-createevent">
+    <div class="topbar"><div class="logo">New Event</div><div class="iconbtn" onclick="go('create')">✕</div></div>
+    <div class="flowbanner" id="eflowbanner" style="display:none"></div>
+    <div class="steps"><i class="on" id="est1"></i><i id="est2"></i></div>
+    <div id="estep1">
+      <div class="field"><label>UNDER CAMPAIGN</label><select id="ecamp"></select></div>
+      <div class="field"><label>EVENT TITLE</label><input id="ename" placeholder="e.g. Downtown LA Satellite"></div>
+      <div class="field"><label>CITY</label>
+        <select id="ecity">
+          <option value="34.05,-118.24">Los Angeles, CA</option><option value="19.07,72.87">Mumbai, India</option>
+          <option value="43.65,-79.38">Toronto, Canada</option><option value="48.85,2.35">Paris, France</option>
+          <option value="35.68,139.69">Tokyo, Japan</option><option value="-33.86,151.2">Sydney, Australia</option>
+          <option value="30.04,31.23">Cairo, Egypt</option><option value="6.52,3.37">Lagos, Nigeria</option>
+        </select></div>
+      <div class="fieldrow">
+        <div class="field"><label>STARTS</label><input type="datetime-local" value="2026-08-12T09:47"></div>
+        <div class="field"><label>ENDS</label><input type="datetime-local" value="2026-08-12T11:47"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn primary" style="flex:1" onclick="ewiz(2)">Continue — Tickets &amp; capacity</button></div>
+    </div>
+    <div id="estep2" style="display:none">
+      <div class="fieldrow">
+        <div class="field"><label>TICKET PRICE (USD)</label><input id="eprice" type="number" value="0" min="0"></div>
+        <div class="field"><label>MAX CAPACITY</label><input id="ecap" type="number" value="100"></div>
+      </div>
+      <div class="field"><label>DETAILS</label><textarea rows="3" placeholder="What happens at this event?"></textarea></div>
+      <div class="card" style="margin:0 16px 14px;padding:12px;font-size:12.5px">
+        <div class="aiflag">✦ Inherits campaign tags, type & moderation</div>
+        <div class="muted" style="margin-top:6px">#eclipse #iceland #globalmeditation · Synchronized Moment</div>
+      </div>
+      <div style="display:flex;gap:10px;margin:6px 16px"><button class="btn" onclick="ewiz(1)">Back</button><button class="btn primary" style="flex:1" onclick="publishEvent()">Publish event</button></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ============ PROFILE / ADMIN ============ -->
+  <div class="view" id="view-profile">
+    <div class="topbar"><div class="logo">@flowlabskevin</div><div class="iconbtn" onclick="go('settings')">⚙</div></div>
+    <div style="display:flex;gap:14px;align-items:center;padding:6px 16px">
+      <div class="avatar" style="width:64px;height:64px;font-size:22px">KM</div>
+      <div><b style="font-size:17px">Kevin Moore</b><div class="muted small">Brea, CA · #music #meditate</div>
+      <div class="pillrow" id="myroles"><span class="rolechip">Admin · Rise</span><span class="rolechip">Manager · Vegan Coalition</span></div></div>
+    </div>
+    <div class="statrow"><div><b>2</b><span>Followers</span></div><div><b>2</b><span>Following</span></div><div><b id="statCampaigns">13</b><span>Campaigns</span></div><div><b id="statOrgs">6</b><span>Orgs</span></div></div>
+    <div class="sectionhead"><h3>Moderation queue <span class="aiflag warn" style="margin-left:4px">✦ 2 AI-flagged</span></h3><a onclick="toast('Content Moderator role — full queue')">See all</a></div>
+    <div class="card modrow">
+      <div style="display:flex;gap:10px;align-items:center"><div class="avatar">2F</div><div><b class="small">2027 Fusion</b><div class="muted small">posted to Iceland Eclipse · 2h</div></div><span class="aiflag warn" style="margin-left:auto">✦ 82% spam</span></div>
+      <div class="small" style="margin-top:8px">"Test Event Post 1234 — click here for free tickets…"</div>
+      <div class="acts"><button class="btn small" onclick="modAct(this,'Removed')">Remove</button><button class="btn small primary" onclick="modAct(this,'Approved')">Approve</button></div>
+    </div>
+    <div class="card modrow">
+      <div style="display:flex;gap:10px;align-items:center"><div class="avatar">RM</div><div><b class="small">Ray Mehta</b><div class="muted small">image · Meat Fast · 5h</div></div><span class="aiflag warn" style="margin-left:auto">✦ borderline</span></div>
+      <div class="small" style="margin-top:8px">AI: possible off-topic promotion. Rationale attached.</div>
+      <div class="acts"><button class="btn small" onclick="modAct(this,'Removed')">Remove</button><button class="btn small primary" onclick="modAct(this,'Approved')">Approve</button></div>
+    </div>
+    <div class="sectionhead"><h3>My activity</h3></div>
+    <div id="myactivity"></div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- ============ SETTINGS ============ -->
+  <div class="view" id="view-settings">
+    <div class="topbar"><div class="iconbtn" style="margin:0" onclick="go('profile')">←</div><div class="logo">Settings</div></div>
+    <div class="setgroup">
+      <h5>Account</h5>
+      <div class="setcard">
+        <div class="setrow" onclick="toast('Edit profile')">
+          <div class="avatar">KM</div>
+          <div class="lb"><b>Kevin Moore</b><span>@flowlabskevin · kevin@flowlabs.us</span></div>
+          <span class="muted">→</span>
+        </div>
+        <div class="setrow" onclick="toast('Change password flow')"><div class="ic">🔑</div><div class="lb"><b>Password &amp; security</b><span>Last changed 3 months ago</span></div><span class="muted">→</span></div>
+        <div class="setrow" onclick="toast('Linked: Google')"><div class="ic">🔗</div><div class="lb"><b>Linked accounts</b><span>Google connected</span></div><span class="muted">→</span></div>
+      </div>
+    </div>
+    <div class="setgroup">
+      <h5>Appearance</h5>
+      <div class="setcard">
+        <div class="setrow" style="cursor:default">
+          <div class="ic">🎨</div>
+          <div class="lb"><b>Theme</b><span>Dark keeps the globe immersive</span></div>
+          <div class="themeseg"><div id="thDark" class="on" onclick="setTheme('dark')">Dark</div><div id="thLight" onclick="setTheme('light')">Light</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="setgroup">
+      <h5>Notifications</h5>
+      <div class="setcard">
+        <div class="setrow"><div class="ic">🌐</div><div class="lb"><b>Campaign start &amp; end</b><span>Sync moments you joined</span></div><div class="switch on" onclick="sw(this)"></div></div>
+        <div class="setrow"><div class="ic">📍</div><div class="lb"><b>Event reminders</b><span>24h and 1h before RSVPs</span></div><div class="switch on" onclick="sw(this)"></div></div>
+        <div class="setrow"><div class="ic">💬</div><div class="lb"><b>Messages &amp; announcements</b><span>DMs and org channels</span></div><div class="switch on" onclick="sw(this)"></div></div>
+      </div>
+    </div>
+    <div class="setgroup">
+      <h5>Privacy</h5>
+      <div class="setcard">
+        <div class="setrow"><div class="ic">🛰</div><div class="lb"><b>Show me on the globe</b><span>Anonymous dot at city-level only</span></div><div class="switch on" onclick="sw(this)"></div></div>
+        <div class="setrow"><div class="ic">✉️</div><div class="lb"><b>Don't publish email</b><span>Hidden on org &amp; event contact cards</span></div><div class="switch on" onclick="sw(this)"></div></div>
+        <div class="setrow"><div class="ic">📞</div><div class="lb"><b>Don't publish phone</b><span>Hidden everywhere</span></div><div class="switch on" onclick="sw(this)"></div></div>
+      </div>
+    </div>
+    <div class="setgroup">
+      <h5>AI</h5>
+      <div class="setcard">
+        <div class="setrow"><div class="ic">✦</div><div class="lb"><b>Personalized recommendations</b><span>For-You rail &amp; smart globe highlights</span></div><div class="switch on" onclick="sw(this)"></div></div>
+        <div class="setrow"><div class="ic">🛡</div><div class="lb"><b>AI pre-screen my posts</b><span>Instant publish when checks pass</span></div><div class="switch on" onclick="sw(this)"></div></div>
+      </div>
+    </div>
+    <div class="setgroup">
+      <h5>Session</h5>
+      <div class="setcard">
+        <div class="setrow" onclick="logout()"><div class="ic">⎋</div><div class="lb"><b style="color:var(--pink)">Log out</b><span>kevin@flowlabs.us</span></div></div>
+        <div class="setrow" onclick="toast('Account deletion requires email confirmation')"><div class="ic">🗑</div><div class="lb"><b>Delete account</b><span>Permanent — exports your data first</span></div></div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:4px 0 24px" class="muted small">Togethr rebuild prototype · v2.1</div>
+  </div>
+
+  <!-- ============ CAMPAIGN DETAIL ============ -->
+  <div class="view" id="view-campaign">
+    <div class="backbtn" onclick="go(lastTab)">←</div>
+    <div class="hero" id="chero"><div class="ov"></div></div>
+    <div class="detailbody">
+      <span class="badge sync" id="cbadge">Sync moment</span> <span class="badge live" id="clive" style="display:none">LIVE</span>
+      <h2 id="ctitle" style="margin:8px 0 2px"></h2>
+      <div class="muted small" id="csub"></div>
+      <div class="card" style="margin:14px 0;padding:14px;display:flex;justify-content:center"><div class="cd" id="ccd"></div></div>
+      <div class="miniglobe"><div class="lbl">Live participation</div><div class="iconbtn expand" onclick="go('globe')">⤢</div><div id="cglobeEl" style="position:absolute;inset:0"></div></div>
+      <p class="small" id="cdesc" style="line-height:1.55;color:#C6CCDA"></p>
+      <div class="pillrow" id="ctags"></div>
+      <div class="facepile" id="cfaces"></div>
+      <div class="sectionhead" style="padding:18px 0 10px"><h3>Events under this campaign</h3><a onclick="startEventWizard(true)">+ Host one</a></div>
+      <div id="cevents"></div>
+      <div style="height:120px"></div>
+    </div>
+    <div class="stickycta">
+      <button class="btn primary" onclick="toast('Joined! You appear on the globe ✦')">Join campaign</button>
+      <button class="btn" onclick="startEventWizard(true)">Host event</button>
+    </div>
+  </div>
+
+  <!-- ============ EVENT DETAIL ============ -->
+  <div class="view" id="view-event">
+    <div class="backbtn" onclick="go(lastTab)">←</div>
+    <div class="hero" id="ehero"><div class="ov"></div></div>
+    <div class="detailbody">
+      <span class="badge event">Event</span> <span class="badge sync">Sync moment</span>
+      <h2 id="etitle" style="margin:8px 0 2px"></h2>
+      <div class="muted small" id="esub"></div>
+      <div class="card" style="margin:14px 0;padding:14px;display:flex;justify-content:center"><div class="cd" id="ecd" data-cd=""></div></div>
+      <div class="miniglobe"><div class="lbl">This event → global moment</div><div class="iconbtn expand" onclick="go('globe')">⤢</div><div id="eglobeEl" style="position:absolute;inset:0"></div></div>
+      <div class="kv" id="ekv"></div>
+      <div class="facepile" id="efaces"></div>
+      <div class="sectionhead" style="padding:18px 0 10px"><h3>Nearby events</h3><a onclick="go('events')">See all</a></div>
+      <div id="enearby"></div>
+      <div style="height:120px"></div>
+    </div>
+    <div class="stickycta">
+      <button class="btn primary" id="ergbtn" onclick="this.textContent='Going ✓ · ticket in wallet';toast('RSVP confirmed ✦')">Register — Free</button>
+      <button class="btn" onclick="openThread(0)">Message host</button>
+    </div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <div id="nav">
+    <div class="tab on" data-v="home" onclick="go('home')"><span class="i">⌂</span>Home</div>
+    <div class="tab" data-v="globe" onclick="go('globe')"><span class="i">🌐</span>Discover</div>
+    <div class="tab create" data-v="create" onclick="go('create')"><span class="i">＋</span></div>
+    <div class="tab" data-v="events" onclick="go('events')"><span class="i">▦</span>Events</div>
+    <div class="tab" data-v="chat" onclick="go('chat')"><span class="i">💬<span class="navdot" id="chatdot"></span></span>Chat</div>
+    <div class="tab" data-v="profile" onclick="go('profile')"><span class="i">◉</span>Profile</div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://unpkg.com/globe.gl@2.32.2/dist/globe.gl.min.js"></script>
+<script>
+/* ================= mock data ================= */
+const IMG = {
+  eclipse:'https://images.unsplash.com/photo-1503416997304-7f8bf166c121?w=800&q=60',
+  meditate:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=60',
+  lands:'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=60',
+  vegan:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=60',
+  run:'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=60',
+  city:'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=60'
+};
+let campaigns = [
+  {id:'c1',name:'Iceland Eclipse',org:'Unify',type:'sync', img:IMG.eclipse, lat:64.8,lng:-23.7, joined:1000,
+   tagline:'A cosmic gathering in the land of fire & ice',
+   desc:'Artists, scientists, musicians and visionaries converge on the Snæfellsnes Peninsula as the Moon’s shadow sweeps the land. Satellite events worldwide join the same moment.',
+   ends: Date.now()+ 35*864e5 + 13*36e5, tags:['#eclipse','#iceland','#globalmeditation']},
+  {id:'c2',name:'Summer Solstice Meditation',org:'Unify',type:'sync', img:IMG.meditate, lat:34.05,lng:-118.24, joined:1000,
+   tagline:'The world pauses together', desc:'On the longest day of the year, people around the world pause together for a synchronized meditation.',
+   ends: Date.now()+ 41*864e5, tags:['#synchronize','#global']},
+  {id:'c3',name:'Meat Fast',org:'Rise',type:'challenge', img:IMG.vegan, lat:40.7,lng:-74, joined:412,
+   tagline:'30 days, no meat', desc:'A 30-day no-meat challenge designed to reduce your environmental impact. Complete it any way you like — log your streak and appear on the globe.',
+   ends: Date.now()+ 12*864e5, tags:['#meatfast','#climate']},
+  {id:'c4',name:'Keep Free Lands Free',org:'Open Spaces',type:'range', img:IMG.lands, lat:36.2,lng:-115.9, joined:2,
+   tagline:'Complete one land-cleanup action before May 3', desc:'A Range campaign: you have from Dec 27 to May 3 to complete a public-lands action — cleanup, letter, or local meetup.',
+   ends: Date.now()+ 297*864e5, tags:['#publicland','#freedom']},
+  {id:'c5',name:'Running4Life',org:'MAHA',type:'challenge', img:IMG.run, lat:51.5,lng:-0.12, joined:88,
+   tagline:'Run 100km together, anywhere', desc:'Log runs anywhere on earth; the collective total lights up the globe.',
+   ends: Date.now()+ 60*864e5, tags:['#run','#health']},
+];
+let events = [
+  {id:'e1',title:'Iceland Eclipse — Los Angeles Satellite',city:'Los Angeles',lat:34.05,lng:-118.24,going:56,price:0,cap:200,campaign:'c1',host:'Kevin'},
+  {id:'e2',title:'Iceland Eclipse — Mumbai Satellite',city:'Mumbai',lat:19.07,lng:72.87,going:41,price:0,cap:150,campaign:'c1',host:'Vivaan'},
+  {id:'e3',title:'Iceland Eclipse — Toronto Satellite',city:'Toronto',lat:43.65,lng:-79.38,going:24,price:0,cap:80,campaign:'c1',host:'Mason'},
+  {id:'e4',title:'Iceland Eclipse — Paris Satellite',city:'Paris',lat:48.85,lng:2.35,going:38,price:10,cap:120,campaign:'c1',host:'Daniela'},
+  {id:'e5',title:'Iceland Eclipse — London Satellite',city:'London',lat:51.5,lng:-0.12,going:52,price:0,cap:300,campaign:'c1',host:'Liam'},
+  {id:'e6',title:'Iceland Eclipse — Nairobi Satellite',city:'Nairobi',lat:-1.29,lng:36.82,going:19,price:0,cap:60,campaign:'c1',host:'Amara'},
+  {id:'e7',title:'Iceland Eclipse — Seoul Satellite',city:'Seoul',lat:37.56,lng:126.97,going:33,price:5,cap:90,campaign:'c1',host:'Yan'},
+  {id:'e8',title:'Iceland Eclipse — Lagos Satellite',city:'Lagos',lat:6.52,lng:3.37,going:27,price:0,cap:100,campaign:'c1',host:'Ade'},
+  {id:'e9',title:'Iceland Eclipse — Cairo Satellite',city:'Cairo',lat:30.04,lng:31.23,going:22,price:0,cap:70,campaign:'c1',host:'Omar'},
+  {id:'e10',title:'Iceland Eclipse — Mexico City Satellite',city:'Mexico City',lat:19.43,lng:-99.13,going:31,price:0,cap:110,campaign:'c1',host:'Sofía'},
+  {id:'e11',title:'Iceland Eclipse — Tokyo Satellite',city:'Tokyo',lat:35.68,lng:139.69,going:45,price:0,cap:140,campaign:'c1',host:'Rin'},
+  {id:'e12',title:'Iceland Eclipse — Sydney Satellite',city:'Sydney',lat:-33.86,lng:151.2,going:29,price:0,cap:100,campaign:'c1',host:'Grayson'},
+];
+const posts = [
+  {who:'2027 Fusion',init:'2F',when:'2h',body:'One month until the shadow crosses Snæfellsnes. Satellite events now live in 12 cities 🌘',img:IMG.eclipse,likes:214,comments:36},
+  {who:'Kevin Moore',init:'KM',when:'5h',body:'We don’t need meat! Day 18 of the Meat Fast — streak intact.',img:IMG.vegan,likes:47,comments:9},
+  {who:'Open Spaces',init:'OS',when:'1d',body:'2 of 2 members completed their land action this week. Range campaign at 64% completion.',img:IMG.lands,likes:12,comments:2},
+];
+let convos = [
+  {id:0,name:'Ray Mehta',init:'RM',sub:'online',unread:true,msgs:[
+    {me:false,t:'Hey! Are you hosting the LA satellite again this year?',w:'9:12 AM'},
+    {me:true,t:'Hey',w:'9:14 AM'},
+    {me:false,t:'The eclipse one — I can bring the sound gear like last time.',w:'9:15 AM'}]},
+  {id:1,name:'Viktor Test',init:'VT',sub:'last seen 2h ago',unread:false,msgs:[
+    {me:true,t:'Testing',w:'Apr 22'},{me:false,t:'Got it 👍',w:'Apr 22'}]},
+  {id:2,name:'Yuli Zhong',init:'YZ',sub:'online',unread:false,msgs:[
+    {me:true,t:'Response 1106',w:'Mar 11'},{me:false,t:'Perfect, see you at the meetup.',w:'Mar 11'}]},
+];
+const announcements = [
+  {name:'Unify',init:'UN',sub:'announcement',msgs:[{me:false,t:'🌘 Iceland Eclipse goes live in 35 days. 12 satellite cities confirmed. Host yours →',w:'2h'}]},
+  {name:'Rise',init:'RI',sub:'announcement',msgs:[{me:false,t:'Meat Fast crosses 400 participants! Final stretch — 12 days left.',w:'1d'}]},
+];
+
+/* ================= auth & nav ================= */
+let lastTab='home', lastCreatedCampaign=null, cameFromFlow=false;
+function login(msg){
+  document.getElementById('phone').classList.add('authed');
+  go('home'); toast(msg||'Welcome back, Kevin ✦');
+}
+function logout(){document.getElementById('phone').classList.remove('authed');
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-login').classList.add('active');}
+function go(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const navV = v==='settings' ? 'profile' : v;
+  document.querySelectorAll('#nav .tab').forEach(t=>t.classList.toggle('on',t.dataset.v===navV));
+  if(['home','globe','events','chat','profile'].includes(v)) lastTab=v;
+  if(v==='globe') initGlobe();
+  if(v==='chat') document.getElementById('chatdot').style.display='none';
+}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2300)}
+
+/* ================= theme & settings ================= */
+function setTheme(mode){
+  document.getElementById('phone').classList.toggle('light',mode==='light');
+  document.getElementById('thDark').classList.toggle('on',mode==='dark');
+  document.getElementById('thLight').classList.toggle('on',mode==='light');
+  try{localStorage.setItem('togethr-theme',mode)}catch(e){}
+  toast(mode==='light'?'Light theme ☀️':'Dark theme 🌙');
+}
+function sw(el){el.classList.toggle('on')}
+try{ if(localStorage.getItem('togethr-theme')==='light'){
+  document.getElementById('phone').classList.add('light');
+  document.getElementById('thDark').classList.remove('on');
+  document.getElementById('thLight').classList.add('on');
+}}catch(e){}
+
+/* ================= countdown ================= */
+function cdHTML(ms){
+  const s=Math.max(0,Math.floor((ms-Date.now())/1000));
+  const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),ss=s%60;
+  return `<div><b>${d}</b><span>days</span></div><div><b>${h}</b><span>hrs</span></div><div><b>${m}</b><span>min</span></div><div><b>${ss}</b><span>sec</span></div>`;
+}
+setInterval(()=>{document.querySelectorAll('[data-cd]').forEach(el=>{if(el.dataset.cd)el.innerHTML=cdHTML(+el.dataset.cd)})},1000);
+
+/* ================= home render ================= */
+function renderHome(){
+  document.getElementById('carousel').innerHTML=campaigns.map(c=>`
+    <div class="feat" onclick="openCampaign('${c.id}')">
+      <div class="bgi" style="background-image:url('${c.img}')"></div>
+      <div class="ov">
+        <div><span class="badge ${c.type==='sync'?'sync':c.type}">${c.type==='sync'?'Sync moment':c.type}</span></div>
+        <h4>${c.name}</h4>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div class="small muted">by ${c.org} · ${c.joined.toLocaleString()} joined</div>
+          <div class="cd" data-cd="${c.ends}" style="transform:scale(.72);transform-origin:right bottom"></div>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('myactivity').innerHTML=campaigns.slice(0,3).map(c=>`
+    <div class="card rowcard" onclick="openCampaign('${c.id}')">
+      <div class="thumb" style="background-image:url('${c.img}')"></div>
+      <div style="flex:1"><span class="badge ${c.type==='sync'?'sync':c.type}" style="float:right">${c.type}</span>
+        <b class="small">${c.name}</b><div class="muted small">${c.org} · Member</div>
+        <div class="muted" style="font-size:11px;margin-top:6px">${c.tagline}</div></div>
+    </div>`).join('');
+}
+document.getElementById('feed').innerHTML=posts.map(p=>`
+  <div class="card post">
+    <div class="head"><div class="avatar">${p.init}</div><div><b class="small">${p.who}</b><div class="muted" style="font-size:11px">${p.when} ago</div></div>
+    <span class="aiflag" style="margin-left:auto">✦ verified</span></div>
+    <div class="small" style="line-height:1.5">${p.body}</div>
+    <div class="media" style="background-image:url('${p.img}')"></div>
+    <div class="acts"><span>♥ ${p.likes}</span><span>💬 ${p.comments}</span><span>↗ Share</span></div>
+  </div>`).join('');
+renderHome();
+
+/* ================= events list ================= */
+function renderEvents(){
+  document.getElementById('eventlist').innerHTML=events.map(e=>`
+    <div class="card rowcard" onclick="openEvent('${e.id}')">
+      <div class="thumb" style="background-image:url('${IMG.eclipse}')"></div>
+      <div style="flex:1">
+        <b class="small">${e.title}</b>
+        <div class="muted small">Aug 12, 2026 · 9:47 AM local · ${e.price?'$'+e.price:'Free'}</div>
+        <div class="facepile" style="margin-top:8px">${['A','B','C'].map(x=>`<div class="avatar">${x}</div>`).join('')}<span class="muted small" style="margin-left:8px">${e.going} going</span>
+        <button class="btn small primary" style="margin-left:auto" onclick="event.stopPropagation();this.textContent='Going ✓';toast('RSVP confirmed — ${e.city}!')">Register</button></div>
+      </div>
+    </div>`).join('');
+}
+renderEvents();
+
+/* ================= campaign detail ================= */
+function openCampaign(id){
+  const c=campaigns.find(x=>x.id===id); if(!c) return;
+  document.getElementById('chero').style.backgroundImage=`linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.2)),url('${c.img}')`;
+  const b=document.getElementById('cbadge');
+  b.textContent=c.type==='sync'?'Synchronized moment':c.type; b.className='badge '+(c.type==='sync'?'sync':c.type);
+  document.getElementById('clive').style.display = c.id==='c3'?'inline-block':'none';
+  document.getElementById('ctitle').textContent=c.name;
+  document.getElementById('csub').textContent=`by ${c.org} · ${c.joined.toLocaleString()} participating · ${c.tagline}`;
+  document.getElementById('cdesc').textContent=c.desc;
+  document.getElementById('ccd').dataset.cd=c.ends;
+  document.getElementById('ctags').innerHTML=c.tags.map(t=>`<span class="pill">${t}</span>`).join('');
+  document.getElementById('cfaces').innerHTML=['GR','OM','VI','KM','+'].map(x=>`<div class="avatar">${x}</div>`).join('')+`<span class="muted small" style="margin-left:10px">Grayson, Omar, Vivaan and ${Math.max(0,c.joined-3).toLocaleString()} others</span>`;
+  const evs=events.filter(e=>e.campaign===c.id);
+  document.getElementById('cevents').innerHTML = evs.length ? evs.slice(0,5).map(e=>`
+    <div class="card rowcard" style="margin:0 0 10px" onclick="openEvent('${e.id}')">
+      <div style="flex:1"><b class="small">${e.city} Satellite</b><div class="muted small">Aug 12 · host: ${e.host} · ${e.going} going</div></div>
+      <button class="btn small" onclick="event.stopPropagation();toast('RSVP’d ${e.city}')">RSVP</button>
+    </div>`).join('') : `<div class="muted small" style="padding:4px 0 10px">No hosted events yet — ${c.type==='range'?'complete your action anytime in the window, or host a meetup.':'be the first to host a local event.'}</div>`;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-campaign').classList.add('active');
+  setTimeout(()=>campaignGlobe(c),60);
+}
+
+/* ================= event detail ================= */
+function openEvent(id){
+  const e=events.find(x=>x.id===id); if(!e) return;
+  const c=campaigns.find(x=>x.id===e.campaign)||campaigns[0];
+  document.getElementById('ehero').style.backgroundImage=`linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.2)),url('${c.img}')`;
+  document.getElementById('etitle').textContent=e.title;
+  document.getElementById('esub').innerHTML=`under <b style="color:var(--pink);cursor:pointer" onclick="openCampaign('${c.id}')">${c.name}</b> · hosted by ${e.host}`;
+  document.getElementById('ecd').dataset.cd=c.ends;
+  document.getElementById('ekv').innerHTML=`
+    <span>When</span><div>Aug 12, 2026 · 9:47–11:47 AM local</div>
+    <span>Where</span><div>${e.city}</div>
+    <span>Cost</span><div>${e.price?'$'+e.price+' USD':'Free'}</div>
+    <span>Capacity</span><div>${e.going} going · ${e.cap-e.going} spots left</div>
+    <span>Organizer</span><div>${e.host}</div>`;
+  document.getElementById('efaces').innerHTML=['A','B','C','D'].map(x=>`<div class="avatar">${x}</div>`).join('')+`<span class="muted small" style="margin-left:10px">${e.going} going</span>`;
+  document.getElementById('ergbtn').textContent = e.price?`Register — $${e.price}`:'Register — Free';
+  document.getElementById('enearby').innerHTML=events.filter(x=>x.id!==e.id).slice(0,3).map(x=>`
+    <div class="card rowcard" style="margin:0 0 10px" onclick="openEvent('${x.id}')">
+      <div style="flex:1"><b class="small">${x.city} Satellite</b><div class="muted small">${x.going} going · ${x.price?'$'+x.price:'Free'}</div></div>
+      <span class="muted">→</span>
+    </div>`).join('');
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-event').classList.add('active');
+  setTimeout(()=>eventGlobe(e,c),60);
+}
+
+/* ================= chat ================= */
+let currentConvo=null, chatMode='dm';
+function renderConvos(){
+  const list = chatMode==='dm' ? convos : announcements.map((a,i)=>({...a,id:'a'+i,unread:false}));
+  document.getElementById('convolist').innerHTML=list.map(c=>`
+    <div class="convo" onclick="${chatMode==='dm'?`openThread(${c.id})`:`toast('Announcement channels are read-only for members')`}">
+      <div class="avatar">${c.init}</div>
+      <div style="min-width:0"><b class="small">${c.name}</b><div class="muted" style="font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.msgs[c.msgs.length-1].t}</div></div>
+      <span class="when">${c.msgs[c.msgs.length-1].w}</span>
+      ${c.unread?'<span class="unread"></span>':''}
+    </div>`).join('');
+}
+function chatTab(el,mode){chatMode=mode;el.parentNode.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderConvos()}
+function openThread(id){
+  currentConvo=convos.find(c=>c.id===id); if(!currentConvo)return;
+  currentConvo.unread=false;
+  document.getElementById('thavatar').textContent=currentConvo.init;
+  document.getElementById('thname').textContent=currentConvo.name;
+  document.getElementById('thsub').textContent=currentConvo.sub;
+  renderThread();
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-thread').classList.add('active');
+}
+function renderThread(){
+  const el=document.getElementById('threadmsgs');
+  el.innerHTML=currentConvo.msgs.map(m=>`<div class="bubble ${m.me?'me':'them'}">${m.t}<span class="t">${m.w}</span></div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('msginput');
+  if(!inp.value.trim()||!currentConvo)return;
+  currentConvo.msgs.push({me:true,t:inp.value.trim(),w:'now'});
+  inp.value=''; renderThread(); renderConvos();
+  setTimeout(()=>{
+    const replies=['Sounds good!','Love it — adding it to the event page.','✦ Can’t wait. The globe is going to light up.','Perfect timing.'];
+    currentConvo.msgs.push({me:false,t:replies[Math.floor(Math.random()*replies.length)],w:'now'});
+    if(document.getElementById('view-thread').classList.contains('active')) renderThread();
+  },1100);
+}
+renderConvos();
+
+/* ================= org wizard ================= */
+function startOrgWizard(){owiz(1);go('createorg')}
+function owiz(n){[1,2].forEach(i=>{document.getElementById('ostep'+i).style.display=i===n?'block':'none';document.getElementById('ost'+i).classList.toggle('on',i<=n)})}
+function publishOrg(){
+  const name=document.getElementById('oname').value||'Aurora Collective';
+  const sel=document.getElementById('corgsel');
+  const opt=document.createElement('option');opt.textContent=name+' — you are Admin';opt.selected=true;sel.prepend(opt);sel.value=opt.value;
+  document.getElementById('myroles').insertAdjacentHTML('beforeend',`<span class="rolechip">Admin · ${name}</span>`);
+  document.getElementById('statOrgs').textContent=+document.getElementById('statOrgs').textContent+1;
+  const bn=document.getElementById('cflowbanner');bn.style.display='flex';bn.innerHTML=`✓ <b>${name}</b>&nbsp;created — now launch its first campaign`;
+  toast(`Organization "${name}" is live ✦`);
+  startCampaignWizard();
+}
+
+/* ================= campaign wizard ================= */
+let ctype='sync';
+function startCampaignWizard(){wiz(1);go('createcampaign')}
+function wiz(n){
+  document.getElementById('wstepdone').style.display='none';
+  [1,2,3].forEach(i=>{document.getElementById('wstep'+i).style.display=i===n?'block':'none';document.getElementById('st'+i).classList.toggle('on',i<=n)})
+}
+function pickType(el,t){ctype=t;el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');pv()}
+function seg(el){el.parentNode.querySelectorAll('div').forEach(o=>o.classList.remove('on'));el.classList.add('on')}
+function pv(){
+  document.getElementById('pvname').textContent=document.getElementById('cname').value||'Your campaign';
+  document.getElementById('pvorg').textContent='by '+document.getElementById('corgsel').value.split(' — ')[0]+' · starts Aug 12';
+  const b=document.getElementById('pvbadge');
+  b.textContent=ctype==='sync'?'Sync moment':ctype; b.className='badge '+(ctype==='sync'?'sync':ctype);
+}
+function aiDraft(){const n=document.getElementById('cname');if(!n.value)n.value='Global Sunrise Yoga';pv();toast('✦ AI drafted tagline, description & tags')}
+function publishCampaign(){
+  const name=document.getElementById('cname').value||'Global Sunrise Yoga';
+  const org=document.getElementById('corgsel').value.split(' — ')[0];
+  const [lat,lng]=document.getElementById('cloc').value.split(',').map(Number);
+  const c={id:'c'+(campaigns.length+1),name,org,type:ctype,img:IMG.city,lat,lng,joined:1,
+    tagline:'Just launched — be an early participant',desc:'A brand-new campaign created in this session. Join to appear on the globe; host a local event to grow the movement.',
+    ends:Date.now()+33*864e5,tags:['#new','#'+ctype]};
+  campaigns.unshift(c); lastCreatedCampaign=c.id; renderHome(); fillEventCampaignSelect();
+  document.getElementById('statCampaigns').textContent=+document.getElementById('statCampaigns').textContent+1;
+  [1,2,3].forEach(i=>document.getElementById('wstep'+i).style.display='none');
+  document.getElementById('donecname').textContent=`"${name}" is live!`;
+  document.getElementById('wstepdone').style.display='block';
+  if(globeReady) paintGlobe();
+  toast('Published — campaign is on the globe ✦');
+}
+
+/* ================= event wizard ================= */
+function fillEventCampaignSelect(){
+  document.getElementById('ecamp').innerHTML=campaigns.map(c=>`<option value="${c.id}" ${c.id===lastCreatedCampaign?'selected':''}>${c.name} (${c.org})</option>`).join('');
+}
+function startEventWizard(fromFlow){
+  cameFromFlow=!!fromFlow; fillEventCampaignSelect(); ewiz(1);
+  const bn=document.getElementById('eflowbanner');
+  if(fromFlow&&lastCreatedCampaign){const c=campaigns.find(x=>x.id===lastCreatedCampaign);bn.style.display='flex';bn.innerHTML=`✓ Adding an official event under <b>&nbsp;${c?c.name:''}</b>`}
+  else bn.style.display='none';
+  go('createevent');
+}
+function ewiz(n){[1,2].forEach(i=>{document.getElementById('estep'+i).style.display=i===n?'block':'none';document.getElementById('est'+i).classList.toggle('on',i<=n)})}
+function publishEvent(){
+  const campId=document.getElementById('ecamp').value||campaigns[0].id;
+  const c=campaigns.find(x=>x.id===campId);
+  const citySel=document.getElementById('ecity');
+  const cityName=citySel.options[citySel.selectedIndex].text.split(',')[0];
+  const [lat,lng]=citySel.value.split(',').map(Number);
+  const title=document.getElementById('ename').value||`${c.name} — ${cityName} Satellite`;
+  const e={id:'e'+(events.length+1),title,city:cityName,lat,lng,going:1,
+    price:+document.getElementById('eprice').value||0,cap:+document.getElementById('ecap').value||100,
+    campaign:campId,host:'Kevin'};
+  events.unshift(e); renderEvents(); if(globeReady) paintGlobe();
+  toast('Event published under '+c.name+' ✦');
+  openEvent(e.id);
+}
+
+/* ================= globes ================= */
+let globe, globeReady=false;
+const layers={campaigns:true,events:true,participants:true,arcs:true};
+function toggleLayer(el){const k=el.dataset.layer;layers[k]=!layers[k];el.classList.toggle('on',layers[k]);paintGlobe()}
+function randPeople(n,clat,clng,spread){const a=[];for(let i=0;i<n;i++){
+  a.push(clat===undefined
+    ?{lat:(Math.random()-.5)*140,lng:(Math.random()-.5)*360,size:.18}
+    :{lat:clat+(Math.random()-.5)*spread,lng:clng+(Math.random()-.5)*spread,size:.22});}return a}
+const people=randPeople(260);
+function makeGlobe(el,alt){
+  const w=el.clientWidth||398, h=el.clientHeight||230;
+  const g=Globe()(el).width(w).height(h)
+    .backgroundColor('rgba(0,0,0,0)')
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .atmosphereColor('#F41585').atmosphereAltitude(.18)
+    .pointAltitude(.012).pointRadius(d=>d.size||.6).pointColor(d=>d.color||'#fff')
+    .arcColor(()=>['rgba(244,21,133,.85)','rgba(77,163,255,.85)'])
+    .arcDashLength(.45).arcDashGap(.25).arcDashAnimateTime(2600).arcStroke(.5)
+    .pointOfView({lat:30,lng:-40,altitude:alt||2.1},0);
+  g.controls().autoRotate=true; g.controls().autoRotateSpeed=.6; g.controls().enableZoom=false;
+  return g;
+}
+function initGlobe(){
+  if(globeReady||typeof Globe==='undefined'){if(globeReady)paintGlobe();return}
+  globe=makeGlobe(document.getElementById('globeEl'),2.1);
+  globe.controls().enableZoom=true;
+  globe.onPointClick(d=>{if(d.kind)openSheet(d)});
+  document.getElementById('globeFallback').style.display='none';
+  globeReady=true; paintGlobe();
+}
+function paintGlobe(){
+  if(!globeReady)return;
+  let pts=[];
+  if(layers.campaigns) pts=pts.concat(campaigns.map(c=>({lat:c.lat,lng:c.lng,size:.85,color:'#F41585',kind:'campaign',ref:c})));
+  if(layers.events) pts=pts.concat(events.map(s=>({lat:s.lat,lng:s.lng,size:.5,color:'#4DA3FF',kind:'event',ref:s})));
+  if(layers.participants) pts=pts.concat(people.map(p=>({...p,color:'rgba(255,255,255,.55)'})));
+  globe.pointsData(pts);
+  globe.arcsData(layers.arcs?events.filter(e=>e.campaign==='c1').map(s=>({startLat:s.lat,startLng:s.lng,endLat:64.8,endLng:-23.7})):[]);
+}
+/* mini globe on campaign page */
+let cglobe=null;
+function campaignGlobe(c){
+  if(typeof Globe==='undefined')return;
+  const el=document.getElementById('cglobeEl');
+  if(!cglobe){cglobe=makeGlobe(el,1.9)}
+  const evs=events.filter(e=>e.campaign===c.id);
+  const crowd=randPeople(60,c.lat,c.lng,50).map(p=>({...p,color:'rgba(255,255,255,.6)'}));
+  cglobe.pointsData([{lat:c.lat,lng:c.lng,size:1,color:'#F41585'},...evs.map(e=>({lat:e.lat,lng:e.lng,size:.5,color:'#4DA3FF'})),...crowd]);
+  cglobe.arcsData(evs.map(e=>({startLat:e.lat,startLng:e.lng,endLat:c.lat,endLng:c.lng})));
+  cglobe.pointOfView({lat:c.lat,lng:c.lng,altitude:1.9},900);
+}
+/* mini globe on event page */
+let eglobe=null;
+function eventGlobe(e,c){
+  if(typeof Globe==='undefined')return;
+  const el=document.getElementById('eglobeEl');
+  if(!eglobe){eglobe=makeGlobe(el,1.9)}
+  const siblings=events.filter(x=>x.campaign===e.campaign&&x.id!==e.id);
+  eglobe.pointsData([
+    {lat:e.lat,lng:e.lng,size:1,color:'#4DA3FF'},
+    {lat:c.lat,lng:c.lng,size:.9,color:'#F41585'},
+    ...siblings.map(s=>({lat:s.lat,lng:s.lng,size:.35,color:'rgba(77,163,255,.5)'}))]);
+  eglobe.arcsData([{startLat:e.lat,startLng:e.lng,endLat:c.lat,endLng:c.lng},
+    ...siblings.slice(0,6).map(s=>({startLat:s.lat,startLng:s.lng,endLat:c.lat,endLng:c.lng}))]);
+  eglobe.pointOfView({lat:(e.lat+c.lat)/2,lng:(e.lng+c.lng)/2,altitude:2},900);
+}
+/* discover sheet */
+function openSheet(d){
+  const sh=document.getElementById('sheet');
+  if(d.kind==='campaign'){const c=d.ref;
+    sh.innerHTML=`<div style="display:flex;gap:12px">
+      <div class="thumb" style="background-image:url('${c.img}')"></div>
+      <div style="flex:1"><span class="badge ${c.type==='sync'?'sync':c.type}">${c.type==='sync'?'Sync moment':c.type}</span>
+        <b style="display:block;margin-top:4px">${c.name}</b>
+        <div class="muted small">by ${c.org} · ${c.joined.toLocaleString()} joined</div></div>
+      <div class="iconbtn" onclick="closeSheet()">✕</div></div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn primary" style="flex:1" onclick="closeSheet();openCampaign('${c.id}')">View campaign</button>
+        <button class="btn" onclick="toast('Joined ✦')">Join</button></div>`;
+  } else {const s=d.ref;
+    sh.innerHTML=`<div style="display:flex;gap:12px">
+      <div class="thumb" style="background-image:url('${IMG.eclipse}')"></div>
+      <div style="flex:1"><span class="badge event">Event</span><b style="display:block;margin-top:4px">${s.title}</b>
+      <div class="muted small">${s.going} going · ${s.price?'$'+s.price:'Free'}</div></div>
+      <div class="iconbtn" onclick="closeSheet()">✕</div></div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn primary" style="flex:1" onclick="closeSheet();openEvent('${s.id}')">View event</button></div>`;
+  }
+  sh.classList.add('open');
+}
+function closeSheet(){document.getElementById('sheet').classList.remove('open')}
+function modAct(btn,label){const card=btn.closest('.modrow');card.style.opacity=.35;card.querySelector('.acts').innerHTML=`<span class="aiflag">${label} — decision logged</span>`;toast(label+' · audit trail updated')}
+fillEventCampaignSelect();
+</script>
+</body>
+</html>
