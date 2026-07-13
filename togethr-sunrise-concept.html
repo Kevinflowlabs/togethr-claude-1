@@ -130,6 +130,18 @@
   .kv2 .ic{width:38px;height:38px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
   .expl{margin:12px 0;padding:13px 15px;border-radius:16px;background:var(--soft);font-size:13px;line-height:1.5}
 
+  /* ---------- notifications ---------- */
+  .circle{position:relative}
+  .bellbadge{position:absolute;top:-3px;right:-4px;min-width:17px;height:17px;border-radius:99px;background:var(--coral);color:#fff;font-size:9.5px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--bg)}
+  .notifrow{display:flex;gap:12px;padding:13px 18px;align-items:flex-start;cursor:pointer;border-bottom:1px solid rgba(239,233,224,.7)}
+  .notifrow:hover{background:rgba(255,255,255,.7)}
+  .notifrow.unread{background:#FFF6F2}
+  .notifrow .nicon{width:44px;height:44px;border-radius:15px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+  .notifrow .ntxt{flex:1;min-width:0;font-size:13.5px;line-height:1.45}
+  .notifrow .ntxt b{font-weight:800}
+  .notifrow .nwhen{font-size:11px;color:var(--sub);font-weight:700;margin-top:3px;display:block}
+  .notifrow .ndot2{width:9px;height:9px;border-radius:50%;background:var(--coral);flex-shrink:0;margin-top:6px}
+  .markall{margin-left:auto;font-size:12px;font-weight:900;color:var(--coral);cursor:pointer;background:none;border:none;font-family:inherit}
   /* ---------- activity walls ---------- */
   .composer2{display:flex;gap:10px;align-items:center;padding:11px 12px;margin:0 0 14px}
   .composer2 input{flex:1;background:var(--soft);border:none;border-radius:999px;padding:11px 15px;font-family:inherit;font-weight:600;font-size:13.5px;outline:none;min-width:0;color:var(--ink)}
@@ -238,7 +250,7 @@
   <!-- ========== HOME ========== -->
   <div class="view" id="view-home">
     <div class="top"><div class="brand">togeth<em>r</em></div>
-      <div class="right"><div class="circle" onclick="toast('Search everything')">⌕</div><div class="circle" onclick="toast('2 new notifications')">🔔</div></div></div>
+      <div class="right"><div class="circle" onclick="toast('Search everything')">⌕</div><div class="circle" onclick="openNotifs()">🔔<span class="bellbadge" id="bellbadge">3</span></div></div></div>
     <div class="rail" id="stories"></div>
     <div class="sechead"><h3>Happening now</h3><a onclick="go('map')">See the map →</a></div>
     <div id="feed"></div>
@@ -434,6 +446,17 @@
     <div class="t" data-v="inbox" onclick="go('inbox')"><span class="i">💬<span class="ndot" id="inboxdot">1</span></span>Inbox</div>
     <div class="t" data-v="me" onclick="go('me')"><span class="i">🙂</span>You</div>
   </div>
+  <!-- ========== NOTIFICATIONS ========== -->
+  <div class="view" id="view-notifs">
+    <div class="top">
+      <div class="circle" onclick="go(lastTab)">←</div>
+      <div class="h1">Notifications</div>
+      <button class="markall" onclick="markAllNotifs()">Mark all read</button>
+    </div>
+    <div id="notiflist"></div>
+    <div style="height:24px"></div>
+  </div>
+
   <!-- ========== COMMENTS SHEET ========== -->
   <div id="cmtOv" onclick="if(event.target===this)closeComments()">
     <div id="cmtSheet">
@@ -611,6 +634,42 @@ function postToWall(cid){
  wallPosts.unshift(p);feedPosts.splice(1,0,{kind:'post',ref:p.id});
  refreshWalls();toast('Posted! Everyone in this space can see it 📣');
 }
+
+/* ============ notifications ============ */
+let notifs=[
+ {id:'n1',icon:'💬',txt:'<b>Ray Mehta</b> commented on your post: "Bringing the sound gear 🎶"',when:'3h · LA Eclipse Watch Party',unread:true,sect:'today',act:()=>openComments('p8')},
+ {id:'n2',icon:'🎉',txt:'<b>12 people</b> joined <b>Iceland Eclipse</b> through your gathering',when:'5h',unread:true,sect:'today',act:()=>openCampaign('c1')},
+ {id:'n3',icon:'🎟',txt:'<b>Daniela</b> and 3 others reserved spots at <b>LA Eclipse Watch Party</b>',when:'6h',unread:true,sect:'today',act:()=>openEvent('e1')},
+ {id:'n4',icon:'⏰',txt:'<b>30-Day Meat Fast</b> ends in 12 days — you\'re on day 18. Keep going!',when:'today',unread:false,sect:'today',act:()=>openCampaign('c3')},
+ {id:'n5',icon:'❤️',txt:'<b>Yuli Zhong</b> and 46 others liked your Meat Fast update',when:'1d',unread:false,sect:'earlier',act:()=>openComments('p2')},
+ {id:'n6',icon:'🏡',txt:'You were made <b>Moderator</b> of <b>Vegan Coalition</b>',when:'2d',unread:false,sect:'earlier',act:()=>openCommunity('o2')},
+ {id:'n7',icon:'📍',txt:'New gathering near you: <b>Solstice in the Park</b>, Griffith Park',when:'2d',unread:false,sect:'earlier',act:()=>openEvent('e8')},
+ {id:'n8',icon:'💌',txt:'<b>Ray Mehta</b> sent you a message',when:'3d',unread:false,sect:'earlier',act:()=>openThread(0)},
+ {id:'n9',icon:'🌘',txt:'<b>Iceland Eclipse</b> hit 12,000 participants — 35 days to go',when:'3d',unread:false,sect:'earlier',act:()=>openCampaign('c1')}];
+function updateBell(){
+ const n=notifs.filter(x=>x.unread).length;
+ const b=document.getElementById('bellbadge');
+ b.textContent=n;b.style.display=n?'flex':'none';
+}
+function renderNotifs(){
+ const sect=s=>notifs.filter(n=>n.sect===s).map(n=>`
+  <div class="notifrow ${n.unread?'unread':''}" onclick="tapNotif('${n.id}')">
+   <div class="nicon">${n.icon}</div>
+   <div class="ntxt">${n.txt}<span class="nwhen">${n.when}</span></div>
+   ${n.unread?'<span class="ndot2"></span>':''}
+  </div>`).join('');
+ const today=sect('today'),earlier=sect('earlier');
+ document.getElementById('notiflist').innerHTML=
+  (today?`<div class="sechead" style="padding-top:6px"><h3>Today</h3></div>`+today:'')+
+  (earlier?`<div class="sechead"><h3>Earlier</h3></div>`+earlier:'')||
+  '<div class="s13 sub" style="text-align:center;padding:40px 0">All caught up! ☀️</div>';
+}
+function openNotifs(){renderNotifs();show('view-notifs')}
+function tapNotif(id){
+ const n=notifs.find(x=>x.id===id);if(!n)return;
+ n.unread=false;updateBell();n.act();
+}
+function markAllNotifs(){notifs.forEach(n=>n.unread=false);updateBell();renderNotifs();toast('All caught up! ☀️')}
 
 /* ============ comments sheet ============ */
 let cmtPid=null;
@@ -867,6 +926,7 @@ function campMap(c){
  cmap.arcsData(ce.map(e=>({startLat:e.lat,startLng:e.lng,endLat:c.lat,endLng:c.lng})));
  cmap.pointOfView({lat:c.lat,lng:c.lng,altitude:1.8},800);
 }
+updateBell();
 function evtMap(e,c){
  if(typeof Globe==='undefined')return;
  if(!emap)emap=makeG(document.getElementById('emapEl'),1.9);
