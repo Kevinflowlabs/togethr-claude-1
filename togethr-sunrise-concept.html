@@ -130,6 +130,23 @@
   .kv2 .ic{width:38px;height:38px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
   .expl{margin:12px 0;padding:13px 15px;border-radius:16px;background:var(--soft);font-size:13px;line-height:1.5}
 
+  /* ---------- hi-viz timers ---------- */
+  .timerbox{border-radius:20px;padding:15px 16px;margin:13px 0;color:#fff;box-shadow:0 12px 30px rgba(34,31,43,.18)}
+  .timerbox.moment{background:linear-gradient(120deg,#FF6B4A,#F53D9C)}
+  .timerbox.challenge{background:linear-gradient(120deg,#FF9A2E,#F2472E)}
+  .timerbox.window{background:linear-gradient(120deg,#8F7CFF,#5D8BF4)}
+  .timerbox .tlab{font-size:12px;font-weight:900;letter-spacing:.03em;opacity:.95;margin-bottom:10px}
+  .tdigits{display:flex;gap:8px}
+  .tdigits div{flex:1;background:rgba(255,255,255,.18);border-radius:13px;text-align:center;padding:9px 2px 7px;backdrop-filter:blur(4px)}
+  .tdigits b{display:block;font-size:23px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+  .tdigits span{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+  .tlive{font-size:17px;font-weight:900;text-align:center;width:100%;padding:6px 0;animation:pulse 1.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .timermini{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:900;color:#fff}
+  .timermini.moment{background:linear-gradient(120deg,#FF6B4A,#F53D9C)}
+  .timermini.challenge{background:linear-gradient(120deg,#FF9A2E,#F2472E)}
+  .timermini.window{background:linear-gradient(120deg,#8F7CFF,#5D8BF4)}
+  .timermini b{font-variant-numeric:tabular-nums;font-weight:900}
   /* ---------- notifications ---------- */
   .circle{position:relative}
   .bellbadge{position:absolute;top:-3px;right:-4px;min-width:17px;height:17px;border-radius:99px;background:var(--coral);color:#fff;font-size:9.5px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--bg)}
@@ -286,6 +303,7 @@
       <span class="tag moment" id="ctag">Same moment, everywhere</span> <span class="tag live" id="clive" style="display:none">LIVE NOW</span>
       <h2 style="font-size:23px;font-weight:900;margin:10px 0 3px" id="cname"></h2>
       <div class="s13 sub" id="cby"></div>
+      <div id="ctimer"></div>
       <div class="expl" id="cexpl"></div>
       <div class="card" style="padding:15px;margin:12px 0">
         <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -318,6 +336,7 @@
       <span class="tag event">Gathering</span> <span class="tag moment" id="eparent" style="cursor:pointer"></span>
       <h2 style="font-size:22px;font-weight:900;margin:10px 0 3px" id="ename"></h2>
       <div class="s13 sub" id="ehost"></div>
+      <div id="etimer"></div>
       <div class="kv2">
         <div class="row"><div class="ic">🗓</div><div><b class="s13" id="ewhen"></b><div class="s12 sub">Add to calendar</div></div></div>
         <div class="row"><div class="ic">📍</div><div><b class="s13" id="ewhere"></b><div class="s12 sub">Get directions</div></div></div>
@@ -491,15 +510,15 @@ const comms=[
  {id:'o2',name:'Rise',tagline:'Rise together for change',img:IMG.crowd,desc:'Collective action for a more connected world — synchronized experiences for good.',team:[['Kevin','Admin'],['Liam','Manager']]},
  {id:'o3',name:'Open Spaces',tagline:'Keep public lands free',img:IMG.lands,desc:'We organize stewards of public lands — cleanups, advocacy, and gatherings under open skies.',team:[['Kevin','Admin']]}];
 let camps=[
- {id:'c1',name:'Iceland Eclipse',comm:'Unify',commId:'o1',type:'moment',img:IMG.eclipse,lat:64.8,lng:-23.7,joined:12408,goal:20000,live:false,
+ {id:'c1',name:'Iceland Eclipse',comm:'Unify',commId:'o1',type:'moment',img:IMG.eclipse,lat:64.8,lng:-23.7,joined:12408,goal:20000,live:false,at:Date.now()+35*864e5+13*36e5+42*6e4,
   desc:'When the Moon\'s shadow sweeps across Iceland on Aug 12, satellite gatherings in 12+ cities will look up at the same minute. One sky, one moment.'},
- {id:'c2',name:'Summer Solstice Pause',comm:'Unify',commId:'o1',type:'moment',img:IMG.meditate,lat:34.05,lng:-118.24,joined:8912,goal:10000,live:false,
+ {id:'c2',name:'Summer Solstice Pause',comm:'Unify',commId:'o1',type:'moment',img:IMG.meditate,lat:34.05,lng:-118.24,joined:8912,goal:10000,live:false,at:Date.now()+41*864e5+7*36e5,
   desc:'On the longest day of the year the world pauses together for ten quiet minutes.'},
- {id:'c3',name:'30-Day Meat Fast',comm:'Rise',commId:'o2',type:'challenge',img:IMG.vegan,lat:40.7,lng:-74,joined:3407,goal:5000,live:true,
+ {id:'c3',name:'30-Day Meat Fast',comm:'Rise',commId:'o2',type:'challenge',img:IMG.vegan,lat:40.7,lng:-74,joined:3407,goal:5000,live:true,at:Date.now()+12*864e5+5*36e5+33*6e4,
   desc:'Skip meat for 30 days, at your own pace. Every completed streak becomes a glowing dot on the map.'},
- {id:'c4',name:'Free Lands Weekend',comm:'Open Spaces',commId:'o3',type:'window',img:IMG.lands,lat:36.2,lng:-115.9,joined:214,goal:1000,live:false,
+ {id:'c4',name:'Free Lands Weekend',comm:'Open Spaces',commId:'o3',type:'window',img:IMG.lands,lat:36.2,lng:-115.9,joined:214,goal:1000,live:false,at:Date.now()+297*864e5+3*36e5,
   desc:'Pick any day before May 3 to do one act for public lands — a cleanup, a letter, a hike with friends.'},
- {id:'c5',name:'Run The World 100',comm:'Rise',commId:'o2',type:'challenge',img:IMG.run,lat:51.5,lng:-0.12,joined:1856,goal:2500,live:false,
+ {id:'c5',name:'Run The World 100',comm:'Rise',commId:'o2',type:'challenge',img:IMG.run,lat:51.5,lng:-0.12,joined:1856,goal:2500,live:false,at:Date.now()+60*864e5+18*36e5,
   desc:'Run 100 km total, anywhere, any speed. Our collective distance circles the planet.'}];
 let evts=[
  {id:'e1',name:'LA Eclipse Watch Party',city:'Los Angeles',lat:34.05,lng:-118.24,going:56,cap:200,price:0,camp:'c1',host:'Kevin',mon:'AUG',day:'12'},
@@ -510,6 +529,9 @@ let evts=[
  {id:'e6',name:'Nairobi Watch Meetup',city:'Nairobi',lat:-1.29,lng:36.82,going:19,cap:60,price:0,camp:'c1',host:'Amara',mon:'AUG',day:'12'},
  {id:'e7',name:'Mojave Cleanup Day',city:'Mojave Desert',lat:35.0,lng:-115.5,going:12,cap:40,price:0,camp:'c4',host:'Kevin',mon:'APR',day:'18'},
  {id:'e8',name:'Solstice in the Park',city:'Griffith Park, LA',lat:34.13,lng:-118.29,going:88,cap:250,price:0,camp:'c2',host:'Yuli',mon:'JUN',day:'21'}];
+/* gatherings under a synchronized moment start at the campaign's moment */
+evts.forEach(e=>{const pc=camps.find(c=>c.id===e.camp);e.at=pc?pc.at:Date.now()+30*864e5});
+evts.find(e=>e.id==='e7').at=Date.now()+45*864e5+6*36e5;
 /* one shared store: every post lives on a wall (campaign/event/community); home aggregates */
 let pidSeq=20;
 const wallPosts=[
@@ -569,6 +591,35 @@ function go(v){
 }
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2300)}
 
+/* ============ hi-viz timers ============ */
+const TBOX={
+ moment:{lab:'⚡ SYNCHRONIZED MOMENT BEGINS IN',done:'🔴 LIVE — THE MOMENT IS NOW'},
+ challenge:{lab:'⏳ TIME LEFT TO COMPLETE THE CHALLENGE',done:'🏁 CHALLENGE ENDED'},
+ window:{lab:'🗓 WINDOW CLOSES IN — ACT BEFORE IT ENDS',done:'🏁 WINDOW CLOSED'}};
+const TMINI={moment:['⚡','to the moment'],challenge:['⏳','left to finish'],window:['🗓','left in window']};
+function timerBox(type,at,labOverride){
+ const c=TBOX[type]||TBOX.moment;
+ return `<div class="timerbox ${type}"><div class="tlab">${labOverride||c.lab}</div><div class="tdigits" data-tt="${at}" data-done="${c.done}"></div></div>`;
+}
+function timerMini(type,at){const [ic,lb]=TMINI[type]||TMINI.moment;
+ return `<div class="timermini ${type}">${ic} <b data-ttm="${at}"></b> ${lb}</div>`}
+function tickTimers(){
+ const now=Date.now();
+ document.querySelectorAll('[data-tt]').forEach(el=>{
+  const r=+el.dataset.tt-now;
+  if(r<=0){el.innerHTML=`<div class="tlive">${el.dataset.done||'🔴 LIVE NOW'}</div>`;return}
+  const d=Math.floor(r/864e5),h=Math.floor(r%864e5/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);
+  el.innerHTML=[[d,'days'],[h,'hours'],[m,'min'],[s,'sec']].map(([v,l])=>`<div><b>${String(v).padStart(2,'0')}</b><span>${l}</span></div>`).join('');
+ });
+ document.querySelectorAll('[data-ttm]').forEach(el=>{
+  const r=+el.dataset.ttm-now;
+  if(r<=0){el.textContent='LIVE NOW';return}
+  const d=Math.floor(r/864e5),h=Math.floor(r%864e5/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);
+  el.textContent=(d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+ });
+}
+setInterval(tickTimers,1000);
+
 /* ============ home ============ */
 function renderStories(){
  document.getElementById('stories').innerHTML=
@@ -585,13 +636,15 @@ function campCard(c){const T=TYPE[c.type];const pct=Math.min(100,Math.round(c.jo
    <div class="s12 sub" style="margin:2px 0 10px">by <b style="color:var(--ink);cursor:pointer" onclick="event.stopPropagation();openCommunity('${c.commId}')">${c.comm}</b> · ${c.joined.toLocaleString()} in</div>
    <div class="prog"><i style="width:${pct}%"></i></div>
    <div style="display:flex;justify-content:space-between;margin-top:7px" class="s12 sub"><span>${pct}% of ${c.goal.toLocaleString()}</span><b style="color:var(--coral)">Join →</b></div>
+   ${timerMini(c.type,c.at)}
   </div></div>`}
 function eventCard(e){const c=camps.find(x=>x.id===e.camp);
  return `<div class="card ecard" onclick="openEvent('${e.id}')">
   <div class="datechip"><div class="m">${e.mon}</div><div class="d">${e.day}</div></div>
   <div class="info"><b>${e.name}</b>
    <div class="s12 sub">${e.city} · ${e.price?'$'+e.price:'Free'} · part of ${c?c.name:''}</div>
-   <div class="faces" style="margin-top:7px">${['🌸','🌊','🌿'].map(x=>`<div class="av">${x}</div>`).join('')}<span class="s12 sub" style="margin-left:8px">${e.going} going</span></div></div>
+   <div class="s12" style="margin-top:4px;font-weight:900;color:var(--coral)">⚡ <b data-ttm="${e.at}"></b></div>
+   <div class="faces" style="margin-top:6px">${['🌸','🌊','🌿'].map(x=>`<div class="av">${x}</div>`).join('')}<span class="s12 sub" style="margin-left:8px">${e.going} going</span></div></div>
   <button class="btn teal sm" onclick="event.stopPropagation();this.textContent='Going ✓';toast('You\\'re going! 🎉')">Join</button></div>`}
 function postCard(p){
  return `<div class="card fpost">
@@ -610,7 +663,7 @@ function renderFeed(){
   if(p.kind==='event'){const e=evts.find(x=>x.id===p.ref);return e?eventCard(e):''}
   const post=wallPosts.find(x=>x.id===p.ref);return post?postCard(post):''}).join('');
 }
-renderStories();renderFeed();
+renderStories();renderFeed();tickTimers();
 
 /* ============ activity walls ============ */
 function wallHTML(entity,cid,ph){
@@ -703,6 +756,7 @@ function openCampaign(id){
  document.getElementById('clive').style.display=c.live?'inline-block':'none';
  document.getElementById('cname').textContent=c.name;
  document.getElementById('cby').innerHTML=`by <b style="color:var(--ink);cursor:pointer" onclick="openCommunity('${c.commId}')">${c.comm}</b> · community campaign`;
+ document.getElementById('ctimer').innerHTML=timerBox(c.type,c.at);
  document.getElementById('cexpl').innerHTML='💡 '+T.expl;
  document.getElementById('cjoined').textContent=c.joined.toLocaleString()+' people are in';
  document.getElementById('cgoal').textContent='goal '+c.goal.toLocaleString();
@@ -729,6 +783,7 @@ function openEvent(id){
  const p=document.getElementById('eparent');p.textContent='part of '+(c?c.name:'');p.onclick=()=>openCampaign(c.id);
  document.getElementById('ename').textContent=e.name;
  document.getElementById('ehost').textContent='hosted by '+e.host+' · anyone can join';
+ document.getElementById('etimer').innerHTML=timerBox('moment',e.at,'📍 THIS GATHERING BEGINS IN');
  document.getElementById('ewhen').textContent=e.mon+' '+e.day+', 2026 · 9:47 AM local';
  document.getElementById('ewhere').textContent=e.city;
  document.getElementById('ecost').textContent=e.price?'$'+e.price+' per person':'Free to attend';
@@ -757,7 +812,7 @@ function openCommunity(id){
  renderWall('owall',o.id,'Share with this community…');
  show('view-community');
 }
-function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');tickTimers()}
 
 /* ============ create ============ */
 const CF={
@@ -790,7 +845,7 @@ const CF={
    <div class="fld"><label>CAN PEOPLE HOST GATHERINGS?</label>
     <select><option>Yes — anyone can host</option><option>Only my team</option><option>No gatherings</option></select></div>`,
   done:(n)=>{const [lat,lng]=(document.getElementById('nfloc')||{value:'34.05,-118.24'}).value.split(',').map(Number);
-   const c={id:'c'+(camps.length+1),name:n,comm:comms[comms.length-1].name,commId:comms[comms.length-1].id,type:newT,img:IMG.crowd,lat,lng,joined:1,goal:1000,live:false,desc:'Just launched — help it grow!'};
+   const c={id:'c'+(camps.length+1),name:n,comm:comms[comms.length-1].name,commId:comms[comms.length-1].id,type:newT,img:IMG.crowd,lat,lng,joined:1,goal:1000,live:false,at:Date.now()+33*864e5+7*36e5,desc:'Just launched — help it grow!'};
    camps.unshift(c);renderStories();renderFeed();mapReady&&paintMap();
    toast(`🔥 "${n}" is live on the map!`);openCampaign(c.id)}},
  event:{title:'Plan your gathering',f1:`
@@ -806,7 +861,7 @@ const CF={
    <div class="fld"><label>WHAT HAPPENS THERE?</label><textarea rows="3" placeholder="Tell people what to expect…"></textarea></div>`,
   done:(n)=>{const sel=document.getElementById('nf0');const camp=camps.find(c=>c.name===sel.value)||camps[0];
    const [ll,city]=document.getElementById('nfcity').value.split('|');const [lat,lng]=ll.split(',').map(Number);
-   const e={id:'e'+(evts.length+1),name:n,city,lat,lng,going:1,cap:+(document.getElementById('nfcap')||{value:100}).value,price:+(document.getElementById('nfprice')||{value:0}).value,camp:camp.id,host:'Kevin',mon:'AUG',day:'12'};
+   const e={id:'e'+(evts.length+1),name:n,city,lat,lng,going:1,cap:+(document.getElementById('nfcap')||{value:100}).value,price:+(document.getElementById('nfprice')||{value:0}).value,camp:camp.id,host:'Kevin',mon:'AUG',day:'12',at:camp.at||Date.now()+33*864e5};
    evts.unshift(e);renderFeed();mapReady&&paintMap();
    toast(`📍 "${n}" is on the map under ${camp.name}!`);openEvent(e.id)}}};
 let createKind='campaign',newT='moment';
