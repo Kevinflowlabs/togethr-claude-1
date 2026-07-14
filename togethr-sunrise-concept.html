@@ -99,6 +99,11 @@
   .campcard .pic{height:150px;background-size:cover;background-position:center;position:relative}
   .campcard .pic .tag{position:absolute;top:12px;left:12px}
   .campcard .inner{padding:14px 16px 16px}
+  /* home feed: full-bleed cards, images edge-to-edge */
+  #feed .fpost,#feed .campcard,#feed .ecard{margin:0 0 12px;border-radius:0;border-left:none;border-right:none}
+  #feed .campcard .pic{height:190px}
+  /* activity walls: posts bleed edge-to-edge too */
+  #cwall .fpost,#ewall .fpost,#owall .fpost{margin:0 -18px 14px;border-radius:0;border-left:none;border-right:none}
 
   /* ---------- map ---------- */
   #view-map{overflow:hidden;background:linear-gradient(180deg,#DFF1FF 0%,#FDF6EC 100%)}
