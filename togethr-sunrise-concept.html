@@ -99,11 +99,14 @@
   .campcard .pic{height:150px;background-size:cover;background-position:center;position:relative}
   .campcard .pic .tag{position:absolute;top:12px;left:12px}
   .campcard .inner{padding:14px 16px 16px}
-  /* home feed: full-bleed cards, images edge-to-edge */
-  #feed .fpost,#feed .campcard,#feed .ecard{margin:0 0 12px;border-radius:0;border-left:none;border-right:none}
+  /* home feed: full-bleed cards, flush stack, inset hairline dividers */
+  #feed .fpost,#feed .campcard,#feed .ecard{margin:0;border:none;border-radius:0;box-shadow:none;position:relative}
+  #feed .fpost::after,#feed .campcard::after,#feed .ecard::after{content:'';position:absolute;left:18px;right:18px;bottom:0;height:1px;background:#E2DDD2}
+  #feed>*:last-child::after{display:none}
   #feed .campcard .pic{height:190px}
-  /* activity walls: posts bleed edge-to-edge too */
-  #cwall .fpost,#ewall .fpost,#owall .fpost{margin:0 -18px 14px;border-radius:0;border-left:none;border-right:none}
+  /* activity walls: same treatment, aligned to content width */
+  #cwall .fpost,#ewall .fpost,#owall .fpost{margin:0 -18px;border:none;border-radius:0;box-shadow:none;position:relative}
+  #cwall .fpost::after,#ewall .fpost::after,#owall .fpost::after{content:'';position:absolute;left:18px;right:18px;bottom:0;height:1px;background:#E2DDD2}
 
   /* ---------- map ---------- */
   #view-map{overflow:hidden;background:linear-gradient(180deg,#DFF1FF 0%,#FDF6EC 100%)}
