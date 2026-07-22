@@ -14,10 +14,31 @@
     --shadow:0 6px 24px rgba(34,31,43,.07);
     --r:22px;
   }
+  #app.dark{
+    --bg:#141019; --card:#1E1926; --ink:#F3F0F7; --sub:#9C94A8; --line:#2E2838; --soft:#272130;
+    --ring:linear-gradient(45deg,#FFB938,#FF6B4A,#F53D9C);
+    --shadow:0 6px 24px rgba(0,0,0,.4);
+  }
+  #app.dark{background:#0C0912}
+  body:has(#app.dark){background:#0C0912}
+  #app.dark #feed .fpost::after,#app.dark #feed .campcard::after,#app.dark #feed .ecard::after,
+  #app.dark #cwall .fpost::after,#app.dark #ewall .fpost::after,#app.dark #owall .fpost::after{background:#2E2838}
+  #app.dark .toast{background:#000;color:#fff;border:1px solid var(--line)}
+  #app.dark #nav{background:rgba(20,16,25,.94)}
+  /* invert hardcoded dark-gray body text so it stays readable on dark surfaces */
+  #app.dark .inforow{color:#C7C1D2}
+  #app.dark #cdesc{color:#C7C1D2!important}
+  #app.dark .expl{color:var(--ink)}
+  #app.dark .tag.challenge{background:#3A2E12;color:#FFC65C}
+  #app.dark .tag.community{background:#1B2540;color:#8FB0FF}
+  #app.dark .rolebadge{background:#1B2540;color:#8FB0FF}
+  #app.dark .notifrow.unread{background:#221C2B}
+  #app.dark .notifrow{border-bottom-color:#2E2838}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  svg.ic{display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
   html,body{height:100%}
   body{background:#EFEAE2;color:var(--ink);font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center}
-  #app{position:relative;width:100%;max-width:430px;height:100dvh;background:var(--bg);overflow:hidden;display:flex;flex-direction:column}
+  #app{position:relative;width:100%;max-width:430px;height:100dvh;background:var(--bg);color:var(--ink);overflow:hidden;display:flex;flex-direction:column}
   @media(min-width:520px){#app{height:min(880px,94vh);border-radius:44px;box-shadow:0 40px 100px rgba(34,31,43,.25);border:1px solid #E5DFD4}}
 
   /* ---------- shared ---------- */
@@ -63,17 +84,21 @@
   .toast.show{opacity:1;transform:translateX(-50%)}
 
   /* ---------- welcome ---------- */
-  #view-welcome{background:linear-gradient(170deg,#FFE9D6 0%,#FFD6E4 45%,var(--bg) 90%)}
-  .wel{min-height:100%;display:flex;flex-direction:column;padding:44px 30px 40px}
-  .sunball{width:150px;height:150px;border-radius:50%;margin:26px auto 8px;background:radial-gradient(circle at 35% 32%,#FFE29A,#FF9A62 55%,#FF6B4A);box-shadow:0 20px 50px rgba(255,107,74,.4);position:relative;animation:rise 3.4s ease-in-out infinite}
-  @keyframes rise{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  .sunball::after{content:'';position:absolute;inset:-14px;border-radius:50%;border:2px dashed rgba(255,107,74,.4);animation:spin 24s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .wel h1{font-size:31px;font-weight:900;text-align:center;line-height:1.18;letter-spacing:-.02em;margin-top:18px}
-  .wel h1 em{font-style:normal;color:var(--coral)}
-  .wel p{text-align:center;color:var(--sub);margin:12px 0 26px;font-size:14.5px;line-height:1.55}
+  #view-welcome{background:#081726;overflow:hidden}
+  #welGlobe{position:absolute;left:0;right:0;top:10%;bottom:-10%;z-index:0}
+  #welGlobe canvas{display:block}
+  .welwash{position:absolute;left:0;right:0;bottom:0;height:50%;z-index:1;background:linear-gradient(180deg,rgba(6,12,22,0) 0%,rgba(6,12,22,.55) 42%,rgba(6,12,22,.9) 74%,rgba(6,12,22,.98) 100%)}
+  .wel{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;padding:52px 30px 40px}
+  .wbrand{text-align:center;font-weight:900;font-size:30px;letter-spacing:.02em;color:#fff}
+  .wbrand em{font-style:normal;color:var(--coral)}
+  .wel h1{font-size:33px;font-weight:900;text-align:center;line-height:1.16;letter-spacing:-.02em;margin-top:auto;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.5)}
+  .wel h1 em{font-style:normal;color:#FFB07A}
+  .wel p{text-align:center;color:rgba(255,255,255,.8);margin:14px 0 26px;font-size:14.5px;line-height:1.55;text-shadow:0 1px 20px rgba(0,0,0,.5)}
   .social{display:flex;flex-direction:column;gap:11px}
-  .social .btn{display:flex;align-items:center;justify-content:center;gap:9px;background:#fff;box-shadow:var(--shadow)}
+  .social .btn{display:flex;align-items:center;justify-content:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  .social .btn.solid{background:rgba(255,107,74,.9);border-color:rgba(255,255,255,.25);box-shadow:0 10px 30px rgba(255,107,74,.4)}
+  .wfoot{color:rgba(255,255,255,.55)!important}
+  .wlink{color:#FFB07A!important}
 
   /* ---------- stories ---------- */
   .story{width:76px;flex-shrink:0;text-align:center;cursor:pointer}
@@ -90,7 +115,9 @@
   .fpost .body{padding:0 16px 12px;font-size:14px;line-height:1.55}
   .fpost .pic{height:200px;background-size:cover;background-position:center}
   .fpost .bar{display:flex;gap:4px;padding:8px 10px;border-top:1px solid var(--line)}
-  .fpost .bar div{flex:1;text-align:center;padding:9px 0;border-radius:12px;font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer}
+  .fpost .bar div{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 0;border-radius:12px;font-size:12.5px;font-weight:800;color:var(--sub);cursor:pointer}
+  .faceav{color:rgba(255,255,255,.95)}
+  .av.faceav svg{opacity:.95}
   .fpost .bar div:hover{background:var(--soft)}
   .ecard{margin:0 18px 16px;padding:14px;display:flex;gap:13px;align-items:center;cursor:pointer}
   .ecard .info{flex:1;min-width:0}
@@ -115,9 +142,19 @@
   #view-map{overflow:hidden;background:linear-gradient(180deg,#DFF1FF 0%,#FDF6EC 100%)}
   #mapEl{position:absolute;inset:0}
   .map-top{position:absolute;top:0;left:0;right:0;z-index:5}
-  .map-top .top{background:linear-gradient(rgba(251,248,243,.9) 55%,transparent)}
-  .mapcards{position:absolute;bottom:84px;left:0;right:0;z-index:6;display:flex;gap:12px;overflow-x:auto;padding:6px 18px;scrollbar-width:none;scroll-snap-type:x mandatory}
+  .map-top .top{background:linear-gradient(rgba(6,14,26,.6) 40%,rgba(6,14,26,0))}
+  #view-map .h1{color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.55)}
+  #view-map .circle{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 6px 18px rgba(0,0,0,.22)}
+  .mapchip{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap;color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+  .mapchip.on{background:rgba(255,255,255,.94);color:var(--coral);border-color:rgba(255,255,255,.95);text-shadow:none}
+  .mapcards{position:absolute;bottom:8px;left:0;right:0;z-index:6;display:flex;gap:12px;overflow-x:auto;padding:6px 18px;scrollbar-width:none;scroll-snap-type:x mandatory}
   .mapcards::-webkit-scrollbar{display:none}
+  #mapPreview{position:absolute;left:16px;right:16px;bottom:96px;z-index:8;transform:translateY(24px) scale(.97);opacity:0;pointer-events:none;transition:transform .26s cubic-bezier(.3,.9,.4,1),opacity .26s}
+  #mapPreview.show{transform:none;opacity:1;pointer-events:auto}
+  .mapprev{padding:12px;display:flex;gap:12px;align-items:center;position:relative;cursor:pointer;box-shadow:0 18px 46px rgba(6,14,26,.4)}
+  .mapprev .pthumb{width:60px;height:60px;border-radius:14px;background-size:cover;background-position:center;flex-shrink:0}
+  .mapprev .pclose{position:absolute;top:-10px;right:-6px;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+  .mapprev .parr{color:var(--sub);flex-shrink:0}
   .mapcard{scroll-snap-align:center;flex:0 0 84%;background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(34,31,43,.16);padding:13px;display:flex;gap:12px;align-items:center;cursor:pointer}
   .maplegend{position:absolute;top:118px;right:14px;z-index:5;background:rgba(255,255,255,.92);border-radius:16px;box-shadow:var(--shadow);padding:10px 12px;font-size:10.5px;font-weight:800;display:flex;flex-direction:column;gap:7px}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
@@ -176,10 +213,13 @@
   .inforow{display:flex;gap:10px;align-items:center;margin:0 0 12px;padding:11px 14px;border-radius:16px;background:var(--soft);font-size:12.5px;font-weight:700;color:#5A5566}
   .body2 .fpost{margin:0 0 14px}
   /* ---------- comments sheet ---------- */
-  #cmtOv{position:absolute;inset:0;background:rgba(34,31,43,.45);z-index:80;display:none;align-items:flex-end;backdrop-filter:blur(2px)}
+  #cmtOv{position:absolute;inset:0;background:rgba(34,31,43,.45);z-index:80;display:none;align-items:flex-end;backdrop-filter:blur(2px);transition:background .26s ease,backdrop-filter .26s ease}
   #cmtOv.open{display:flex}
+  #cmtOv.closing{background:rgba(34,31,43,0);backdrop-filter:blur(0)}
   #cmtSheet{width:100%;max-height:76%;min-height:44%;background:var(--bg);border-radius:26px 26px 0 0;display:flex;flex-direction:column;padding-top:8px;animation:sheetup .26s cubic-bezier(.3,.9,.4,1)}
-  @keyframes sheetup{from{transform:translateY(35%)}to{transform:none}}
+  #cmtOv.closing #cmtSheet{animation:sheetdown .26s cubic-bezier(.4,0,1,1) forwards}
+  @keyframes sheetup{from{transform:translateY(100%)}to{transform:none}}
+  @keyframes sheetdown{from{transform:none}to{transform:translateY(100%)}}
   .grab{width:44px;height:5px;border-radius:99px;background:var(--line);margin:4px auto 10px;flex-shrink:0}
   #cmtHead{text-align:center;font-weight:900;font-size:14px;padding-bottom:11px;border-bottom:1px solid var(--line);flex-shrink:0}
   #cmtList{flex:1;overflow-y:auto;padding:15px 18px;display:flex;flex-direction:column;gap:13px;scrollbar-width:none}
@@ -261,24 +301,26 @@
 
   <!-- ========== WELCOME ========== -->
   <div class="view full active" id="view-welcome">
+    <div id="welGlobe"></div>
+    <div class="welwash"></div>
     <div class="wel">
-      <div class="sunball"></div>
+      <div class="wbrand">togeth<em>r</em></div>
       <h1>Do something <em>amazing</em>,<br>together.</h1>
       <p>Join millions moving in sync — global moments,<br>challenges, and gatherings near you.</p>
       <div class="social">
-        <button class="btn" onclick="login()">🍎&nbsp; Continue with Apple</button>
-        <button class="btn" onclick="login()">🇬&nbsp; Continue with Google</button>
-        <button class="btn go" onclick="login()">Sign up with email</button>
+        <button class="btn" onclick="login()"><span data-ic="apple"></span>&nbsp; Continue with Apple</button>
+        <button class="btn" onclick="login()"><span data-ic="chrome"></span>&nbsp; Continue with Google</button>
+        <button class="btn solid" onclick="login()"><span data-ic="mail"></span>&nbsp; Sign up with email</button>
       </div>
-      <div style="text-align:center;margin-top:18px" class="s13 sub">Already with us? <a style="color:var(--coral);font-weight:900;cursor:pointer" onclick="login('Welcome back, Kevin! 🌅')">Log in</a></div>
-      <div style="text-align:center;margin-top:auto;padding-top:24px" class="s12 sub">©2026 Flow Labs</div>
+      <div style="text-align:center;margin-top:18px" class="s13 wfoot">Already with us? <a class="wlink" style="font-weight:900;cursor:pointer" onclick="login('Welcome back, Kevin! 🌅')">Log in</a></div>
+      <div style="text-align:center;margin-top:24px" class="s12 wfoot">©2026 Flow Labs</div>
     </div>
   </div>
 
   <!-- ========== HOME ========== -->
   <div class="view" id="view-home">
     <div class="top"><div class="brand">togeth<em>r</em></div>
-      <div class="right"><div class="circle" onclick="toast('Search everything')">⌕</div><div class="circle" onclick="openNotifs()">🔔<span class="bellbadge" id="bellbadge">3</span></div></div></div>
+      <div class="right"><div class="circle" data-ic="search" onclick="toast('Search everything')"></div><div class="circle" data-ic="bell" onclick="openNotifs()"><span class="bellbadge" id="bellbadge">3</span></div></div></div>
     <div class="rail" id="stories"></div>
     <div class="sechead"><h3>Happening now</h3><a onclick="go('map')">See the map →</a></div>
     <div id="feed"></div>
@@ -289,12 +331,12 @@
   <div class="view" id="view-map">
     <div id="mapEl"></div>
     <div class="map-top">
-      <div class="top"><div class="h1">Around the world</div><div class="right"><div class="circle" onclick="toast('Search places & moments')">⌕</div></div></div>
+      <div class="top"><div class="h1">Around the world</div><div class="right"><div class="circle" data-ic="search" onclick="toast('Search places & moments')"></div></div></div>
       <div class="rail" style="padding-top:2px">
-        <span class="btn sm" style="background:#fff;box-shadow:var(--shadow)" data-f="all" onclick="mapFilter(this)">✨ Everything</span>
-        <span class="btn sm ghost" data-f="campaigns" onclick="mapFilter(this)">Campaigns</span>
-        <span class="btn sm ghost" data-f="events" onclick="mapFilter(this)">Events</span>
-        <span class="btn sm ghost" data-f="people" onclick="mapFilter(this)">People</span>
+        <span class="mapchip on" data-f="all" onclick="mapFilter(this)">All</span>
+        <span class="mapchip" data-f="campaigns" onclick="mapFilter(this)">Campaigns</span>
+        <span class="mapchip" data-f="events" onclick="mapFilter(this)">Events</span>
+        <span class="mapchip" data-f="people" onclick="mapFilter(this)">People</span>
       </div>
     </div>
     <div class="maplegend">
@@ -302,13 +344,14 @@
       <span><span class="dot" style="background:var(--teal)"></span>Event</span>
       <span><span class="dot" style="background:var(--sun)"></span>People</span>
     </div>
+    <div id="mapPreview"></div>
     <div class="mapcards" id="mapcards"></div>
   </div>
 
   <!-- ========== CAMPAIGN ========== -->
   <div class="view paged" id="view-campaign">
     <div class="scrollwrap">
-    <div class="circle backc" onclick="go(lastTab)">←</div>
+    <div class="circle backc" data-ic="back" onclick="go(lastTab)"></div>
     <div class="hero2" id="chero"><div class="fade"></div></div>
     <div class="body2">
       <span class="tag moment" id="ctag">Same moment, everywhere</span> <span class="tag live" id="clive" style="display:none">LIVE NOW</span>
@@ -323,7 +366,7 @@
         <div class="prog" style="margin-top:9px"><i id="cprog" style="width:60%"></i></div>
         <div class="faces" style="margin-top:12px" id="cfaces"></div>
       </div>
-      <div class="minimap"><div class="lbl">🌍 Live around the world</div><div id="cmapEl" style="position:absolute;inset:0"></div></div>
+      <div class="minimap"><div class="lbl" data-ic="globe" data-sz="13">Live around the world</div><div id="cmapEl" style="position:absolute;inset:0"></div></div>
       <p class="s13" style="line-height:1.6;color:#524D5E" id="cdesc"></p>
       <div class="sechead" style="padding:18px 0 10px"><h3>Gatherings</h3><a onclick="openCreate('event')">+ Host yours</a></div>
       <div id="cevents"></div>
@@ -333,7 +376,7 @@
     </div>
     </div>
     <div class="ctabar">
-      <button class="btn go" id="cjoinbtn" onclick="joinCampaign(this)">Count me in ✋</button>
+      <button class="btn go" id="cjoinbtn" onclick="joinCampaign(this)">Count me in</button>
       <button class="btn" onclick="openCreate('event')">Host a gathering</button>
     </div>
   </div>
@@ -341,7 +384,7 @@
   <!-- ========== EVENT ========== -->
   <div class="view paged" id="view-event">
     <div class="scrollwrap">
-    <div class="circle backc" onclick="go(lastTab)">←</div>
+    <div class="circle backc" data-ic="back" onclick="go(lastTab)"></div>
     <div class="hero2" id="ehero"><div class="fade"></div></div>
     <div class="body2">
       <span class="tag event">Gathering</span> <span class="tag moment" id="eparent" style="cursor:pointer"></span>
@@ -349,11 +392,11 @@
       <div class="s13 sub" id="ehost"></div>
       <div id="etimer"></div>
       <div class="kv2">
-        <div class="row"><div class="ic">🗓</div><div><b class="s13" id="ewhen"></b><div class="s12 sub">Add to calendar</div></div></div>
-        <div class="row"><div class="ic">📍</div><div><b class="s13" id="ewhere"></b><div class="s12 sub">Get directions</div></div></div>
-        <div class="row"><div class="ic">🎟</div><div><b class="s13" id="ecost"></b><div class="s12 sub" id="espots"></div></div></div>
+        <div class="row"><div class="ic" data-ic="calendar"></div><div><b class="s13" id="ewhen"></b><div class="s12 sub">Add to calendar</div></div></div>
+        <div class="row"><div class="ic" data-ic="pin"></div><div><b class="s13" id="ewhere"></b><div class="s12 sub">Get directions</div></div></div>
+        <div class="row"><div class="ic" data-ic="ticket"></div><div><b class="s13" id="ecost"></b><div class="s12 sub" id="espots"></div></div></div>
       </div>
-      <div class="minimap"><div class="lbl">📍 This gathering & its global moment</div><div id="emapEl" style="position:absolute;inset:0"></div></div>
+      <div class="minimap"><div class="lbl" data-ic="pin" data-sz="13">This gathering &amp; its global moment</div><div id="emapEl" style="position:absolute;inset:0"></div></div>
       <div class="faces" id="efaces" style="margin-top:4px"></div>
       <div class="sechead" style="padding:18px 0 10px"><h3>Activity</h3><span class="s12 sub">attendees can post here</span></div>
       <div id="ewall"></div>
@@ -363,14 +406,14 @@
     </div>
     </div>
     <div class="ctabar">
-      <button class="btn go" id="ersvp" onclick="this.textContent='You\'re going! 🎉';toast('Ticket saved to your profile')">Reserve my spot</button>
+      <button class="btn go" id="ersvp" onclick="this.textContent='You\'re going!';toast('Ticket saved to your profile')">Reserve my spot</button>
       <button class="btn" onclick="openThread(0)">Message host</button>
     </div>
   </div>
 
   <!-- ========== COMMUNITY (ORG) ========== -->
   <div class="view" id="view-community">
-    <div class="circle backc" onclick="go(lastTab)">←</div>
+    <div class="circle backc" data-ic="back" onclick="go(lastTab)"></div>
     <div class="hero2" id="ohero" style="height:180px"><div class="fade"></div></div>
     <div class="body2">
       <span class="tag community">Community</span>
@@ -393,19 +436,19 @@
 
   <!-- ========== CREATE ========== -->
   <div class="view" id="view-create">
-    <div class="top"><div class="h1">Bring something to life</div><div class="right"><div class="circle" onclick="go('home')">✕</div></div></div>
-    <div class="tierline"><span class="n">🏡 Community</span>→<span class="n">🔥 Campaign</span>→<span class="n">📍 Gathering</span></div>
+    <div class="top"><div class="h1">Bring something to life</div><div class="right"><div class="circle" data-ic="close" onclick="go('home')"></div></div></div>
+    <div class="tierline"><span class="n" data-ic="users">Community</span><span data-ic="chev"></span><span class="n" data-ic="flame">Campaign</span><span data-ic="chev"></span><span class="n" data-ic="pin">Gathering</span></div>
     <div id="createpick">
       <div class="card pick" onclick="openCreate('community')">
-        <div class="em" style="background:#EDF3FF">🏡</div>
+        <div class="em" style="background:#EDF3FF;color:#3D6BDC" data-ic="users"></div>
         <div><b>A Community</b><span class="s12 sub">Your organization's home. Invite a team, give them roles, run campaigns.</span></div>
       </div>
       <div class="card pick" onclick="openCreate('campaign')">
-        <div class="em" style="background:#FFF0EC">🔥</div>
+        <div class="em" style="background:#FFF0EC;color:var(--coral-deep)" data-ic="flame"></div>
         <div><b>A Campaign</b><span class="s12 sub">Rally people around one cause — a synced moment, a challenge, or a time window.</span></div>
       </div>
       <div class="card pick" onclick="openCreate('event')">
-        <div class="em" style="background:#E8F7F4">📍</div>
+        <div class="em" style="background:#E8F7F4;color:var(--teal)" data-ic="pin"></div>
         <div><b>A Gathering</b><span class="s12 sub">A real-world event under a campaign — official or hosted by you, anywhere.</span></div>
       </div>
     </div>
@@ -419,7 +462,7 @@
 
   <!-- ========== INBOX ========== -->
   <div class="view" id="view-inbox">
-    <div class="top"><div class="h1">Inbox</div><div class="right"><div class="circle" onclick="toast('New message')">✎</div></div></div>
+    <div class="top"><div class="h1">Inbox</div><div class="right"><div class="circle" data-ic="edit" onclick="toast('New message')"></div></div></div>
     <div class="tabs2"><div class="t on" onclick="inboxTab(this,'dm')">Chats</div><div class="t" onclick="inboxTab(this,'up')">Updates</div></div>
     <div id="chats"></div>
   </div>
@@ -428,7 +471,7 @@
   <div class="view full" id="view-thread">
     <div id="thr">
       <div class="top" style="position:relative;background:var(--bg)">
-        <div class="circle" onclick="go('inbox')">←</div>
+        <div class="circle" data-ic="back" onclick="go('inbox')"></div>
         <div class="av" style="width:40px;height:40px;font-size:13px" id="tav">RM</div>
         <div><b style="font-size:15px" id="tname">Ray</b><div class="s12 sub" id="tsub">active now</div></div>
       </div>
@@ -439,14 +482,14 @@
 
   <!-- ========== ME ========== -->
   <div class="view" id="view-me">
-    <div class="top"><div class="h1">You</div><div class="right"><div class="circle" onclick="logout()">⎋</div></div></div>
+    <div class="top"><div class="h1">You</div><div class="right"><div class="circle" data-ic="settings" onclick="go('settings')"></div><div class="circle" data-ic="logout" onclick="logout()"></div></div></div>
     <div style="display:flex;gap:14px;align-items:center;padding:4px 18px 6px">
       <div class="av" style="width:66px;height:66px;font-size:23px">KM</div>
       <div><b style="font-size:18px">Kevin Moore</b><div class="s13 sub">@flowlabskevin · Brea, CA</div>
         <div style="display:flex;gap:6px;margin-top:6px"><span class="rolebadge">Admin · Rise</span><span class="rolebadge">Mod · Vegan Co.</span></div></div>
     </div>
     <div class="impact">
-      <b style="font-size:15px">Your ripple 🌊</b>
+      <b style="font-size:15px;display:inline-flex;align-items:center;gap:7px">Your ripple <span data-ic="ripple"></span></b>
       <div class="s12" style="opacity:.92;margin-top:2px">What you've set in motion on Togethr</div>
       <div class="nums">
         <div><b>13</b><span>moments joined</span></div>
@@ -458,24 +501,54 @@
     <div class="rail" id="mycomms"></div>
     <div class="sechead"><h3>Settings</h3></div>
     <div class="card" style="margin:0 18px 20px">
-      <div class="setrow2" onclick="toast('Edit profile')"><div class="ic">👤</div><div><b class="s13">Profile</b><div class="s12 sub">Photo, bio, interests</div></div><span class="sub" style="margin-left:auto">→</span></div>
-      <div class="setrow2"><div class="ic">🔔</div><div><b class="s13">Notifications</b><div class="s12 sub">Moments, gatherings, chats</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setrow2"><div class="ic">🗺</div><div><b class="s13">Show me on the map</b><div class="s12 sub">City-level dot, always anonymous</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setrow2"><div class="ic">✨</div><div><b class="s13">Smart suggestions</b><div class="s12 sub">AI picks moments you'll love</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setrow2" onclick="toast('Moderation tools for your communities')"><div class="ic">🛡</div><div><b class="s13">Moderation tools</b><div class="s12 sub">2 posts waiting · AI pre-sorted</div></div><span class="ur" style="margin-left:auto">2</span></div>
-      <div class="setrow2" onclick="logout()"><div class="ic">👋</div><div><b class="s13" style="color:var(--coral)">Log out</b><div class="s12 sub">kevin@flowlabs.us</div></div></div>
+      <div class="setrow2" onclick="go('settings')"><div class="ic" data-ic="settings"></div><div><b class="s13">All settings</b><div class="s12 sub">Appearance, account, privacy</div></div><span class="sub" style="margin-left:auto" data-ic="chev"></span></div>
+      <div class="setrow2"><div class="ic" data-ic="bell"></div><div><b class="s13">Notifications</b><div class="s12 sub">Moments, gatherings, chats</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setrow2"><div class="ic" data-ic="globe"></div><div><b class="s13">Show me on the map</b><div class="s12 sub">City-level dot, always anonymous</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setrow2"><div class="ic" data-ic="star"></div><div><b class="s13">Smart suggestions</b><div class="s12 sub">AI picks moments you'll love</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setrow2" onclick="toast('Moderation tools for your communities')"><div class="ic" data-ic="shield"></div><div><b class="s13">Moderation tools</b><div class="s12 sub">2 posts waiting · AI pre-sorted</div></div><span class="ur" style="margin-left:auto">2</span></div>
+      <div class="setrow2" onclick="logout()"><div class="ic" data-ic="logout"></div><div><b class="s13" style="color:var(--coral)">Log out</b><div class="s12 sub">kevin@flowlabs.us</div></div></div>
     </div>
     <div style="text-align:center;padding-bottom:24px" class="s12 sub">Togethr · Sunrise concept</div>
   </div>
 
   <!-- ========== NAV ========== -->
   <div id="nav">
-    <div class="t on" data-v="home" onclick="go('home')"><span class="i">🏠</span>Home</div>
-    <div class="t" data-v="map" onclick="go('map')"><span class="i">🗺</span>Map</div>
-    <div class="t mid" data-v="create" onclick="go('create')"><span class="i">＋</span></div>
-    <div class="t" data-v="inbox" onclick="go('inbox')"><span class="i">💬<span class="ndot" id="inboxdot">1</span></span>Inbox</div>
-    <div class="t" data-v="me" onclick="go('me')"><span class="i">🙂</span>You</div>
+    <div class="t on" data-v="home" onclick="go('home')"><span class="i" data-ic="home"></span>Home</div>
+    <div class="t" data-v="map" onclick="go('map')"><span class="i" data-ic="globe"></span>Map</div>
+    <div class="t mid" data-v="create" onclick="go('create')"><span class="i" data-ic="plus" data-sz="26"></span></div>
+    <div class="t" data-v="inbox" onclick="go('inbox')"><span class="i" data-ic="message"><span class="ndot" id="inboxdot">1</span></span>Inbox</div>
+    <div class="t" data-v="me" onclick="go('me')"><span class="i" data-ic="user"></span>You</div>
   </div>
+  <!-- ========== SETTINGS ========== -->
+  <div class="view" id="view-settings">
+    <div class="top"><div class="circle" data-ic="back" onclick="go('me')"></div><div class="h1">Settings</div></div>
+    <div class="sechead" style="padding-top:4px"><h3>Appearance</h3></div>
+    <div class="card" style="margin:0 18px 16px">
+      <div class="setrow2"><div class="ic" data-ic="moon"></div><div><b class="s13">Dark mode</b><div class="s12 sub">Easy on the eyes at night</div></div><div class="sw" id="swDark" onclick="toggleDark()"></div></div>
+    </div>
+    <div class="sechead"><h3>Account</h3></div>
+    <div class="card" style="margin:0 18px 16px">
+      <div class="setrow2" onclick="toast('Edit profile')"><div class="ic" data-ic="user"></div><div><b class="s13">Profile</b><div class="s12 sub">Photo, bio, interests</div></div><span class="sub" style="margin-left:auto" data-ic="chev"></span></div>
+      <div class="setrow2" onclick="toast('Password & sign-in')"><div class="ic" data-ic="key"></div><div><b class="s13">Password &amp; sign-in</b><div class="s12 sub">kevin@flowlabs.us</div></div><span class="sub" style="margin-left:auto" data-ic="chev"></span></div>
+      <div class="setrow2" onclick="toast('Linked: Google, Apple')"><div class="ic" data-ic="link"></div><div><b class="s13">Linked accounts</b><div class="s12 sub">Google connected</div></div><span class="sub" style="margin-left:auto" data-ic="chev"></span></div>
+    </div>
+    <div class="sechead"><h3>Notifications</h3></div>
+    <div class="card" style="margin:0 18px 16px">
+      <div class="setrow2"><div class="ic" data-ic="zap"></div><div><b class="s13">Moments &amp; countdowns</b><div class="s12 sub">When a synced moment is near</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setrow2"><div class="ic" data-ic="pin"></div><div><b class="s13">Gathering reminders</b><div class="s12 sub">24h and 1h before RSVPs</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setrow2"><div class="ic" data-ic="message"></div><div><b class="s13">Chats &amp; comments</b><div class="s12 sub">DMs and replies to your posts</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+    <div class="sechead"><h3>Privacy</h3></div>
+    <div class="card" style="margin:0 18px 16px">
+      <div class="setrow2"><div class="ic" data-ic="globe"></div><div><b class="s13">Show me on the map</b><div class="s12 sub">City-level dot, always anonymous</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setrow2"><div class="ic" data-ic="star"></div><div><b class="s13">Smart suggestions</b><div class="s12 sub">AI picks moments you'll love</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+    <div class="card" style="margin:0 18px 16px">
+      <div class="setrow2" onclick="logout()"><div class="ic" data-ic="logout"></div><div><b class="s13" style="color:var(--coral)">Log out</b><div class="s12 sub">kevin@flowlabs.us</div></div></div>
+    </div>
+    <div style="text-align:center;padding-bottom:24px" class="s12 sub">Togethr · Sunrise concept · v1</div>
+  </div>
+
   <!-- ========== NOTIFICATIONS ========== -->
   <div class="view" id="view-notifs">
     <div class="top">
@@ -504,6 +577,58 @@
 </div>
 
 <script src="https://unpkg.com/globe.gl@2.32.2/dist/globe.gl.min.js"></script>
+<script>
+/* ============ line-art icon set (Feather-style) ============ */
+const ICON={
+ search:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/>',
+ bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+ settings:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+ logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+ back:'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+ close:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+ edit:'<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>',
+ home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+ globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/>',
+ plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+ message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
+ zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+ clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+ pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+ flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+ award:'<circle cx="12" cy="8" r="6"/><polyline points="8.2 13.9 7 23 12 20 17 23 15.8 13.9"/>',
+ flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+ key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+ moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>',
+ star:'<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/>',
+ shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+ heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21.2l7.8-7.8 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',
+ ticket:'<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+ mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/>',
+ share:'<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>',
+ ripple:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.5"/><path d="M7.8 16.3a6 6 0 0 1 0-8.5"/><path d="M19 5a10 10 0 0 1 0 14"/><path d="M5 19a10 10 0 0 1 0-14"/>',
+ chrome:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.2" y1="8" x2="12" y2="8"/><line x1="3.9" y1="6" x2="8.5" y2="14"/><line x1="10.9" y1="21.9" x2="15.5" y2="14"/>',
+ apple:'<path d="M12 20.9c1.5 0 2.7 1.1 4 1.1 3 0 6-8 6-12.2A4.9 4.9 0 0 0 17 5c-2.2 0-4 1.4-5 2-1-.6-2.8-2-5-2a4.9 4.9 0 0 0-5 4.8C2 14 5 22 8 22c1.3 0 2.5-1.1 4-1.1z"/><path d="M12 7c0-2 1-3.5 2.5-4"/>',
+ hand:'<path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.5l-3.6-3.9a2 2 0 0 1 2.9-2.7L10 15"/>',
+ check:'<polyline points="20 6 9 17 4 12"/>',
+ send:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+ sparklemini:'<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/>',
+ chev:'<polyline points="9 18 15 12 9 6"/>',
+ grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+ bulb:'<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.1 14a5 5 0 1 0-6.2 0c.5.4 1.1 1 1.1 2h4c0-1 .6-1.6 1.1-2z"/>'
+};
+function ic(name,size){size=size||20;return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`}
+function hydrateIcons(root){(root||document).querySelectorAll('[data-ic]').forEach(el=>{
+ if(el._iced)return;el._iced=1;
+ const sz=+el.getAttribute('data-sz')||20;
+ const hasText=el.textContent.trim().length>0||el.children.length>0;
+ el.insertAdjacentHTML('afterbegin',ic(el.getAttribute('data-ic'),sz));
+ if(hasText){el.style.display='inline-flex';el.style.alignItems='center';el.style.gap=el.style.gap||'7px';}
+});}
+</script>
 <script>
 /* ============ data ============ */
 const IMG={
@@ -585,6 +710,40 @@ const updates=[
  {name:'Unify',init:'UN',msgs:[{me:false,t:'🌘 Iceland Eclipse hits 12,000 participants! Countdown: 35 days.',w:'2h'}]},
  {name:'Rise',init:'RI',msgs:[{me:false,t:'Meat Fast final stretch — 12 days. You\'ve got this. 🌱',w:'1d'}]}];
 
+/* face-pile avatars use a neutral line user glyph */
+function faceAvs(n){let s='';for(let i=0;i<n;i++)s+=`<div class="av faceav">${ic('user',16)}</div>`;return s;}
+
+/* ============ welcome globe ============ */
+let welG=null;
+function welArcs(hubs){const a=[];for(let i=0;i<hubs.length;i++){const s=hubs[i],e=hubs[(i+3)%hubs.length];a.push({startLat:s.lat,startLng:s.lng,endLat:e.lat,endLng:e.lng});}return a;}
+function initWelcomeGlobe(){
+ const el=document.getElementById('welGlobe');
+ if(!el||welG||typeof Globe==='undefined')return;
+ const w=el.clientWidth||430,h=el.clientHeight||760;
+ // dense scatter of pins across the whole surface + brighter "beacon" hubs
+ const pins=[];for(let i=0;i<620;i++){const r=Math.random();const beacon=r<.08;
+  pins.push({lat:(Math.random()-.5)*170,lng:(Math.random()-.5)*360,
+   size:beacon?.9:(r<.35?.42:.26),
+   color:beacon?'#FFB07A':(r<.5?'#FF6B4A':(r<.8?'#12A594':'#FFD166'))});}
+ // clustered density around major population centers for realism
+ const centers=[[40.7,-74],[51.5,-0.12],[35.68,139.69],[19.07,72.87],[34.05,-118.24],[-23.5,-46.6],[28.6,77.2],[31.2,121.5],[48.85,2.35],[-33.86,151.2],[55.75,37.6],[1.35,103.8]];
+ centers.forEach(([la,lo])=>{for(let k=0;k<26;k++){pins.push({lat:la+(Math.random()-.5)*22,lng:lo+(Math.random()-.5)*22,size:Math.random()<.2?.7:.3,color:Math.random()<.5?'#FF6B4A':'#12A594'});}});
+ const hubs=[{lat:64.8,lng:-23.7},{lat:34.05,lng:-118.24},{lat:51.5,lng:-0.12},{lat:35.68,lng:139.69},{lat:-33.86,lng:151.2},{lat:19.07,lng:72.87},{lat:-1.29,lng:36.82},{lat:48.85,lng:2.35},{lat:40.7,lng:-74},{lat:-23.5,lng:-46.6},{lat:55.75,lng:37.6},{lat:1.35,lng:103.8}];
+ welG=Globe()(el)
+  .width(w).height(h)
+  .backgroundColor('rgba(0,0,0,0)')
+  .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+  .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+  .atmosphereColor('#8FD0FF').atmosphereAltitude(.26)
+  .pointsData(pins).pointAltitude(.015).pointRadius(d=>d.size).pointColor(d=>d.color).pointsMerge(true)
+  .ringsData(hubs).ringColor(()=>t=>`rgba(255,176,122,${1-t})`).ringMaxRadius(6).ringPropagationSpeed(1.7).ringRepeatPeriod(1200)
+  .arcsData(welArcs(hubs)).arcColor(()=>['rgba(255,176,122,.75)','rgba(143,208,255,.75)']).arcStroke(.35).arcDashLength(.5).arcDashGap(.28).arcDashAnimateTime(3200).arcAltitudeAutoScale(.4)
+  .pointOfView({lat:18,lng:-30,altitude:1.64},0);
+ const c=welG.controls();c.autoRotate=true;c.autoRotateSpeed=.62;c.enableZoom=false;c.enablePan=false;
+ // brighten: crank up every light in the scene so the daytime earth reads full and vivid
+ try{welG.scene().traverse(o=>{if(o.isLight)o.intensity=(o.intensity||1)*2.4;});}catch(e){}
+}
+
 /* ============ nav ============ */
 let lastTab='home';
 function login(m){document.getElementById('app').classList.add('in');go('home');toast(m||'Welcome to Togethr, Kevin! 🌅')}
@@ -596,29 +755,38 @@ function go(v){
  document.getElementById('view-'+v).classList.add('active');
  document.querySelectorAll('#nav .t').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
  if(['home','map','inbox','me'].includes(v))lastTab=v;
- if(v==='map')initMap();
+ if(v==='map'){initMap();const mp=document.getElementById('mapPreview');if(mp)mp.classList.remove('show');resumeMapRotate();}
  if(v==='inbox')document.getElementById('inboxdot').style.display='none';
  if(v==='create'){document.getElementById('createpick').style.display='block';document.getElementById('createform').style.display='none'}
 }
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2300)}
 
+/* ============ dark mode ============ */
+function applyDark(on){
+ document.getElementById('app').classList.toggle('dark',on);
+ const sw=document.getElementById('swDark');if(sw)sw.classList.toggle('on',on);
+ try{localStorage.setItem('togethr-dark',on?'1':'0')}catch(e){}
+}
+function toggleDark(){const on=!document.getElementById('app').classList.contains('dark');applyDark(on);toast(on?'Dark mode on 🌙':'Light mode on ☀️')}
+try{if(localStorage.getItem('togethr-dark')==='1')applyDark(true)}catch(e){}
+
 /* ============ hi-viz timers ============ */
 const TBOX={
- moment:{lab:'⚡ SYNCHRONIZED MOMENT BEGINS IN',done:'🔴 LIVE — THE MOMENT IS NOW'},
- challenge:{lab:'⏳ TIME LEFT TO COMPLETE THE CHALLENGE',done:'🏁 CHALLENGE ENDED'},
- window:{lab:'🗓 WINDOW CLOSES IN — ACT BEFORE IT ENDS',done:'🏁 WINDOW CLOSED'}};
-const TMINI={moment:['⚡','to the moment'],challenge:['⏳','left to finish'],window:['🗓','left in window']};
-function timerBox(type,at,labOverride){
+ moment:{i:'zap',lab:'SYNCHRONIZED MOMENT BEGINS IN',done:'LIVE — THE MOMENT IS NOW'},
+ challenge:{i:'clock',lab:'TIME LEFT TO COMPLETE THE CHALLENGE',done:'CHALLENGE ENDED'},
+ window:{i:'calendar',lab:'WINDOW CLOSES IN — ACT BEFORE IT ENDS',done:'WINDOW CLOSED'}};
+const TMINI={moment:['zap','to the moment'],challenge:['clock','left to finish'],window:['calendar','left in window']};
+function timerBox(type,at,labOverride,iconOverride){
  const c=TBOX[type]||TBOX.moment;
- return `<div class="timerbox ${type}"><div class="tlab">${labOverride||c.lab}</div><div class="tdigits" data-tt="${at}" data-done="${c.done}"></div></div>`;
+ return `<div class="timerbox ${type}"><div class="tlab">${ic(iconOverride||c.i,15)} ${labOverride||c.lab}</div><div class="tdigits" data-tt="${at}" data-done="${c.done}"></div></div>`;
 }
-function timerMini(type,at){const [ic,lb]=TMINI[type]||TMINI.moment;
- return `<div class="timermini ${type}">${ic} <b data-ttm="${at}"></b> ${lb}</div>`}
+function timerMini(type,at){const [icn,lb]=TMINI[type]||TMINI.moment;
+ return `<div class="timermini ${type}">${ic(icn,14)} <b data-ttm="${at}"></b> ${lb}</div>`}
 function tickTimers(){
  const now=Date.now();
  document.querySelectorAll('[data-tt]').forEach(el=>{
   const r=+el.dataset.tt-now;
-  if(r<=0){el.innerHTML=`<div class="tlive">${el.dataset.done||'🔴 LIVE NOW'}</div>`;return}
+  if(r<=0){el.innerHTML=`<div class="tlive">${el.dataset.done||'LIVE NOW'}</div>`;return}
   const d=Math.floor(r/864e5),h=Math.floor(r%864e5/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);
   el.innerHTML=[[d,'days'],[h,'hours'],[m,'min'],[s,'sec']].map(([v,l])=>`<div><b>${String(v).padStart(2,'0')}</b><span>${l}</span></div>`).join('');
  });
@@ -654,8 +822,8 @@ function eventCard(e){const c=camps.find(x=>x.id===e.camp);
   <div class="datechip"><div class="m">${e.mon}</div><div class="d">${e.day}</div></div>
   <div class="info"><b>${e.name}</b>
    <div class="s12 sub">${e.city} · ${e.price?'$'+e.price:'Free'} · part of ${c?c.name:''}</div>
-   <div class="s12" style="margin-top:4px;font-weight:900;color:var(--coral)">⚡ <b data-ttm="${e.at}"></b></div>
-   <div class="faces" style="margin-top:6px">${['🌸','🌊','🌿'].map(x=>`<div class="av">${x}</div>`).join('')}<span class="s12 sub" style="margin-left:8px">${e.going} going</span></div></div>
+   <div class="s12" style="margin-top:4px;font-weight:900;color:var(--coral);display:flex;align-items:center;gap:5px">${ic('zap',14)} <b data-ttm="${e.at}"></b></div>
+   <div class="faces" style="margin-top:6px">${faceAvs(3)}<span class="s12 sub" style="margin-left:8px">${e.going} going</span></div></div>
   <button class="btn teal sm" onclick="event.stopPropagation();this.textContent='Going ✓';toast('You\\'re going! 🎉')">Join</button></div>`}
 function postCard(p){
  return `<div class="card fpost">
@@ -663,18 +831,20 @@ function postCard(p){
   <div class="body">${p.txt}</div>
   ${p.img?`<div class="pic" style="background-image:url('${p.img}')"></div>`:''}
   <div class="bar">
-   <div onclick="likePost(this,'${p.id}')">🤍 ${p.likes}</div>
-   <div onclick="openComments('${p.id}')">💬 ${p.comments.length}</div>
-   <div onclick="toast('Shared!')">↗ Share</div></div></div>`}
-function likePost(el,pid){const p=wallPosts.find(x=>x.id===pid);p.likes++;el.innerHTML='❤️ '+p.likes}
-function infoRow(p){return `<div class="inforow"><span style="font-size:16px">${p.icon}</span><span style="flex:1">${p.txt}</span><span class="s12 sub">${p.when}</span></div>`}
+   <div onclick="likePost(this,'${p.id}')">${ic('heart',17)} <span>${p.likes}</span></div>
+   <div onclick="openComments('${p.id}')">${ic('message',17)} <span>${p.comments.length}</span></div>
+   <div onclick="toast('Shared!')">${ic('share',17)} Share</div></div></div>`}
+function likePost(el,pid){const p=wallPosts.find(x=>x.id===pid);p.likes++;el.style.color='var(--coral)';el.innerHTML=ic('heart',17)+' <span>'+p.likes+'</span>'}
+const INFOIC={'🎉':'users','📍':'pin','🎟':'ticket','🏡':'users','⚡':'zap','❤️':'heart'};
+function infoRow(p){return `<div class="inforow"><span class="ii" data-fill>${ic(INFOIC[p.icon]||'star',17)}</span><span style="flex:1">${p.txt}</span><span class="s12 sub">${p.when}</span></div>`}
 function renderFeed(){
  document.getElementById('feed').innerHTML=feedPosts.map(p=>{
   if(p.kind==='camp'){const c=camps.find(x=>x.id===p.ref);return c?campCard(c):''}
   if(p.kind==='event'){const e=evts.find(x=>x.id===p.ref);return e?eventCard(e):''}
   const post=wallPosts.find(x=>x.id===p.ref);return post?postCard(post):''}).join('');
 }
-renderStories();renderFeed();tickTimers();
+renderStories();renderFeed();tickTimers();hydrateIcons();
+setTimeout(initWelcomeGlobe,80);
 
 /* ============ activity walls ============ */
 function wallHTML(entity,cid,ph){
@@ -701,15 +871,15 @@ function postToWall(cid){
 
 /* ============ notifications ============ */
 let notifs=[
- {id:'n1',icon:'💬',txt:'<b>Ray Mehta</b> commented on your post: "Bringing the sound gear 🎶"',when:'3h · LA Eclipse Watch Party',unread:true,sect:'today',act:()=>openComments('p8')},
- {id:'n2',icon:'🎉',txt:'<b>12 people</b> joined <b>Iceland Eclipse</b> through your gathering',when:'5h',unread:true,sect:'today',act:()=>openCampaign('c1')},
- {id:'n3',icon:'🎟',txt:'<b>Daniela</b> and 3 others reserved spots at <b>LA Eclipse Watch Party</b>',when:'6h',unread:true,sect:'today',act:()=>openEvent('e1')},
- {id:'n4',icon:'⏰',txt:'<b>30-Day Meat Fast</b> ends in 12 days — you\'re on day 18. Keep going!',when:'today',unread:false,sect:'today',act:()=>openCampaign('c3')},
- {id:'n5',icon:'❤️',txt:'<b>Yuli Zhong</b> and 46 others liked your Meat Fast update',when:'1d',unread:false,sect:'earlier',act:()=>openComments('p2')},
- {id:'n6',icon:'🏡',txt:'You were made <b>Moderator</b> of <b>Vegan Coalition</b>',when:'2d',unread:false,sect:'earlier',act:()=>openCommunity('o2')},
- {id:'n7',icon:'📍',txt:'New gathering near you: <b>Solstice in the Park</b>, Griffith Park',when:'2d',unread:false,sect:'earlier',act:()=>openEvent('e8')},
- {id:'n8',icon:'💌',txt:'<b>Ray Mehta</b> sent you a message',when:'3d',unread:false,sect:'earlier',act:()=>openThread(0)},
- {id:'n9',icon:'🌘',txt:'<b>Iceland Eclipse</b> hit 12,000 participants — 35 days to go',when:'3d',unread:false,sect:'earlier',act:()=>openCampaign('c1')}];
+ {id:'n1',icon:'message',txt:'<b>Ray Mehta</b> commented on your post: "Bringing the sound gear"',when:'3h · LA Eclipse Watch Party',unread:true,sect:'today',act:()=>openComments('p8')},
+ {id:'n2',icon:'users',txt:'<b>12 people</b> joined <b>Iceland Eclipse</b> through your gathering',when:'5h',unread:true,sect:'today',act:()=>openCampaign('c1')},
+ {id:'n3',icon:'ticket',txt:'<b>Daniela</b> and 3 others reserved spots at <b>LA Eclipse Watch Party</b>',when:'6h',unread:true,sect:'today',act:()=>openEvent('e1')},
+ {id:'n4',icon:'clock',txt:'<b>30-Day Meat Fast</b> ends in 12 days — you\'re on day 18. Keep going!',when:'today',unread:false,sect:'today',act:()=>openCampaign('c3')},
+ {id:'n5',icon:'heart',txt:'<b>Yuli Zhong</b> and 46 others liked your Meat Fast update',when:'1d',unread:false,sect:'earlier',act:()=>openComments('p2')},
+ {id:'n6',icon:'shield',txt:'You were made <b>Moderator</b> of <b>Vegan Coalition</b>',when:'2d',unread:false,sect:'earlier',act:()=>openCommunity('o2')},
+ {id:'n7',icon:'pin',txt:'New gathering near you: <b>Solstice in the Park</b>, Griffith Park',when:'2d',unread:false,sect:'earlier',act:()=>openEvent('e8')},
+ {id:'n8',icon:'mail',txt:'<b>Ray Mehta</b> sent you a message',when:'3d',unread:false,sect:'earlier',act:()=>openThread(0)},
+ {id:'n9',icon:'moon',txt:'<b>Iceland Eclipse</b> hit 12,000 participants — 35 days to go',when:'3d',unread:false,sect:'earlier',act:()=>openCampaign('c1')}];
 function updateBell(){
  const n=notifs.filter(x=>x.unread).length;
  const b=document.getElementById('bellbadge');
@@ -718,7 +888,7 @@ function updateBell(){
 function renderNotifs(){
  const sect=s=>notifs.filter(n=>n.sect===s).map(n=>`
   <div class="notifrow ${n.unread?'unread':''}" onclick="tapNotif('${n.id}')">
-   <div class="nicon">${n.icon}</div>
+   <div class="nicon">${ic(n.icon,19)}</div>
    <div class="ntxt">${n.txt}<span class="nwhen">${n.when}</span></div>
    ${n.unread?'<span class="ndot2"></span>':''}
   </div>`).join('');
@@ -739,7 +909,7 @@ function markAllNotifs(){notifs.forEach(n=>n.unread=false);updateBell();renderNo
 let cmtPid=null;
 function openComments(pid){cmtPid=pid;renderComments();document.getElementById('cmtOv').classList.add('open');
  setTimeout(()=>document.getElementById('cmtin').focus(),250)}
-function closeComments(){document.getElementById('cmtOv').classList.remove('open')}
+function closeComments(){const ov=document.getElementById('cmtOv');if(!ov.classList.contains('open'))return;ov.classList.add('closing');setTimeout(()=>ov.classList.remove('open','closing'),260)}
 function renderComments(){
  const p=wallPosts.find(x=>x.id===cmtPid);if(!p)return;
  document.getElementById('cmtHead').textContent=p.comments.length?p.comments.length+(p.comments.length===1?' comment':' comments'):'Comments';
@@ -768,13 +938,13 @@ function openCampaign(id){
  document.getElementById('cname').textContent=c.name;
  document.getElementById('cby').innerHTML=`by <b style="color:var(--ink);cursor:pointer" onclick="openCommunity('${c.commId}')">${c.comm}</b> · community campaign`;
  document.getElementById('ctimer').innerHTML=timerBox(c.type,c.at);
- document.getElementById('cexpl').innerHTML='💡 '+T.expl;
+ document.getElementById('cexpl').innerHTML='<span style="display:inline-flex;gap:7px;align-items:flex-start">'+ic('bulb',17)+'<span>'+T.expl+'</span></span>';
  document.getElementById('cjoined').textContent=c.joined.toLocaleString()+' people are in';
  document.getElementById('cgoal').textContent='goal '+c.goal.toLocaleString();
  document.getElementById('cprog').style.width=Math.min(100,Math.round(c.joined/c.goal*100))+'%';
- document.getElementById('cfaces').innerHTML=['🌻','🌊','🌿','🔥','🌙'].map(x=>`<div class="av">${x}</div>`).join('')+`<span class="s12 sub" style="margin-left:9px">Grayson, Omar &amp; ${(c.joined-2).toLocaleString()} more</span>`;
+ document.getElementById('cfaces').innerHTML=faceAvs(5)+`<span class="s12 sub" style="margin-left:9px">Grayson, Omar &amp; ${(c.joined-2).toLocaleString()} more</span>`;
  document.getElementById('cdesc').textContent=c.desc;
- document.getElementById('cjoinbtn').textContent='Count me in ✋';
+ document.getElementById('cjoinbtn').textContent='Count me in';
  const ce=evts.filter(e=>e.camp===c.id);
  document.getElementById('cevents').innerHTML=ce.length?ce.slice(0,4).map(e=>`
   <div class="card ecard" style="margin:0 0 10px" onclick="openEvent('${e.id}')">
@@ -785,7 +955,7 @@ function openCampaign(id){
  renderWall('cwall',c.id,'Share an update with this campaign…');
  show('view-campaign');setTimeout(()=>campMap(c),60);
 }
-function joinCampaign(btn){btn.textContent='You\'re in! 🎉';curCamp.joined++;toast('Welcome aboard — you\'re dot #'+curCamp.joined.toLocaleString()+' on the map')}
+function joinCampaign(btn){btn.textContent='You\'re in!';curCamp.joined++;toast('Welcome aboard — you\'re dot #'+curCamp.joined.toLocaleString()+' on the map')}
 
 /* ============ event page ============ */
 function openEvent(id){
@@ -794,12 +964,12 @@ function openEvent(id){
  const p=document.getElementById('eparent');p.textContent='part of '+(c?c.name:'');p.onclick=()=>openCampaign(c.id);
  document.getElementById('ename').textContent=e.name;
  document.getElementById('ehost').textContent='hosted by '+e.host+' · anyone can join';
- document.getElementById('etimer').innerHTML=timerBox('moment',e.at,'📍 THIS GATHERING BEGINS IN');
+ document.getElementById('etimer').innerHTML=timerBox('moment',e.at,'THIS GATHERING BEGINS IN','pin');
  document.getElementById('ewhen').textContent=e.mon+' '+e.day+', 2026 · 9:47 AM local';
  document.getElementById('ewhere').textContent=e.city;
  document.getElementById('ecost').textContent=e.price?'$'+e.price+' per person':'Free to attend';
  document.getElementById('espots').textContent=(e.cap-e.going)+' of '+e.cap+' spots left';
- document.getElementById('efaces').innerHTML=['🌸','🌊','🌿','☀️'].map(x=>`<div class="av">${x}</div>`).join('')+`<span class="s12 sub" style="margin-left:9px">${e.going} going</span>`;
+ document.getElementById('efaces').innerHTML=faceAvs(4)+`<span class="s12 sub" style="margin-left:9px">${e.going} going</span>`;
  document.getElementById('ersvp').textContent=e.price?`Reserve — $${e.price}`:'Reserve my spot';
  document.getElementById('enear').innerHTML=evts.filter(x=>x.id!==e.id).slice(0,3).map(x=>`
   <div class="card ecard" style="margin:0 0 10px" onclick="openEvent('${x.id}')">
@@ -815,7 +985,7 @@ function openCommunity(id){
  document.getElementById('ohero').style.backgroundImage=`url('${o.img}')`;
  document.getElementById('oname').textContent=o.name;
  document.getElementById('otagline').textContent=o.tagline;
- document.getElementById('odesc').innerHTML='🏡 '+o.desc;
+ document.getElementById('odesc').innerHTML='<span style="display:inline-flex;gap:7px;align-items:flex-start">'+ic('users',17)+'<span>'+o.desc+'</span></span>';
  document.getElementById('ocamps').innerHTML=camps.filter(c=>c.commId===o.id).map(c=>campCard(c)).join('').replaceAll('margin:0 18px 16px','margin:0 0 14px')||'<div class="s13 sub">No campaigns yet.</div>';
  document.getElementById('oteam').innerHTML=o.team.map(([n,r])=>`
   <div class="setrow2" style="cursor:default"><div class="av" style="width:36px;height:36px;font-size:12px">${n[0]}${n[1]||''}</div>
@@ -845,14 +1015,14 @@ const CF={
    <div class="fld"><label>CAMPAIGN NAME</label><input id="nf1" placeholder="e.g. Global Sunrise Yoga"></div>
    <div class="fld"><label>HOW DO PEOPLE TAKE PART?</label></div>
    <div class="typewrap">
-    <div class="typeopt on" data-t="moment" onclick="pickT(this)"><span class="em">🌐</span><div><b>Same moment, everywhere</b><span class="s12 sub">One synced countdown for the whole planet</span></div></div>
-    <div class="typeopt" data-t="challenge" onclick="pickT(this)"><span class="em">🏆</span><div><b>A challenge</b><span class="s12 sub">Complete it at your own pace</span></div></div>
-    <div class="typeopt" data-t="window" onclick="pickT(this)"><span class="em">🗓</span><div><b>Anytime in a window</b><span class="s12 sub">One action, any day between two dates</span></div></div>
+    <div class="typeopt on" data-t="moment" onclick="pickT(this)"><span class="em" data-ic="globe" data-sz="21"></span><div><b>Same moment, everywhere</b><span class="s12 sub">One synced countdown for the whole planet</span></div></div>
+    <div class="typeopt" data-t="challenge" onclick="pickT(this)"><span class="em" data-ic="award" data-sz="21"></span><div><b>A challenge</b><span class="s12 sub">Complete it at your own pace</span></div></div>
+    <div class="typeopt" data-t="window" onclick="pickT(this)"><span class="em" data-ic="calendar" data-sz="21"></span><div><b>Anytime in a window</b><span class="s12 sub">One action, any day between two dates</span></div></div>
    </div>
-   <div class="aihelp" onclick="document.getElementById('nf1').value=document.getElementById('nf1').value||'Global Sunrise Yoga';toast('✨ Wrote a tagline, story & tags for you')">✨ <span><b>Help me write it</b> — AI drafts your story from one line</span></div>`,
+   <div class="aihelp" onclick="document.getElementById('nf1').value=document.getElementById('nf1').value||'Global Sunrise Yoga';toast('Wrote a tagline, story & tags for you')"><span data-ic="star"></span><span><b>Help me write it</b> — AI drafts your story from one line</span></div>`,
   f2:`<div class="fld"><label>WHEN</label><input type="datetime-local" value="2026-08-12T09:47"></div>
    <div class="fld"><label>WHERE'S THE HEART OF IT?</label>
-    <select id="nfloc"><option value="34.05,-118.24">Los Angeles</option><option value="64.8,-23.7">Iceland</option><option value="51.5,-0.12">London</option><option value="0,0">🌍 Everywhere</option></select></div>
+    <select id="nfloc"><option value="34.05,-118.24">Los Angeles</option><option value="64.8,-23.7">Iceland</option><option value="51.5,-0.12">London</option><option value="0,0">Everywhere (global)</option></select></div>
    <div class="fld"><label>CAN PEOPLE HOST GATHERINGS?</label>
     <select><option>Yes — anyone can host</option><option>Only my team</option><option>No gatherings</option></select></div>`,
   done:(n)=>{const [lat,lng]=(document.getElementById('nfloc')||{value:'34.05,-118.24'}).value.split(',').map(Number);
@@ -867,7 +1037,7 @@ const CF={
     <option value="48.85,2.35|Paris">Paris</option><option value="35.68,139.69|Tokyo">Tokyo</option>
     <option value="-33.86,151.2|Sydney">Sydney</option></select></div>
    <div class="fld"><label>WHEN</label><input type="datetime-local" value="2026-08-12T09:47"></div>`,
-  f2:`<div class="fld"><label>TICKETS</label><select id="nfprice"><option value="0">Free 🎉</option><option value="5">$5</option><option value="10">$10</option></select></div>
+  f2:`<div class="fld"><label>TICKETS</label><select id="nfprice"><option value="0">Free</option><option value="5">$5</option><option value="10">$10</option></select></div>
    <div class="fld"><label>MAX PEOPLE</label><input id="nfcap" type="number" value="100"></div>
    <div class="fld"><label>WHAT HAPPENS THERE?</label><textarea rows="3" placeholder="Tell people what to expect…"></textarea></div>`,
   done:(n)=>{const sel=document.getElementById('nf0');const camp=camps.find(c=>c.name===sel.value)||camps[0];
@@ -888,7 +1058,8 @@ function openCreate(kind){
   cfg.f1.replace('{CAMPS}',camps.map(c=>`<option>${c.name}</option>`).join(''))+
   `<div style="display:flex;gap:10px;margin:4px 18px"><button class="btn go" style="flex:1" onclick="cfNext()">Next</button></div>`;
  document.getElementById('cf2').innerHTML=cfg.f2+
-  `<div style="display:flex;gap:10px;margin:4px 18px"><button class="btn" onclick="cfBack()">Back</button><button class="btn go" style="flex:1" onclick="cfDone()">✨ Bring it to life</button></div>`;
+  `<div style="display:flex;gap:10px;margin:4px 18px"><button class="btn" onclick="cfBack()">Back</button><button class="btn go" style="flex:1" onclick="cfDone()">Bring it to life</button></div>`;
+ hydrateIcons(document.getElementById('createform'));
 }
 function pickT(el){newT=el.dataset.t;el.parentNode.querySelectorAll('.typeopt').forEach(o=>o.classList.remove('on'));el.classList.add('on')}
 function cfNext(){document.getElementById('cf1').style.display='none';document.getElementById('cf2').style.display='block';document.getElementById('dot2').classList.add('on')}
@@ -948,8 +1119,8 @@ function makeG(el,alt){
  return g}
 function initMap(){
  if(mapReady||typeof Globe==='undefined'){if(mapReady)paintMap();return}
- map=makeG(document.getElementById('mapEl'),2.2);
- map.onPointClick(d=>{if(d.kind==='camp')openCampaign(d.id);if(d.kind==='evt')openEvent(d.id)});
+ map=makeG(document.getElementById('mapEl'),1.35);
+ map.onPointClick(d=>{if(d.kind==='camp')showMapPreview('camp',d.id);if(d.kind==='evt')showMapPreview('evt',d.id)});
  mapReady=true;paintMap();renderMapCards();
 }
 function crowdDots(n){const a=[];for(let i=0;i<n;i++)a.push({lat:(Math.random()-.5)*130,lng:(Math.random()-.5)*360,size:.18,color:'rgba(255,185,56,.85)'});return a}
@@ -964,23 +1135,48 @@ function paintMap(){
 }
 function mapFilter(el){
  mapF=el.dataset.f;
- el.parentNode.querySelectorAll('.btn').forEach(b=>{b.className='btn sm ghost'});
- el.className='btn sm';el.style.background='#fff';el.style.boxShadow='var(--shadow)';
+ el.parentNode.querySelectorAll('.mapchip').forEach(b=>b.classList.remove('on'));
+ el.classList.add('on');
  paintMap();
 }
 function renderMapCards(){
  const items=[...camps.slice(0,3).map(c=>({k:'camp',c})),...evts.slice(0,4).map(e=>({k:'evt',e}))];
  document.getElementById('mapcards').innerHTML=items.map(it=>it.k==='camp'
-  ?`<div class="mapcard" onclick="flyTo(${it.c.lat},${it.c.lng});setTimeout(()=>openCampaign('${it.c.id}'),650)">
-     <div class="datechip" style="width:auto;padding:8px 10px;font-size:22px;border:none;background:#FFF0EC">🔥</div>
+  ?`<div class="mapcard" onclick="showMapPreview('camp','${it.c.id}')">
+     <div class="datechip" style="width:auto;padding:11px;border:none;background:#FFF0EC;color:var(--coral-deep);display:flex;align-items:center">${ic('flame',22)}</div>
      <div style="min-width:0"><b class="s13" style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${it.c.name}</b>
       <span class="s12 sub">${it.c.joined.toLocaleString()} in · ${TYPE[it.c.type].label}</span></div></div>`
-  :`<div class="mapcard" onclick="flyTo(${it.e.lat},${it.e.lng});setTimeout(()=>openEvent('${it.e.id}'),650)">
+  :`<div class="mapcard" onclick="showMapPreview('evt','${it.e.id}')">
      <div class="datechip"><div class="m">${it.e.mon}</div><div class="d">${it.e.day}</div></div>
      <div style="min-width:0"><b class="s13" style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${it.e.name}</b>
       <span class="s12 sub">${it.e.city} · ${it.e.going} going</span></div></div>`).join('');
 }
-function flyTo(lat,lng){if(mapReady)map.pointOfView({lat,lng,altitude:1.5},600)}
+function flyTo(lat,lng){if(mapReady){map.pointOfView({lat,lng,altitude:1.4},700);map.controls().autoRotate=false;}}
+function resumeMapRotate(){if(mapReady)map.controls().autoRotate=true}
+function showMapPreview(kind,id){
+ const el=document.getElementById('mapPreview');
+ if(kind==='camp'){const c=camps.find(x=>x.id===id);if(!c)return;flyTo(c.lat,c.lng);
+  el.innerHTML=`<div class="card mapprev" onclick="openCampaign('${c.id}')">
+    <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
+    <div class="pthumb" style="background-image:url('${c.img}')"></div>
+    <div style="flex:1;min-width:0">
+      <span class="tag ${c.type==='moment'?'moment':(c.type==='challenge'?'challenge':'window')}">${TYPE[c.type].label}</span>
+      <b style="display:block;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</b>
+      <span class="s12 sub">by ${c.comm} · ${c.joined.toLocaleString()} in</span></div>
+    <span class="parr">${ic('chev',20)}</span></div>`;
+ } else {const e=evts.find(x=>x.id===id);if(!e)return;const c=camps.find(x=>x.id===e.camp);flyTo(e.lat,e.lng);
+  el.innerHTML=`<div class="card mapprev" onclick="openEvent('${e.id}')">
+    <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
+    <div class="pthumb" style="background-image:url('${(c||{}).img||IMG.crowd}')"></div>
+    <div style="flex:1;min-width:0">
+      <span class="tag event">Gathering</span>
+      <b style="display:block;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.name}</b>
+      <span class="s12 sub">${e.city} · ${e.going} going · ${e.price?'$'+e.price:'Free'}</span></div>
+    <span class="parr">${ic('chev',20)}</span></div>`;
+ }
+ el.classList.add('show');
+}
+function closeMapPreview(){document.getElementById('mapPreview').classList.remove('show');resumeMapRotate();}
 /* mini maps */
 let cmap=null,emap=null;
 function campMap(c){
