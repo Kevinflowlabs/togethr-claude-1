@@ -153,7 +153,7 @@
   .mapchip.on{background:rgba(255,255,255,.94);color:var(--coral);border-color:rgba(255,255,255,.95);text-shadow:none}
   .mapcards{position:absolute;bottom:8px;left:0;right:0;z-index:6;display:flex;gap:12px;overflow-x:auto;padding:6px 18px;scrollbar-width:none;scroll-snap-type:x mandatory}
   .mapcards::-webkit-scrollbar{display:none}
-  #mapPreview{position:absolute;left:16px;right:16px;bottom:96px;z-index:8;transform:translateY(24px) scale(.97);opacity:0;pointer-events:none;transition:transform .26s cubic-bezier(.3,.9,.4,1),opacity .26s}
+  #mapPreview{position:absolute;left:16px;right:16px;bottom:88px;z-index:96;transform:translateY(24px) scale(.97);opacity:0;pointer-events:none;transition:transform .26s cubic-bezier(.3,.9,.4,1),opacity .26s}
   #mapPreview.show{transform:none;opacity:1;pointer-events:auto}
   .mapprev{padding:12px;display:flex;gap:12px;align-items:center;position:relative;cursor:pointer;box-shadow:0 18px 46px rgba(6,14,26,.4)}
   .mapprev .pthumb{width:60px;height:60px;border-radius:14px;background-size:cover;background-position:center;flex-shrink:0}
@@ -161,12 +161,45 @@
   .mapprev .parr{color:var(--sub);flex-shrink:0}
   .mapcard{scroll-snap-align:center;flex:0 0 84%;background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(34,31,43,.16);padding:13px;display:flex;gap:12px;align-items:center;cursor:pointer}
   .maplegend{position:absolute;top:118px;right:14px;z-index:5;background:rgba(255,255,255,.92);color:#221F2B;border-radius:16px;box-shadow:var(--shadow);padding:10px 12px;font-size:10.5px;font-weight:800;display:flex;flex-direction:column;gap:7px}
+  .flatback{position:absolute;top:116px;left:14px;z-index:6;display:none;align-items:center;gap:7px;background:rgba(20,16,25,.82);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 15px;font-size:12.5px;font-weight:800;cursor:pointer;backdrop-filter:blur(10px)}
+  .flatback.on{display:inline-flex}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
 
   /* ---------- detail pages ---------- */
   .hero2{height:230px;background-size:cover;background-position:center;position:relative}
   .hero2 .fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(34,31,43,.05) 40%,var(--bg) 96%)}
   .backc{position:absolute;top:16px;left:16px;z-index:9}
+  .sharec{position:absolute;top:16px;right:16px;z-index:9}
+  #cby,#ehost{display:flex;align-items:center;gap:8px}
+  .cbyshare{margin-left:auto;color:var(--sub);cursor:pointer;display:flex;padding:4px;flex-shrink:0}
+  .cbyshare:hover{color:var(--coral)}
+  /* share & invite modal */
+  #shareOv{position:absolute;inset:0;background:rgba(20,16,25,.55);z-index:85;display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(3px);opacity:0;transition:opacity .24s}
+  #shareOv.open{display:flex;opacity:1}
+  #shareOv.closing{opacity:0}
+  .sharecard{width:100%;max-width:392px;max-height:90%;overflow-y:auto;scrollbar-width:none;background:var(--card);border-radius:24px;padding:22px 20px;box-shadow:0 30px 80px rgba(0,0,0,.4);transform:translateY(18px) scale(.96);transition:transform .26s cubic-bezier(.3,.9,.4,1)}
+  .sharecard::-webkit-scrollbar{display:none}
+  #shareOv.open .sharecard{transform:none}
+  .shhead{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+  .shhead .shx{margin-left:auto;cursor:pointer;color:var(--sub)}
+  .shtitle{font-size:20px;font-weight:900}
+  .shsub{font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:20px}
+  .shlbl{font-size:17px;font-weight:900;margin:18px 0 10px}
+  .shlink{display:flex;align-items:center;gap:8px;background:var(--soft);border-radius:14px;padding:6px 6px 6px 14px}
+  .shlink input{flex:1;background:none;border:none;outline:none;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--ink);min-width:0}
+  .shlink .shgear{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--sub);cursor:pointer}
+  .shlink .shcopy{width:44px;height:38px;border-radius:11px;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .shsocial{display:flex;justify-content:space-between;gap:10px}
+  .shsoc{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s}
+  .shsoc:hover{transform:translateY(-2px)}
+  .shemail{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:5px 5px 5px 14px}
+  .shemail input{flex:1;background:none;border:none;outline:none;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--ink);min-width:0}
+  .shemail .shadd{background:var(--ink);color:var(--bg);border:none;border-radius:999px;padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px}
+  .shuser{display:flex;align-items:center;gap:11px;padding:11px 2px}
+  .shuser .av{width:34px;height:34px;font-size:11px}
+  .shuser b{font-size:13.5px}
+  .shnone{font-size:12.5px;color:var(--sub);margin:8px 0 4px}
+  .shsend{width:100%;margin-top:16px}
   .body2{padding:0 18px 30px;margin-top:-44px;position:relative}
   /* detail pages: scrollable content + docked action bar (own space, never overlaps) */
   .view.paged{flex-direction:column}
@@ -176,7 +209,15 @@
   .ctabar{display:flex;gap:10px;padding:12px 16px 14px;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -10px 30px rgba(34,31,43,.08);flex-shrink:0}
   .ctabar .btn{flex:1}
   .minimap{position:relative;height:210px;border-radius:20px;overflow:hidden;margin:14px 0;background:linear-gradient(180deg,#CBE7FA,#EAF6EE);border:1px solid var(--line)}
-  .minimap .lbl{position:absolute;top:10px;left:10px;z-index:3;background:rgba(255,255,255,.92);border-radius:10px;padding:5px 10px;font-size:10.5px;font-weight:900;color:var(--ink);box-shadow:var(--shadow)}
+  .minimap .lbl{position:absolute;top:10px;left:10px;z-index:3;background:rgba(255,255,255,.92);border-radius:10px;padding:5px 10px;font-size:10.5px;font-weight:900;color:#221F2B;box-shadow:var(--shadow)}
+  .mapexpand{position:absolute;top:10px;right:10px;z-index:3;width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.92);color:#221F2B;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
+  #globeFull{position:absolute;inset:0;z-index:90;display:none;background:#05070E}
+  #globeFull.open{display:block}
+  #globeFullEl{position:absolute;inset:0}
+  .gfbar{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;gap:10px;padding:16px 16px 26px;background:linear-gradient(rgba(5,7,14,.65),transparent)}
+  .gftitle{color:#fff;font-weight:900;font-size:15px;text-shadow:0 1px 12px rgba(0,0,0,.6);flex:1;min-width:0}
+  .gfclose{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(12px);flex-shrink:0}
+  .gfhint{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:rgba(255,255,255,.6);font-size:11.5px;z-index:3}
   .kv2{display:flex;flex-direction:column;gap:10px;margin-top:14px}
   .kv2 .row{display:flex;gap:12px;align-items:center;font-size:13.5px}
   .kv2 .ic{width:38px;height:38px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
@@ -298,7 +339,13 @@
   #nav .t.on{color:var(--ink)}
   #nav .t.mid .i{width:46px;height:46px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;box-shadow:0 10px 24px rgba(255,107,74,.45);margin-top:-20px;border:4px solid var(--bg)}
   .ndot{position:absolute;top:-1px;right:-5px;min-width:15px;height:15px;border-radius:99px;background:var(--coral);color:#fff;font-size:8.5px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 3px}
+  #flatMap{position:absolute;inset:0;z-index:1;opacity:0;pointer-events:none;transition:opacity .35s}
+  #flatMap.on{opacity:1;pointer-events:auto}
+  #mapEl.dim{opacity:0;pointer-events:none;transition:opacity .35s}
+  .maplibregl-ctrl-attrib{font-size:9px!important}
 </style>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 </head>
 <body>
 <div id="app">
@@ -334,6 +381,7 @@
   <!-- ========== MAP ========== -->
   <div class="view" id="view-map">
     <div id="mapEl"></div>
+    <div id="flatMap"></div>
     <div class="map-top">
       <div class="top"><div class="h1">Around the world</div><div class="right"><div class="circle" data-ic="search" onclick="toast('Search places & moments')"></div></div></div>
       <div class="rail" style="padding-top:2px">
@@ -347,8 +395,9 @@
       <span><span class="dot" style="background:var(--coral)"></span>Campaign</span>
       <span><span class="dot" style="background:var(--teal)"></span>Event</span>
       <span><span class="dot" style="background:var(--sun)"></span>People</span>
+      <span style="opacity:.65;font-weight:700">Zoom in → streets</span>
     </div>
-    <div id="mapPreview"></div>
+    <div class="flatback" id="flatback" onclick="exitFlat(flat.getCenter().lat,flat.getCenter().lng)" data-ic="globe" data-sz="16">Globe view</div>
     <div class="mapcards" id="mapcards"></div>
   </div>
 
@@ -370,7 +419,7 @@
         <div class="prog" style="margin-top:9px"><i id="cprog" style="width:60%"></i></div>
         <div class="faces" style="margin-top:12px" id="cfaces"></div>
       </div>
-      <div class="minimap"><div class="lbl" data-ic="globe" data-sz="13">Live around the world</div><div id="cmapEl" style="position:absolute;inset:0"></div></div>
+      <div class="minimap"><div class="lbl" data-ic="globe" data-sz="13">Live around the world</div><div class="mapexpand" data-ic="expand" data-sz="18" onclick="openGlobeFull()" title="Expand"></div><div id="cmapEl" style="position:absolute;inset:0"></div></div>
       <p class="s13" style="line-height:1.6;color:#524D5E" id="cdesc"></p>
       <div class="sechead" style="padding:18px 0 10px"><h3>Gatherings</h3><a onclick="openCreate('event')">+ Host yours</a></div>
       <div id="cevents"></div>
@@ -400,7 +449,7 @@
         <div class="row"><div class="ic" data-ic="pin"></div><div><b class="s13" id="ewhere"></b><div class="s12 sub">Get directions</div></div></div>
         <div class="row"><div class="ic" data-ic="ticket"></div><div><b class="s13" id="ecost"></b><div class="s12 sub" id="espots"></div></div></div>
       </div>
-      <div class="minimap"><div class="lbl" data-ic="pin" data-sz="13">This gathering &amp; its global moment</div><div id="emapEl" style="position:absolute;inset:0"></div></div>
+      <div class="minimap"><div class="lbl" data-ic="pin" data-sz="13">This gathering &amp; its global moment</div><div class="mapexpand" data-ic="expand" data-sz="18" onclick="openGlobeFull(curEvCamp)" title="Expand"></div><div id="emapEl" style="position:absolute;inset:0"></div></div>
       <div class="faces" id="efaces" style="margin-top:4px"></div>
       <div class="sechead" style="padding:18px 0 10px"><h3>Activity</h3><span class="s12 sub">attendees can post here</span></div>
       <div id="ewall"></div>
@@ -418,6 +467,7 @@
   <!-- ========== COMMUNITY (ORG) ========== -->
   <div class="view" id="view-community">
     <div class="circle backc" data-ic="back" onclick="go(lastTab)"></div>
+    <div class="circle sharec" data-ic="share" onclick="openShare('community',curCommId)"></div>
     <div class="hero2" id="ohero" style="height:180px"><div class="fade"></div></div>
     <div class="body2">
       <span class="tag community">Community</span>
@@ -442,6 +492,7 @@
   <div class="view paged" id="view-pubprofile">
     <div class="scrollwrap">
     <div class="circle backc" data-ic="back" onclick="go(lastTab)"></div>
+    <div class="circle sharec" data-ic="share" onclick="openShare('profile')"></div>
     <div class="hero2" id="phero" style="height:150px"><div class="fade"></div></div>
     <div class="body2">
       <div style="display:flex;gap:14px;align-items:flex-end">
@@ -608,6 +659,19 @@
       </div>
     </div>
   </div>
+  <!-- ========== FULLSCREEN GLOBE ========== -->
+  <div id="globeFull">
+    <div id="globeFullEl"></div>
+    <div class="gfbar"><div class="gftitle" id="gftitle">Live participation</div><div class="gfclose" data-ic="close" onclick="closeGlobeFull()"></div></div>
+    <div class="gfhint">Drag to rotate · scroll to zoom · rotate your device for landscape</div>
+  </div>
+
+  <!-- ========== SHARE & INVITE ========== -->
+  <div id="shareOv" onclick="if(event.target===this)closeShare()">
+    <div class="sharecard" id="shareCard"></div>
+  </div>
+
+  <div id="mapPreview"></div>
   <div class="toast" id="toast"></div>
 </div>
 
@@ -653,7 +717,17 @@ const ICON={
  sparklemini:'<path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/>',
  chev:'<polyline points="9 18 15 12 9 6"/>',
  grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
- bulb:'<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.1 14a5 5 0 1 0-6.2 0c.5.4 1.1 1 1.1 2h4c0-1 .6-1.6 1.1-2z"/>'
+ bulb:'<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.1 14a5 5 0 1 0-6.2 0c.5.4 1.1 1 1.1 2h4c0-1 .6-1.6 1.1-2z"/>',
+ copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+ expand:'<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>'
+};
+/* social brand marks (filled, monochrome) */
+const SOC={
+ fb:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.3l.4-2.8h-2.7V9.4c0-.8.3-1.3 1.5-1.3h1.3V5.6c-.6-.1-1.5-.2-2.5-.2-2.1 0-3.6 1.3-3.6 3.7v2.1H9.5V14H12v7h1.5z"/></svg>',
+ x:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h2.7l-5.9 6.7L21 21h-5.4l-4.2-5.5L6.4 21H3.7l6.3-7.2L3 3h5.5l3.8 5.1L17.5 3zm-1 16.4h1.5L7.6 4.5H6l10.5 14.9z"/></svg>',
+ wa:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3zm0 2a7 7 0 1 1-3.6 13l-.3-.2-2.1.6.6-2-.2-.3A7 7 0 0 1 12 5zm3.9 8.6c-.2-.1-1.3-.6-1.5-.7s-.3-.1-.5.1-.5.7-.7.9-.3.1-.5 0a5.7 5.7 0 0 1-2.7-2.4c-.2-.4.2-.4.5-1 0-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.6 2.6 0 0 0-.8 1.9c0 1.1.8 2.2.9 2.3a8.4 8.4 0 0 0 3.2 2.9c1.5.6 1.5.4 1.8.4a2.2 2.2 0 0 0 1.4-1 1.8 1.8 0 0 0 .1-1c0-.2-.2-.2-.4-.3z"/></svg>',
+ rd:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4a8 8 0 1 0 8 8 8 8 0 0 0-8-8zm4.2 9a1.1 1.1 0 1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1zm-8.4 0a1.1 1.1 0 1 1 1.1 1.1A1.1 1.1 0 0 1 7.8 13zm4.2 4.3c-1.7 0-3.2-.6-3.2-1.4s1.5-1.4 3.2-1.4 3.2.6 3.2 1.4-1.5 1.4-3.2 1.4z"/></svg>',
+ ms:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.9 3 3 6.8 3 11.6c0 2.6 1.2 4.8 3.1 6.4V22l2.9-1.6c.8.2 1.6.3 2.5.3 5.1 0 9-3.8 9-8.6S17.1 3 12 3zm.9 11.1-2.3-2.4-4.4 2.4 4.8-5.1 2.3 2.4 4.3-2.4-4.7 5.1z"/></svg>'
 };
 function ic(name,size){size=size||20;return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24">${ICON[name]||''}</svg>`}
 function hydrateIcons(root){(root||document).querySelectorAll('[data-ic]').forEach(el=>{
@@ -790,7 +864,7 @@ function go(v){
  document.getElementById('view-'+v).classList.add('active');
  document.querySelectorAll('#nav .t').forEach(t=>t.classList.toggle('on',t.dataset.v===v));
  if(['home','map','inbox','me'].includes(v))lastTab=v;
- if(v==='map'){initMap();const mp=document.getElementById('mapPreview');if(mp)mp.classList.remove('show');resumeMapRotate();}
+ if(v==='map'){initMap();const mp=document.getElementById('mapPreview');if(mp)mp.classList.remove('show');const mc=document.getElementById('mapcards');if(mc)mc.style.visibility='';resumeMapRotate();}
  if(v==='inbox')document.getElementById('inboxdot').style.display='none';
  if(v==='create'){document.getElementById('createpick').style.display='block';document.getElementById('createform').style.display='none'}
 }
@@ -868,7 +942,7 @@ function postCard(p){
   <div class="bar">
    <div onclick="likePost(this,'${p.id}')">${ic('heart',17)} <span>${p.likes}</span></div>
    <div onclick="openComments('${p.id}')">${ic('message',17)} <span>${p.comments.length}</span></div>
-   <div onclick="toast('Shared!')">${ic('share',17)} Share</div></div></div>`}
+   <div onclick="openShare('post','${p.id}')">${ic('share',17)} Share</div></div></div>`}
 function likePost(el,pid){const p=wallPosts.find(x=>x.id===pid);p.likes++;el.style.color='var(--coral)';el.innerHTML=ic('heart',17)+' <span>'+p.likes+'</span>'}
 const INFOIC={'🎉':'users','📍':'pin','🎟':'ticket','🏡':'users','⚡':'zap','❤️':'heart'};
 function infoRow(p){return `<div class="inforow"><span class="ii" data-fill>${ic(INFOIC[p.icon]||'star',17)}</span><span style="flex:1">${p.txt}</span><span class="s12 sub">${p.when}</span></div>`}
@@ -964,14 +1038,17 @@ function addComment(){
 }
 
 /* ============ campaign page ============ */
-let curCamp=null;
+let curCamp=null,curEventId=null,curCommId=null,curEvCamp=null;
 function openCampaign(id){
  const c=camps.find(x=>x.id===id);if(!c)return;curCamp=c;const T=TYPE[c.type];
+ const gf=document.getElementById('globeFull');if(gf)gf.classList.remove('open');
+ const mp=document.getElementById('mapPreview');if(mp)mp.classList.remove('show');
+ const mc=document.getElementById('mapcards');if(mc)mc.style.visibility='';
  document.getElementById('chero').style.backgroundImage=`url('${c.img}')`;
  const t=document.getElementById('ctag');t.textContent=T.label;t.className='tag '+T.tag;
  document.getElementById('clive').style.display=c.live?'inline-block':'none';
  document.getElementById('cname').textContent=c.name;
- document.getElementById('cby').innerHTML=`by <b style="color:var(--ink);cursor:pointer" onclick="openCommunity('${c.commId}')">${c.comm}</b> · community campaign`;
+ document.getElementById('cby').innerHTML=`<span>by <b style="color:var(--ink);cursor:pointer" onclick="openCommunity('${c.commId}')">${c.comm}</b> · community campaign</span><span class="cbyshare" title="Share" onclick="openShare('campaign','${c.id}')">${ic('share',18)}</span>`;
  document.getElementById('ctimer').innerHTML=timerBox(c.type,c.at);
  document.getElementById('cexpl').innerHTML='<span style="display:inline-flex;gap:7px;align-items:flex-start">'+ic('bulb',17)+'<span>'+T.expl+'</span></span>';
  document.getElementById('cjoined').textContent=c.joined.toLocaleString()+' people are in';
@@ -994,11 +1071,12 @@ function joinCampaign(btn){btn.textContent='You\'re in!';curCamp.joined++;toast(
 
 /* ============ event page ============ */
 function openEvent(id){
- const e=evts.find(x=>x.id===id);if(!e)return;const c=camps.find(x=>x.id===e.camp);
+ const e=evts.find(x=>x.id===id);if(!e)return;curEventId=e.id;const c=camps.find(x=>x.id===e.camp);
  document.getElementById('ehero').style.backgroundImage=`url('${(c||{}).img||IMG.crowd}')`;
  const p=document.getElementById('eparent');p.textContent='part of '+(c?c.name:'');p.onclick=()=>openCampaign(c.id);
  document.getElementById('ename').textContent=e.name;
- document.getElementById('ehost').textContent='hosted by '+e.host+' · anyone can join';
+ curEvCamp=c||null;
+ document.getElementById('ehost').innerHTML=`<span>hosted by ${e.host} · anyone can join</span><span class="cbyshare" title="Share" onclick="openShare('event','${e.id}')">${ic('share',18)}</span>`;
  document.getElementById('etimer').innerHTML=timerBox('moment',e.at,'THIS GATHERING BEGINS IN','pin');
  document.getElementById('ewhen').textContent=e.mon+' '+e.day+', 2026 · 9:47 AM local';
  document.getElementById('ewhere').textContent=e.city;
@@ -1016,7 +1094,7 @@ function openEvent(id){
 
 /* ============ community page ============ */
 function openCommunity(id){
- const o=comms.find(x=>x.id===id);if(!o)return;
+ const o=comms.find(x=>x.id===id);if(!o)return;curCommId=o.id;
  document.getElementById('ohero').style.backgroundImage=`url('${o.img}')`;
  document.getElementById('oname').textContent=o.name;
  document.getElementById('otagline').textContent=o.tagline;
@@ -1029,7 +1107,44 @@ function openCommunity(id){
  renderWall('owall',o.id,'Share with this community…');
  show('view-community');
 }
-function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');tickTimers()}
+function show(id){const gf=document.getElementById('globeFull');if(gf)gf.classList.remove('open');const mp=document.getElementById('mapPreview');if(mp)mp.classList.remove('show');const mc=document.getElementById('mapcards');if(mc)mc.style.visibility='';document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');tickTimers()}
+
+/* ============ share & invite (dynamic by entity type) ============ */
+const slugify=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const SHARECFG={
+ event:{lbl:'Event link',noun:'event'},
+ campaign:{lbl:'Campaign link',noun:'campaign'},
+ community:{lbl:'Community link',noun:'community'},
+ post:{lbl:'Post link',noun:'post'},
+ profile:{lbl:'Profile link',noun:'profile'}};
+function openShare(kind,id){
+ const cfg=SHARECFG[kind]||SHARECFG.event;let name='',org='togethr',link='';
+ if(kind==='event'){const e=evts.find(x=>x.id===id)||evts[0];const c=camps.find(x=>x.id===e.camp);name=e.name;org=c?c.comm:'togethr';link='riseapp.world/'+slugify(org)+'/'+slugify(e.name);}
+ else if(kind==='campaign'){const c=camps.find(x=>x.id===id)||camps[0];name=c.name;org=c.comm;link='riseapp.world/'+slugify(org)+'/'+slugify(c.name);}
+ else if(kind==='post'){const p=wallPosts.find(x=>x.id===id)||wallPosts[0];name=(p&&p.who)||'Post';link='riseapp.world/p/'+id;}
+ else if(kind==='profile'){name=curProfileName||'Profile';link='riseapp.world/@'+slugify(name);}
+ else{const o=comms.find(x=>x.id===id)||comms[0];name=o.name;org=o.name;link='riseapp.world/'+slugify(o.name);}
+ const socials=[['fb','Facebook'],['x','X'],['wa','WhatsApp'],['rd','Reddit'],['ms','Messenger']];
+ document.getElementById('shareCard').innerHTML=`
+  <div class="shhead">${ic('share',22)}<div class="shtitle">Invite &amp; Share</div><div class="shx" onclick="closeShare()">${ic('close',22)}</div></div>
+  <div class="shsub">Share this ${cfg.noun} to social media or anywhere else with the customizable link. You can also invite other users and email friends outside the app.</div>
+  <div class="shlbl">${cfg.lbl}</div>
+  <div class="shlink"><input value="${link}" readonly onclick="this.select()"><div class="shgear" onclick="toast('Customize link')">${ic('settings',18)}</div><div class="shcopy" onclick="shareCopy('${link}')">${ic('copy',18)}</div></div>
+  <div class="shlbl">Social Share</div>
+  <div class="shsocial">${socials.map(s=>`<div class="shsoc" title="${s[1]}" onclick="toast('Shared to ${s[1]}')">${SOC[s[0]]}</div>`).join('')}</div>
+  <div class="shlbl">Invite &amp; Email</div>
+  <div class="shemail"><span style="color:var(--sub);display:flex">${ic('search',18)}</span><input placeholder="Search or invite by email" oninput="shareSearch(this.value)"><button class="shadd" onclick="toast('Added to invite list')">${ic('plus',15)} Add</button></div>
+  <div id="shareUsers">
+   <div class="shuser"><div class="av">AO</div><div><b>Amara Okafor</b><div class="s12 sub">amara@email.com</div></div></div>
+   <div class="shuser"><div class="av">RM</div><div><b>Ray Mehta</b><div class="s12 sub">ray@email.com</div></div></div>
+  </div>
+  <div class="shnone" id="shareNone" style="display:none">No user found with that email. Send invite?</div>
+  <button class="btn go shsend" onclick="toast('Invites sent for ${name.replace(/'/g,'')}');closeShare()">Send Invites</button>`;
+ const ov=document.getElementById('shareOv');ov.classList.remove('closing');ov.classList.add('open');
+}
+function shareSearch(v){document.getElementById('shareNone').style.display=v.trim().length>3?'block':'none';}
+function shareCopy(link){try{navigator.clipboard&&navigator.clipboard.writeText(link);}catch(e){}toast('Link copied to clipboard');}
+function closeShare(){const ov=document.getElementById('shareOv');ov.classList.add('closing');setTimeout(()=>ov.classList.remove('open','closing'),240);}
 
 /* ============ public profile (one template, name passed in) ============ */
 let curProfileName='';
@@ -1161,7 +1276,7 @@ document.getElementById('mycomms').innerHTML=comms.map(o=>`
   <div class="ring quiet"><div class="in" style="background-image:url('${o.img}')"></div></div><span>${o.name}</span></div>`).join('');
 
 /* ============ maps (globe.gl, day texture) ============ */
-let map,mapReady=false,mapF='all',mapSpin=true,mapDrag=false;
+let map,mapReady=false,mapF='all',mapSpin=true,mapDrag=false,mapAlt=1.35,flat=null,flatOn=false;
 function makeG(el,alt){
  const w=el.clientWidth||394,h=el.clientHeight||400;
  const g=Globe()(el).width(w).height(h)
@@ -1184,73 +1299,134 @@ function initMap(){
  // drag is turned off (it was causing the "stuck to cursor" lock); globe.gl still handles
  // point picking so tapping a pin opens its preview.
  const ctr=map.controls();ctr.enabled=false;ctr.autoRotate=false;
- // manual auto-spin
- (function frame(){ if(mapSpin&&!mapDrag&&map){const p=map.pointOfView();map.pointOfView({lat:p.lat,lng:p.lng+0.13,altitude:p.altitude});} requestAnimationFrame(frame); })();
- // custom drag = click-and-hold rotate; a tap (no drag) picks the nearest visible pin
+ // accurate raycaster picking for taps (works regardless of our custom drag)
+ map.enablePointerInteraction(true);
+ map.onPointClick(d=>{ if(!d)return;
+   if(d.kind==='person'&&!d.single){mapSpin=false;mapAlt=Math.max(0.6,mapAlt*0.5);map.pointOfView({lat:d.lat,lng:d.lng,altitude:mapAlt},600);setTimeout(renderMarkers,90);return;}
+   if(d.kind==='camp')renderPreviewCampaign(d.id);
+   else if(d.kind==='evt')renderPreviewEvent(d.id);
+   else renderPreviewPerson(d.lat,d.lng);
+ });
+ const kc={camp:'#FF6B4A',evt:'#12A594',person:'#FFB938'};
+ // sizes scale gently with zoom (angular radius grows with camera distance) so on-screen
+ // size stays roughly steady — never ballooning when zoomed in.
+ const zs=()=>Math.max(.55,Math.min(1.15,mapAlt/1.35));
+ map.pointColor(d=>d.single&&d.kind==='person'?'rgba(255,185,56,.9)':kc[d.kind])
+    .pointRadius(d=>(d.single?(d.kind==='person'?.3:(d.kind==='camp'?.8:.55)):Math.min(2.4,1.1+Math.log2(d.count)*0.45))*zs())
+    .pointAltitude(d=>d.single?(d.kind==='person'?.006:.024):.032)
+    .labelLat(d=>d.lat).labelLng(d=>d.lng).labelText(d=>d.count>1?''+d.count:'')
+    .labelSize(d=>Math.min(2,0.9+Math.log2(Math.max(2,d.count))*0.38)*zs()).labelDotRadius(0)
+    .labelColor(()=>'#fff').labelAltitude(.034).labelResolution(2);
+ (function frame(){ if(mapSpin&&!mapDrag&&map&&!flatOn){const p=map.pointOfView();map.pointOfView({lat:p.lat,lng:p.lng+0.13,altitude:mapAlt});} requestAnimationFrame(frame); })();
  let lx=0,ly=0,down=false;
  el.style.cursor='grab';el.style.touchAction='none';
  el.addEventListener('pointerdown',e=>{down=true;mapDrag=false;mapSpin=false;lx=e.clientX;ly=e.clientY;el.style.cursor='grabbing';});
- el.addEventListener('pointermove',e=>{ if(!down)return; const dx=e.clientX-lx,dy=e.clientY-ly; if(Math.abs(dx)+Math.abs(dy)>4)mapDrag=true; if(!mapDrag)return; const p=map.pointOfView(); const nlat=Math.max(-85,Math.min(85,p.lat+dy*0.25)); map.pointOfView({lat:nlat,lng:p.lng-dx*0.25,altitude:p.altitude}); lx=e.clientX;ly=e.clientY; });
- el.addEventListener('pointerup',e=>{ const tap=down&&!mapDrag; down=false;mapDrag=false;el.style.cursor='grab'; if(tap)mapTapPick(e.clientX,e.clientY); });
+ el.addEventListener('pointermove',e=>{ if(!down)return; const dx=e.clientX-lx,dy=e.clientY-ly; if(Math.abs(dx)+Math.abs(dy)>4)mapDrag=true; if(!mapDrag)return; const p=map.pointOfView(); const nlat=Math.max(-85,Math.min(85,p.lat+dy*0.25)); map.pointOfView({lat:nlat,lng:p.lng-dx*0.25,altitude:mapAlt}); lx=e.clientX;ly=e.clientY; });
+ el.addEventListener('pointerup',()=>{ down=false;mapDrag=false;el.style.cursor='grab'; });
  el.addEventListener('pointerleave',()=>{down=false;mapDrag=false;el.style.cursor='grab';});
  el.addEventListener('pointercancel',()=>{down=false;mapDrag=false;el.style.cursor='grab';});
- // scroll / pinch to zoom (custom, since OrbitControls input is off)
- el.addEventListener('wheel',e=>{e.preventDefault();mapSpin=false;const p=map.pointOfView();let a=p.altitude*(1+e.deltaY*0.0014);a=Math.max(0.45,Math.min(3.4,a));map.pointOfView({lat:p.lat,lng:p.lng,altitude:a},90);},{passive:false});
+ el.addEventListener('wheel',e=>{e.preventDefault();
+   const step=e.deltaMode===1?e.deltaY*16:(e.deltaMode===2?e.deltaY*400:e.deltaY);
+   if(step<0 && mapAlt<=0.62){const p=map.pointOfView();enterFlat(p.lat,p.lng);return;} // zoom in past globe max → street map
+   mapAlt=Math.max(0.6,Math.min(3.4,mapAlt*Math.exp(step*0.0016)));
+   const p=map.pointOfView();map.pointOfView({lat:p.lat,lng:p.lng,altitude:mapAlt},0);
+   if(mapNodes.length){map.pointsData(mapNodes);map.labelsData(mapNodes.filter(n=>n.count>1));}
+   reclusterSoon();
+ },{passive:false});
  mapReady=true;paintMap();renderMapCards();
 }
 function angDist(la1,lo1,la2,lo2){const R=Math.PI/180;const a=Math.sin(la1*R)*Math.sin(la2*R)+Math.cos(la1*R)*Math.cos(la2*R)*Math.cos((lo1-lo2)*R);return Math.acos(Math.max(-1,Math.min(1,a)))/R;}
 function mapTapPick(cx,cy){
  if(!mapReady)return;
- const el=document.getElementById('mapEl');const r=el.getBoundingClientRect();
- const px=cx-r.left,py=cy-r.top;
- const view=map.pointOfView();
- let cand=[];
- if(mapF==='all'||mapF==='campaigns')cand=cand.concat(camps.map(c=>({kind:'camp',id:c.id,lat:c.lat,lng:c.lng})));
- if(mapF==='all'||mapF==='events')cand=cand.concat(evts.map(e=>({kind:'evt',id:e.id,lat:e.lat,lng:e.lng})));
- let best=null,bd=30;
- cand.forEach(o=>{
-  if(angDist(view.lat,view.lng,o.lat,o.lng)>80)return; // far side of globe
-  const s=map.getScreenCoords(o.lat,o.lng,o.kind==='camp'?.03:.024);if(!s)return;
-  const d=Math.hypot(s.x-px,s.y-py);if(d<bd){bd=d;best=o;}
+ const el=document.getElementById('mapEl'),r=el.getBoundingClientRect();
+ const px=cx-r.left,py=cy-r.top,view=map.pointOfView();
+ let best=null,bd=1e9;
+ mapNodes.forEach(o=>{
+  if(angDist(view.lat,view.lng,o.lat,o.lng)>82)return; // far side of globe
+  const s=map.getScreenCoords(o.lat,o.lng,o.single?(o.kind==='person'?.006:.024):.032);if(!s)return;
+  const hit=o.single?(o.kind==='person'?26:34):44,d=Math.hypot(s.x-px,s.y-py);
+  if(d<hit&&d<bd){bd=d;best=o;}
  });
- if(best){showMapPreview(best.kind,best.id);return;}
- // no campaign/event hit — try the people dots
- if(mapF==='all'||mapF==='people'){
-  let bp=null,bpd=22;
-  crowd.forEach(o=>{ if(angDist(view.lat,view.lng,o.lat,o.lng)>80)return;
-   const s=map.getScreenCoords(o.lat,o.lng,.004);if(!s)return;
-   const d=Math.hypot(s.x-px,s.y-py);if(d<bpd){bpd=d;bp=o;} });
-  if(bp)showPersonPreview(bp.lat,bp.lng);
+ if(!best)return;
+ if(!best.single){ // cluster → zoom in and re-cluster to break it apart
+  mapSpin=false;mapAlt=Math.max(0.6,mapAlt*0.5);map.pointOfView({lat:best.lat,lng:best.lng,altitude:mapAlt},600);setTimeout(renderMarkers,80);return;
  }
+ if(best.kind==='camp')showMapPreview('camp',best.id);
+ else if(best.kind==='evt')showMapPreview('evt',best.id);
+ else showPersonPreview(best.lat,best.lng);
 }
-function showPersonPreview(lat,lng){
- flyTo(lat,lng);
- const el=document.getElementById('mapPreview');
- el.innerHTML=`<div class="card mapprev" onclick="openProfile('Amara Okafor',{handle:'amara',loc:'Lagos, Nigeria',bio:'Community organizer and eclipse chaser. Bringing people together for the moments that matter.',followers:'312',following:'180',moments:'6'})">
+/* shared preview cards (used by main map AND campaign minimap) */
+function previewCard(html){const el=document.getElementById('mapPreview');el.innerHTML=html;el.classList.add('show');const mc=document.getElementById('mapcards');if(mc)mc.style.visibility='hidden';tickTimers();}
+function renderPreviewCampaign(id){const c=camps.find(x=>x.id===id);if(!c)return;
+ previewCard(`<div class="card mapprev" onclick="openCampaign('${c.id}')">
+   <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
+   <div class="pthumb" style="background-image:url('${c.img}')"></div>
+   <div style="flex:1;min-width:0">
+     <span class="tag ${c.type==='moment'?'moment':(c.type==='challenge'?'challenge':'window')}">${TYPE[c.type].label}</span>
+     <b style="display:block;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</b>
+     <span class="s12 sub">by ${c.comm} · ${c.joined.toLocaleString()} in</span>
+     <div style="margin-top:7px">${timerMini(c.type,c.at)}</div></div>
+   <span class="parr">${ic('chev',20)}</span></div>`);}
+function renderPreviewEvent(id){const e=evts.find(x=>x.id===id);if(!e)return;const c=camps.find(x=>x.id===e.camp);
+ previewCard(`<div class="card mapprev" onclick="openEvent('${e.id}')">
+   <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
+   <div class="pthumb" style="background-image:url('${(c||{}).img||IMG.crowd}')"></div>
+   <div style="flex:1;min-width:0">
+     <span class="tag event">Gathering</span>
+     <b style="display:block;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.name}</b>
+     <span class="s12 sub">${e.city} · ${e.going} going · ${e.price?'$'+e.price:'Free'}</span>
+     <div style="margin-top:7px">${timerMini('moment',e.at)}</div></div>
+   <span class="parr">${ic('chev',20)}</span></div>`);}
+function renderPreviewPerson(lat,lng){
+ previewCard(`<div class="card mapprev" onclick="openProfile('Amara Okafor',{handle:'amara',loc:'Lagos, Nigeria',bio:'Community organizer and eclipse chaser. Bringing people together for the moments that matter.',followers:'312',following:'180',moments:'6'})">
    <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
    <div class="pthumb" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFD1A1,#FF8FB2);color:#fff">${ic('user',26)}</div>
    <div style="flex:1;min-width:0">
      <span class="tag community">Participant</span>
      <b style="display:block;margin:5px 0 2px">Amara Okafor</b>
      <span class="s12 sub">@amara · joined 3 moments nearby · view profile</span></div>
-   <span class="parr">${ic('chev',20)}</span></div>`;
- el.classList.add('show');
-}
-function crowdDots(n){const a=[];for(let i=0;i<n;i++)a.push({lat:(Math.random()-.5)*130,lng:(Math.random()-.5)*360,size:.18,alt:.004,color:'rgba(255,185,56,.85)'});return a}
-const crowd=crowdDots(240);
-function paintMap(){
- let pts=[];
- if(mapF==='all'||mapF==='people')pts=pts.concat(crowd);
- if(mapF==='all'||mapF==='campaigns')pts=pts.concat(camps.map(c=>({lat:c.lat,lng:c.lng,size:1,alt:.03,color:'#FF6B4A',kind:'camp',id:c.id})));
- if(mapF==='all'||mapF==='events')pts=pts.concat(evts.map(e=>({lat:e.lat,lng:e.lng,size:.62,alt:.024,color:'#12A594',kind:'evt',id:e.id})));
- map.pointsData(pts);
+   <span class="parr">${ic('chev',20)}</span></div>`);}
+function showPersonPreview(lat,lng){flyTo(lat,lng);renderPreviewPerson(lat,lng);}
+/* ---- marker pool (tripled activity), clustered by zoom level ---- */
+const CITIES=[[40.7,-74],[51.5,-.12],[35.68,139.69],[19.07,72.87],[34.05,-118.24],[-23.5,-46.6],[28.6,77.2],[31.2,121.5],[48.85,2.35],[-33.86,151.2],[55.75,37.6],[1.35,103.8],[64.8,-23.7],[-1.29,36.82],[30.04,31.23],[6.52,3.37],[41.9,12.5],[52.52,13.4],[37.77,-122.4],[19.43,-99.13],[-34.6,-58.4],[13.75,100.5]];
+const jit=(v,d)=>v+(Math.random()-.5)*d;
+let mapMarkers=[],mapNodes=[];
+(function buildMarkers(){
+ camps.forEach(c=>mapMarkers.push({lat:c.lat,lng:c.lng,kind:'camp',id:c.id}));
+ for(let i=0;i<11;i++){const ct=CITIES[i%CITIES.length],c=camps[i%camps.length];mapMarkers.push({lat:jit(ct[0],7),lng:jit(ct[1],7),kind:'camp',id:c.id});}
+ evts.forEach(e=>mapMarkers.push({lat:e.lat,lng:e.lng,kind:'evt',id:e.id}));
+ for(let i=0;i<30;i++){const ct=CITIES[(i+4)%CITIES.length],e=evts[i%evts.length];mapMarkers.push({lat:jit(ct[0],8),lng:jit(ct[1],8),kind:'evt',id:e.id});}
+ for(let i=0;i<420;i++){ if(i%2===0){const ct=CITIES[i%CITIES.length];mapMarkers.push({lat:jit(ct[0],16),lng:jit(ct[1],16),kind:'person'});} else {mapMarkers.push({lat:(Math.random()-.5)*150,lng:(Math.random()-.5)*360,kind:'person'});} }
+})();
+function cellDeg(){return Math.max(4,Math.min(62,mapAlt*17));}
+function passFilter(m){return mapF==='all'||(mapF==='campaigns'&&m.kind==='camp')||(mapF==='events'&&m.kind==='evt')||(mapF==='people'&&m.kind==='person');}
+function renderMarkers(){
+ if(!mapReady)return;
+ const nodes=[];
+ // campaigns & events: always individual pins so they're always tappable
+ mapMarkers.filter(m=>m.kind!=='person'&&passFilter(m)).forEach(m=>nodes.push({lat:m.lat,lng:m.lng,kind:m.kind,id:m.id,count:1,single:true}));
+ // people: clustered by a zoom-based grid
+ if(mapF==='all'||mapF==='people'){
+  const cell=cellDeg(),buckets={};
+  mapMarkers.filter(m=>m.kind==='person').forEach(m=>{const k=Math.floor((m.lat+90)/cell)+'_'+Math.floor((m.lng+180)/cell);(buckets[k]=buckets[k]||[]).push(m);});
+  Object.values(buckets).forEach(g=>{
+   const lat=g.reduce((s,m)=>s+m.lat,0)/g.length,lng=g.reduce((s,m)=>s+m.lng,0)/g.length;
+   nodes.push({lat,lng,kind:'person',count:g.length,single:g.length===1});
+  });
+ }
+ mapNodes=nodes;
+ map.pointsData(mapNodes);
+ map.labelsData(mapNodes.filter(n=>n.count>1));
  map.arcsData(mapF==='people'?[]:evts.filter(e=>e.camp==='c1').map(e=>({startLat:e.lat,startLng:e.lng,endLat:64.8,endLng:-23.7})));
 }
+function paintMap(){renderMarkers();}
+let clusterT=null;function reclusterSoon(){clearTimeout(clusterT);clusterT=setTimeout(renderMarkers,120);}
 function mapFilter(el){
  mapF=el.dataset.f;
  el.parentNode.querySelectorAll('.mapchip').forEach(b=>b.classList.remove('on'));
  el.classList.add('on');
  paintMap();
+ if(flatOn&&flat&&flat.getSource&&flat.getSource('pts'))flat.getSource('pts').setData(flatGeo());
 }
 function renderMapCards(){
  const items=[...camps.slice(0,3).map(c=>({k:'camp',c})),...evts.slice(0,4).map(e=>({k:'evt',e}))];
@@ -1264,51 +1440,174 @@ function renderMapCards(){
      <div style="min-width:0"><b class="s13" style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${it.e.name}</b>
       <span class="s12 sub">${it.e.city} · ${it.e.going} going</span></div></div>`).join('');
 }
-function flyTo(lat,lng){if(mapReady){mapSpin=false;map.pointOfView({lat,lng,altitude:1.4},700);}}
+function flyTo(lat,lng){if(mapReady){mapSpin=false;mapAlt=1.4;map.pointOfView({lat,lng,altitude:mapAlt},700);}}
 function resumeMapRotate(){mapSpin=true;mapDrag=false;}
-function showMapPreview(kind,id){
- const el=document.getElementById('mapPreview');
- if(kind==='camp'){const c=camps.find(x=>x.id===id);if(!c)return;flyTo(c.lat,c.lng);
-  el.innerHTML=`<div class="card mapprev" onclick="openCampaign('${c.id}')">
-    <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
-    <div class="pthumb" style="background-image:url('${c.img}')"></div>
-    <div style="flex:1;min-width:0">
-      <span class="tag ${c.type==='moment'?'moment':(c.type==='challenge'?'challenge':'window')}">${TYPE[c.type].label}</span>
-      <b style="display:block;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</b>
-      <span class="s12 sub">by ${c.comm} · ${c.joined.toLocaleString()} in</span></div>
-    <span class="parr">${ic('chev',20)}</span></div>`;
- } else {const e=evts.find(x=>x.id===id);if(!e)return;const c=camps.find(x=>x.id===e.camp);flyTo(e.lat,e.lng);
-  el.innerHTML=`<div class="card mapprev" onclick="openEvent('${e.id}')">
-    <div class="pclose" onclick="event.stopPropagation();closeMapPreview()">${ic('close',16)}</div>
-    <div class="pthumb" style="background-image:url('${(c||{}).img||IMG.crowd}')"></div>
-    <div style="flex:1;min-width:0">
-      <span class="tag event">Gathering</span>
-      <b style="display:block;margin:5px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.name}</b>
-      <span class="s12 sub">${e.city} · ${e.going} going · ${e.price?'$'+e.price:'Free'}</span></div>
-    <span class="parr">${ic('chev',20)}</span></div>`;
- }
- el.classList.add('show');
+
+/* ============ step 2: flat street map (MapLibre) at max globe zoom ============ */
+function flatGeo(){return {type:'FeatureCollection',features:mapMarkers.filter(passFilter).map(m=>({type:'Feature',geometry:{type:'Point',coordinates:[m.lng,m.lat]},properties:{kind:m.kind,id:m.id||''}}))};}
+function buildFlat(){
+ flat=new maplibregl.Map({container:'flatMap',attributionControl:true,center:[0,20],zoom:5,
+  style:{version:8,glyphs:'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+   sources:{c:{type:'raster',tileSize:256,attribution:'© OpenStreetMap contributors © CARTO',
+     tiles:['https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png','https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png','https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png']}},
+   layers:[{id:'c',type:'raster',source:'c'}]}});
+ flat.on('load',()=>{
+  flat.addSource('pts',{type:'geojson',data:flatGeo(),cluster:true,clusterRadius:46,clusterMaxZoom:13});
+  flat.addLayer({id:'clusters',type:'circle',source:'pts',filter:['has','point_count'],paint:{'circle-color':'#FF6B4A','circle-opacity':.92,'circle-stroke-width':3,'circle-stroke-color':'rgba(255,107,74,.35)','circle-radius':['step',['get','point_count'],16,10,21,50,27,200,34]}});
+  flat.addLayer({id:'cluster-count',type:'symbol',source:'pts',filter:['has','point_count'],layout:{'text-field':'{point_count_abbreviated}','text-font':['Noto Sans Regular'],'text-size':13},paint:{'text-color':'#fff'}});
+  flat.addLayer({id:'pts',type:'circle',source:'pts',filter:['!',['has','point_count']],paint:{'circle-color':['match',['get','kind'],'camp','#FF6B4A','evt','#12A594','#FFB938'],'circle-radius':7,'circle-stroke-width':2.5,'circle-stroke-color':'#fff'}});
+  flat.on('click','clusters',ev=>{const f=flat.queryRenderedFeatures(ev.point,{layers:['clusters']})[0];if(!f)return;flat.getSource('pts').getClusterExpansionZoom(f.properties.cluster_id,(er,z)=>{if(er)return;flat.easeTo({center:f.geometry.coordinates,zoom:z});});});
+  flat.on('click','pts',ev=>{const f=ev.features[0],pr=f.properties,ll=f.geometry.coordinates;if(pr.kind==='camp')renderPreviewCampaign(pr.id);else if(pr.kind==='evt')renderPreviewEvent(pr.id);else renderPreviewPerson(ll[1],ll[0]);});
+  flat.on('mouseenter','pts',()=>flat.getCanvas().style.cursor='pointer');
+  flat.on('mouseleave','pts',()=>flat.getCanvas().style.cursor='');
+  flat.on('mouseenter','clusters',()=>flat.getCanvas().style.cursor='pointer');
+  flat.on('mouseleave','clusters',()=>flat.getCanvas().style.cursor='');
+  flat.on('zoomend',()=>{ if(flatOn&&flat.getZoom()<=3.2){const c=flat.getCenter();exitFlat(c.lat,c.lng);} });
+ });
 }
-function closeMapPreview(){document.getElementById('mapPreview').classList.remove('show');resumeMapRotate();}
+function enterFlat(lat,lng){
+ if(typeof maplibregl==='undefined')return; // library unavailable → stay on globe
+ if(!flat)buildFlat();
+ flatOn=true;mapSpin=false;
+ document.getElementById('flatMap').classList.add('on');
+ document.getElementById('mapEl').classList.add('dim');
+ document.getElementById('flatback').classList.add('on');
+ const g=()=>{flat.resize();flat.jumpTo({center:[lng,lat],zoom:5.4});if(flat.getSource('pts'))flat.getSource('pts').setData(flatGeo());};
+ if(flat.loaded())g();else flat.once('load',g);
+}
+function exitFlat(lat,lng){
+ flatOn=false;
+ document.getElementById('flatMap').classList.remove('on');
+ document.getElementById('mapEl').classList.remove('dim');
+ document.getElementById('flatback').classList.remove('on');
+ mapAlt=0.95;mapSpin=false;
+ if(map){map.pointOfView({lat:lat,lng:lng,altitude:mapAlt},500);if(mapNodes.length){map.pointsData(mapNodes);map.labelsData(mapNodes.filter(n=>n.count>1));}reclusterSoon();}
+}
+function showMapPreview(kind,id){
+ if(kind==='camp'){const c=camps.find(x=>x.id===id);if(c)flyTo(c.lat,c.lng);renderPreviewCampaign(id);}
+ else{const e=evts.find(x=>x.id===id);if(e)flyTo(e.lat,e.lng);renderPreviewEvent(id);}
+}
+function closeMapPreview(){document.getElementById('mapPreview').classList.remove('show');const mc=document.getElementById('mapcards');if(mc)mc.style.visibility='';resumeMapRotate();cmapSpin=true;emapSpin=true;gfSpin=true;}
 /* mini maps */
-let cmap=null,emap=null;
+let emap=null,emapNodes=[],emapSpin=true,emapDrag=false,emapAlt=1.9,cmap=null,cmapNodes=[],cmapSpin=true,cmapDrag=false,cmapAlt=1.8;
 function campMap(c){
  if(typeof Globe==='undefined')return;
- if(!cmap)cmap=makeG(document.getElementById('cmapEl'),1.8);
+ const el=document.getElementById('cmapEl');
+ if(!cmap){
+  cmap=makeG(el,cmapAlt);const cc=cmap.controls();cc.enabled=false;cc.autoRotate=false;
+  cmap.pointColor(d=>d.color).pointRadius(d=>d.size).pointAltitude(d=>d.alt!=null?d.alt:.013);
+  (function f(){ if(cmapSpin&&!cmapDrag&&cmap){const p=cmap.pointOfView();cmap.pointOfView({lat:p.lat,lng:p.lng+0.18,altitude:cmapAlt});} requestAnimationFrame(f); })();
+  let lx=0,ly=0,dn=false;el.style.cursor='grab';el.style.touchAction='none';
+  el.addEventListener('pointerdown',e=>{dn=true;cmapDrag=false;cmapSpin=false;lx=e.clientX;ly=e.clientY;});
+  el.addEventListener('pointermove',e=>{ if(!dn)return; const dx=e.clientX-lx,dy=e.clientY-ly; if(Math.abs(dx)+Math.abs(dy)>4)cmapDrag=true; if(!cmapDrag)return; const p=cmap.pointOfView(); const nlat=Math.max(-85,Math.min(85,p.lat+dy*0.3)); cmap.pointOfView({lat:nlat,lng:p.lng-dx*0.3,altitude:cmapAlt}); lx=e.clientX;ly=e.clientY; });
+  el.addEventListener('pointerup',e=>{ const tap=dn&&!cmapDrag; dn=false;cmapDrag=false; if(tap)cmapTap(e.clientX,e.clientY); });
+  el.addEventListener('pointerleave',()=>{dn=false;cmapDrag=false;});
+ }
  const ce=evts.filter(e=>e.camp===c.id);
- const local=[];for(let i=0;i<40;i++)local.push({lat:c.lat+(Math.random()-.5)*40,lng:c.lng+(Math.random()-.5)*40,size:.2,color:'rgba(255,185,56,.9)'});
- cmap.pointsData([{lat:c.lat,lng:c.lng,size:1,color:'#FF6B4A'},...ce.map(e=>({lat:e.lat,lng:e.lng,size:.5,color:'#12A594'})),...local]);
+ cmapNodes=[{lat:c.lat,lng:c.lng,size:1,alt:.03,color:'#FF6B4A',kind:'camp',id:c.id},
+   ...ce.map(e=>({lat:e.lat,lng:e.lng,size:.55,alt:.024,color:'#12A594',kind:'evt',id:e.id}))];
+ for(let i=0;i<40;i++)cmapNodes.push({lat:c.lat+(Math.random()-.5)*40,lng:c.lng+(Math.random()-.5)*40,size:.24,alt:.004,color:'rgba(255,185,56,.9)',kind:'person'});
+ cmap.pointsData(cmapNodes);
  cmap.arcsData(ce.map(e=>({startLat:e.lat,startLng:e.lng,endLat:c.lat,endLng:c.lng})));
- cmap.pointOfView({lat:c.lat,lng:c.lng,altitude:1.8},800);
+ cmapSpin=true;
+ cmap.pointOfView({lat:c.lat,lng:c.lng,altitude:cmapAlt},800);
 }
+function cmapTap(cx,cy){
+ if(!cmap)return;
+ const el=document.getElementById('cmapEl'),r=el.getBoundingClientRect();
+ const px=cx-r.left,py=cy-r.top,view=cmap.pointOfView();
+ let best=null,bd=1e9;
+ cmapNodes.forEach(o=>{ if(angDist(view.lat,view.lng,o.lat,o.lng)>82)return;
+  const s=cmap.getScreenCoords(o.lat,o.lng,o.alt||.01);if(!s)return;
+  const hit=o.kind==='person'?22:30,d=Math.hypot(s.x-px,s.y-py);
+  if(d<hit&&d<bd){bd=d;best=o;} });
+ if(!best)return;
+ if(best.kind==='camp')renderPreviewCampaign(best.id);
+ else if(best.kind==='evt')renderPreviewEvent(best.id);
+ else renderPreviewPerson(best.lat,best.lng);
+}
+/* fullscreen globe (expand from campaign minimap; clickable pins, resize/landscape aware) */
+let gfGlobe=null,gfNodes=[],gfSpin=true,gfDrag=false,gfAlt=1.7;
+function gfResize(){if(!gfGlobe)return;const el=document.getElementById('globeFullEl');gfGlobe.width(el.clientWidth);gfGlobe.height(el.clientHeight);}
+function openGlobeFull(c){
+ c=c||curCamp;
+ if(typeof Globe==='undefined'||!c)return;
+ const ov=document.getElementById('globeFull');ov.classList.add('open');
+ const el=document.getElementById('globeFullEl');
+ if(!gfGlobe){
+  gfGlobe=makeG(el,gfAlt);const cc=gfGlobe.controls();cc.enabled=false;cc.autoRotate=false;
+  gfGlobe.pointColor(d=>d.color).pointRadius(d=>d.size).pointAltitude(d=>d.alt!=null?d.alt:.013);
+  (function f(){ if(gfSpin&&!gfDrag&&gfGlobe&&document.getElementById('globeFull').classList.contains('open')){const p=gfGlobe.pointOfView();gfGlobe.pointOfView({lat:p.lat,lng:p.lng+0.12,altitude:gfAlt});} requestAnimationFrame(f); })();
+  let lx=0,ly=0,dn=false;el.style.cursor='grab';el.style.touchAction='none';
+  el.addEventListener('pointerdown',e=>{dn=true;gfDrag=false;gfSpin=false;lx=e.clientX;ly=e.clientY;el.style.cursor='grabbing';});
+  el.addEventListener('pointermove',e=>{ if(!dn)return; const dx=e.clientX-lx,dy=e.clientY-ly; if(Math.abs(dx)+Math.abs(dy)>4)gfDrag=true; if(!gfDrag)return; const p=gfGlobe.pointOfView(); const nlat=Math.max(-85,Math.min(85,p.lat+dy*0.25)); gfGlobe.pointOfView({lat:nlat,lng:p.lng-dx*0.25,altitude:gfAlt}); lx=e.clientX;ly=e.clientY; });
+  el.addEventListener('pointerup',e=>{ const tap=dn&&!gfDrag; dn=false;gfDrag=false;el.style.cursor='grab'; if(tap)gfTap(e.clientX,e.clientY); });
+  el.addEventListener('pointerleave',()=>{dn=false;gfDrag=false;el.style.cursor='grab';});
+  el.addEventListener('wheel',e=>{e.preventDefault();const step=e.deltaMode===1?e.deltaY*16:e.deltaY;gfAlt=Math.max(0.5,Math.min(3.2,gfAlt*Math.exp(step*0.0016)));const p=gfGlobe.pointOfView();gfGlobe.pointOfView({lat:p.lat,lng:p.lng,altitude:gfAlt},0);},{passive:false});
+ }
+ gfResize();
+ const ce=evts.filter(e=>e.camp===c.id);
+ gfNodes=[{lat:c.lat,lng:c.lng,size:1.1,alt:.03,color:'#FF6B4A',kind:'camp',id:c.id},
+  ...ce.map(e=>({lat:e.lat,lng:e.lng,size:.6,alt:.024,color:'#12A594',kind:'evt',id:e.id}))];
+ for(let i=0;i<70;i++)gfNodes.push({lat:c.lat+(Math.random()-.5)*44,lng:c.lng+(Math.random()-.5)*44,size:.26,alt:.004,color:'rgba(255,185,56,.9)',kind:'person'});
+ gfGlobe.pointsData(gfNodes);
+ gfGlobe.arcsData(ce.map(e=>({startLat:e.lat,startLng:e.lng,endLat:c.lat,endLng:c.lng})));
+ gfAlt=1.7;gfSpin=true;
+ gfGlobe.pointOfView({lat:c.lat,lng:c.lng,altitude:gfAlt},600);
+ document.getElementById('gftitle').textContent=c.name+' · live participation';
+ setTimeout(gfResize,120);
+}
+function gfTap(cx,cy){
+ if(!gfGlobe)return;
+ const el=document.getElementById('globeFullEl'),r=el.getBoundingClientRect();
+ const px=cx-r.left,py=cy-r.top,view=gfGlobe.pointOfView();
+ let best=null,bd=1e9;
+ gfNodes.forEach(o=>{ if(angDist(view.lat,view.lng,o.lat,o.lng)>82)return;
+  const s=gfGlobe.getScreenCoords(o.lat,o.lng,o.alt||.01);if(!s)return;
+  const hit=o.kind==='person'?24:34,d=Math.hypot(s.x-px,s.y-py);
+  if(d<hit&&d<bd){bd=d;best=o;} });
+ if(!best)return;
+ if(best.kind==='camp')renderPreviewCampaign(best.id);
+ else if(best.kind==='evt')renderPreviewEvent(best.id);
+ else renderPreviewPerson(best.lat,best.lng);
+}
+function closeGlobeFull(){document.getElementById('globeFull').classList.remove('open');}
+window.addEventListener('resize',()=>{if(document.getElementById('globeFull').classList.contains('open'))gfResize();});
+window.addEventListener('orientationchange',()=>setTimeout(()=>{if(document.getElementById('globeFull').classList.contains('open'))gfResize();},350));
 updateBell();
 function evtMap(e,c){
  if(typeof Globe==='undefined')return;
- if(!emap)emap=makeG(document.getElementById('emapEl'),1.9);
+ const el=document.getElementById('emapEl');
+ if(!emap){
+  emap=makeG(el,emapAlt);const cc=emap.controls();cc.enabled=false;cc.autoRotate=false;
+  emap.pointColor(d=>d.color).pointRadius(d=>d.size).pointAltitude(d=>d.alt!=null?d.alt:.013);
+  (function f(){ if(emapSpin&&!emapDrag&&emap){const p=emap.pointOfView();emap.pointOfView({lat:p.lat,lng:p.lng+0.18,altitude:emapAlt});} requestAnimationFrame(f); })();
+  let lx=0,ly=0,dn=false;el.style.cursor='grab';el.style.touchAction='none';
+  el.addEventListener('pointerdown',ev=>{dn=true;emapDrag=false;emapSpin=false;lx=ev.clientX;ly=ev.clientY;});
+  el.addEventListener('pointermove',ev=>{ if(!dn)return; const dx=ev.clientX-lx,dy=ev.clientY-ly; if(Math.abs(dx)+Math.abs(dy)>4)emapDrag=true; if(!emapDrag)return; const p=emap.pointOfView(); const nlat=Math.max(-85,Math.min(85,p.lat+dy*0.3)); emap.pointOfView({lat:nlat,lng:p.lng-dx*0.3,altitude:emapAlt}); lx=ev.clientX;ly=ev.clientY; });
+  el.addEventListener('pointerup',ev=>{ const tap=dn&&!emapDrag; dn=false;emapDrag=false; if(tap)emapTap(ev.clientX,ev.clientY); });
+  el.addEventListener('pointerleave',()=>{dn=false;emapDrag=false;});
+ }
  const sib=evts.filter(x=>x.camp===e.camp&&x.id!==e.id);
- emap.pointsData([{lat:e.lat,lng:e.lng,size:1,color:'#12A594'},...(c?[{lat:c.lat,lng:c.lng,size:.9,color:'#FF6B4A'}]:[]),...sib.map(s=>({lat:s.lat,lng:s.lng,size:.35,color:'rgba(18,165,148,.55)'}))]);
+ emapNodes=[{lat:e.lat,lng:e.lng,size:1,alt:.03,color:'#12A594',kind:'evt',id:e.id},
+  ...(c?[{lat:c.lat,lng:c.lng,size:.9,alt:.024,color:'#FF6B4A',kind:'camp',id:c.id}]:[]),
+  ...sib.map(s=>({lat:s.lat,lng:s.lng,size:.45,alt:.02,color:'rgba(18,165,148,.7)',kind:'evt',id:s.id}))];
+ emap.pointsData(emapNodes);
  emap.arcsData(c?[{startLat:e.lat,startLng:e.lng,endLat:c.lat,endLng:c.lng},...sib.slice(0,5).map(s=>({startLat:s.lat,startLng:s.lng,endLat:c.lat,endLng:c.lng}))]:[]);
- emap.pointOfView({lat:c?(e.lat+c.lat)/2:e.lat,lng:c?(e.lng+c.lng)/2:e.lng,altitude:2},800);
+ emapSpin=true;
+ emap.pointOfView({lat:c?(e.lat+c.lat)/2:e.lat,lng:c?(e.lng+c.lng)/2:e.lng,altitude:emapAlt},800);
+}
+function emapTap(cx,cy){
+ if(!emap)return;
+ const el=document.getElementById('emapEl'),r=el.getBoundingClientRect();
+ const px=cx-r.left,py=cy-r.top,view=emap.pointOfView();
+ let best=null,bd=1e9;
+ emapNodes.forEach(o=>{ if(angDist(view.lat,view.lng,o.lat,o.lng)>82)return;
+  const s=emap.getScreenCoords(o.lat,o.lng,o.alt||.01);if(!s)return;
+  const d=Math.hypot(s.x-px,s.y-py); if(d<32&&d<bd){bd=d;best=o;} });
+ if(!best)return;
+ if(best.kind==='camp')renderPreviewCampaign(best.id);
+ else renderPreviewEvent(best.id);
 }
 </script>
 </body>
